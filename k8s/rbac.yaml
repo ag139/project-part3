@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: devops-app-readonly
+  namespace: devops-app
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "pods"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: backend-readonly-binding
+  namespace: devops-app
+subjects:
+  - kind: ServiceAccount
+    name: backend-sa
+    namespace: devops-app
+roleRef:
+  kind: Role
+  name: devops-app-readonly
+  apiGroup: rbac.authorization.k8s.io

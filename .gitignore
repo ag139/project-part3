@@ -1,0 +1,5 @@
+secret.yaml
+k8s/secret.yaml
+*.env
+.env*
+credentials
