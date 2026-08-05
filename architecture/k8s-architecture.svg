@@ -1,0 +1,142 @@
+<svg width="1000" height="820" viewBox="0 0 1000 820" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M1 1L9 5L1 9" fill="none" stroke="#4a4a48" stroke-width="1.5"/>
+    </marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M1 1L9 5L1 9" fill="none" stroke="#9a9892" stroke-width="1.3"/>
+    </marker>
+  </defs>
+
+  <rect width="1000" height="820" fill="#fdfdfc"/>
+
+  <text x="40" y="44" font-size="17" font-weight="600" fill="#22221f">Kubernetes Architecture</text>
+  <text x="40" y="63" font-size="11.5" fill="#78766f">DevOps on AWS, Part 3 - local kind cluster, namespace devops-app</text>
+
+  <line x1="40" y1="78" x2="960" y2="78" stroke="#dedcd5" stroke-width="1"/>
+
+  <!-- ============ CLUSTER BOUNDARY ============ -->
+  <rect x="40" y="102" width="600" height="580" rx="4" fill="none" stroke="#b9b7b0" stroke-width="1.2"/>
+  <text x="56" y="122" font-size="11" font-weight="600" fill="#6b6960" letter-spacing="0.4">KUBERNETES CLUSTER</text>
+
+  <!-- user -->
+  <text x="332" y="152" text-anchor="middle" font-size="12" fill="#4a4a48">User, HTTP</text>
+  <line x1="332" y1="160" x2="332" y2="186" stroke="#4a4a48" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- ingress controller -->
+  <rect x="212" y="188" width="240" height="34" rx="3" fill="#fff" stroke="#8e8c85" stroke-width="1"/>
+  <text x="332" y="209" text-anchor="middle" font-size="12" fill="#33332f">ingress-nginx controller</text>
+  <line x1="332" y1="222" x2="332" y2="248" stroke="#4a4a48" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- namespace boundary -->
+  <rect x="64" y="248" width="552" height="410" rx="4" fill="none" stroke="#cfcdc6" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="78" y="266" font-size="10.5" fill="#8e8c85">namespace: devops-app</text>
+
+  <!-- Ingress -->
+  <rect x="212" y="278" width="240" height="38" rx="3" fill="#fff" stroke="#4a4a48" stroke-width="1.4"/>
+  <text x="332" y="295" text-anchor="middle" font-size="12" font-weight="600" fill="#22221f">Ingress</text>
+  <text x="332" y="309" text-anchor="middle" font-size="10" fill="#78766f">devops-app.local</text>
+
+  <line x1="332" y1="316" x2="332" y2="340" stroke="#4a4a48" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- frontend -->
+  <rect x="212" y="340" width="240" height="52" rx="3" fill="#fff" stroke="#4a4a48" stroke-width="1.4"/>
+  <text x="332" y="359" text-anchor="middle" font-size="12.5" font-weight="600" fill="#22221f">frontend</text>
+  <text x="332" y="374" text-anchor="middle" font-size="10" fill="#78766f">nginx, 2 pods, Service :80</text>
+  <text x="332" y="386" text-anchor="middle" font-size="9.5" fill="#a3a19a">frontend-sa</text>
+
+  <line x1="332" y1="392" x2="332" y2="416" stroke="#4a4a48" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="342" y="408" font-size="9.5" fill="#9a9892">:5000</text>
+
+  <!-- backend -->
+  <rect x="212" y="416" width="240" height="52" rx="3" fill="#fff" stroke="#4a4a48" stroke-width="1.4"/>
+  <text x="332" y="435" text-anchor="middle" font-size="12.5" font-weight="600" fill="#22221f">backend</text>
+  <text x="332" y="450" text-anchor="middle" font-size="10" fill="#78766f">Flask, 2 pods, Service :5000</text>
+  <text x="332" y="462" text-anchor="middle" font-size="9.5" fill="#a3a19a">backend-sa, HPA 2-6</text>
+
+  <line x1="332" y1="468" x2="332" y2="492" stroke="#4a4a48" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="342" y="484" font-size="9.5" fill="#9a9892">:5432</text>
+
+  <!-- postgres -->
+  <rect x="212" y="492" width="240" height="52" rx="3" fill="#fff" stroke="#4a4a48" stroke-width="1.4"/>
+  <text x="332" y="511" text-anchor="middle" font-size="12.5" font-weight="600" fill="#22221f">postgres</text>
+  <text x="332" y="526" text-anchor="middle" font-size="10" fill="#78766f">1 pod, Service :5432, PVC 1Gi</text>
+  <text x="332" y="538" text-anchor="middle" font-size="9.5" fill="#a3a19a">in-cluster, test only</text>
+
+  <!-- worker -->
+  <rect x="92" y="416" width="104" height="52" rx="3" fill="#fff" stroke="#4a4a48" stroke-width="1.4"/>
+  <text x="144" y="435" text-anchor="middle" font-size="12.5" font-weight="600" fill="#22221f">worker</text>
+  <text x="144" y="450" text-anchor="middle" font-size="10" fill="#78766f">1 pod, no Service</text>
+  <text x="144" y="462" text-anchor="middle" font-size="9.5" fill="#a3a19a">worker-sa</text>
+
+  <path d="M144 468 L144 518 L210 518" fill="none" stroke="#4a4a48" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- config + secret -->
+  <rect x="480" y="340" width="120" height="34" rx="3" fill="#faf6ec" stroke="#b5a173" stroke-width="1"/>
+  <text x="540" y="361" text-anchor="middle" font-size="10.5" fill="#6b5a2e">ConfigMap</text>
+
+  <rect x="480" y="382" width="120" height="34" rx="3" fill="#faf6ec" stroke="#b5a173" stroke-width="1"/>
+  <text x="540" y="403" text-anchor="middle" font-size="10.5" fill="#6b5a2e">Secret</text>
+
+  <path d="M478 358 L455 432" fill="none" stroke="#9a9892" stroke-width="1.1" stroke-dasharray="3 3" marker-end="url(#b)"/>
+  <path d="M478 400 L455 442" fill="none" stroke="#9a9892" stroke-width="1.1" stroke-dasharray="3 3" marker-end="url(#b)"/>
+  <text x="540" y="432" text-anchor="middle" font-size="9" fill="#a3a19a">envFrom</text>
+
+  <!-- worker + postgres notes anchored subtly -->
+  <text x="92" y="590" font-size="9.5" fill="#a3a19a">ServiceAccounts: one per Deployment,</text>
+  <text x="92" y="604" font-size="9.5" fill="#a3a19a">no API token mounted</text>
+  <text x="92" y="626" font-size="9.5" fill="#a3a19a">NetworkPolicy: default-deny,</text>
+  <text x="92" y="640" font-size="9.5" fill="#a3a19a">explicit allow per component</text>
+
+  <!-- ============ AWS ============ -->
+  <rect x="700" y="102" width="260" height="580" rx="4" fill="none" stroke="#b9b7b0" stroke-width="1.2"/>
+  <text x="716" y="122" font-size="11" font-weight="600" fill="#6b6960" letter-spacing="0.4">AWS</text>
+
+  <text x="716" y="152" font-size="10" fill="#8e8c85">in use</text>
+  <line x1="716" y1="158" x2="944" y2="158" stroke="#e4e2db" stroke-width="1"/>
+
+  <rect x="716" y="170" width="228" height="46" rx="3" fill="#fff" stroke="#4a4a48" stroke-width="1.2"/>
+  <text x="830" y="189" text-anchor="middle" font-size="12" font-weight="600" fill="#22221f">S3</text>
+  <text x="830" y="205" text-anchor="middle" font-size="10" fill="#78766f">ayelet-backend-bucket</text>
+
+  <rect x="716" y="228" width="228" height="46" rx="3" fill="#fff" stroke="#4a4a48" stroke-width="1.2"/>
+  <text x="830" y="247" text-anchor="middle" font-size="12" font-weight="600" fill="#22221f">SNS</text>
+  <text x="830" y="263" text-anchor="middle" font-size="10" fill="#78766f">project-alerts</text>
+
+  <text x="830" y="292" text-anchor="middle" font-size="9.5" fill="#a3a19a">HTTPS :443, IAM access keys</text>
+
+  <text x="716" y="352" font-size="10" fill="#8e8c85">not reachable from this cluster</text>
+  <line x1="716" y1="358" x2="944" y2="358" stroke="#e4e2db" stroke-width="1"/>
+
+  <rect x="716" y="370" width="228" height="88" rx="3" fill="#fbfbfa" stroke="#c9c7c0" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="830" y="391" text-anchor="middle" font-size="12" font-weight="600" fill="#8e8c85">RDS PostgreSQL</text>
+  <text x="830" y="408" text-anchor="middle" font-size="10" fill="#a3a19a">project-db, Terraform, Part 2</text>
+  <text x="830" y="426" text-anchor="middle" font-size="10" fill="#a3a19a">private subnets</text>
+  <text x="830" y="441" text-anchor="middle" font-size="10" fill="#a3a19a">publicly_accessible = false</text>
+
+  <!-- arrows to AWS -->
+  <path d="M454 428 L714 200" fill="none" stroke="#4a4a48" stroke-width="1.5" marker-end="url(#a)"/>
+  <path d="M454 440 L714 254" fill="none" stroke="#4a4a48" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- blocked path -->
+  <path d="M454 456 L714 410" fill="none" stroke="#b9b7b0" stroke-width="1.3" stroke-dasharray="5 4"/>
+  <g stroke="#8e8c85" stroke-width="1.8">
+    <line x1="578" y1="426" x2="592" y2="440"/>
+    <line x1="592" y1="426" x2="578" y2="440"/>
+  </g>
+
+  <!-- ============ NOTES ============ -->
+  <line x1="40" y1="708" x2="960" y2="708" stroke="#dedcd5" stroke-width="1"/>
+
+  <text x="40" y="730" font-size="10.5" font-weight="600" fill="#6b6960">Exposure</text>
+  <text x="40" y="748" font-size="10" fill="#78766f">Public - Ingress -> frontend only.</text>
+  <text x="40" y="763" font-size="10" fill="#78766f">Internal - backend and postgres are ClusterIP, cluster-internal DNS only.</text>
+  <text x="40" y="778" font-size="10" fill="#78766f">Private - worker has no Service and accepts no inbound traffic.</text>
+
+  <text x="530" y="730" font-size="10.5" font-weight="600" fill="#6b6960">Every pod</text>
+  <text x="530" y="748" font-size="10" fill="#78766f">runAsNonRoot, allowPrivilegeEscalation false, readOnlyRootFilesystem</text>
+  <text x="530" y="763" font-size="10" fill="#78766f">capabilities dropped, seccomp RuntimeDefault, resource requests and limits</text>
+  <text x="530" y="778" font-size="10" fill="#78766f">readiness and liveness probes, PodDisruptionBudget on frontend and backend</text>
+
+  <text x="40" y="800" font-size="9.5" fill="#a3a19a">Solid arrow: request flow.   Dashed: configuration injected.   Crossed: no network path - see README section 13.</text>
+</svg>

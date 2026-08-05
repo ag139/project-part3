@@ -1,0 +1,69 @@
+Name:             backend-5764bcffdb-5zrbl
+Namespace:        devops-app
+Priority:         0
+Service Account:  backend-sa
+Node:             devops-app-control-plane/172.24.0.2
+Start Time:       Sat, 01 Aug 2026 10:23:31 +0300
+Labels:           app=devops-app
+                  component=backend
+                  pod-template-hash=5764bcffdb
+Annotations:      kubectl.kubernetes.io/restartedAt: 2026-08-01T10:23:21+03:00
+Status:           Running
+SeccompProfile:   RuntimeDefault
+IP:               10.244.0.8
+IPs:
+  IP:           10.244.0.8
+Controlled By:  ReplicaSet/backend-5764bcffdb
+Containers:
+  backend:
+    Container ID:   containerd://8727d14137be49eff89ea8badd1f5dbe6b7541fc20d8cd9e49c3e907574bed2f
+    Image:          devops-app-backend:1.0.0
+    Image ID:       docker.io/library/import-2026-07-31@sha256:d048d40962cc29d144df9ee902b995f552e8e9d5c270c22b104ce220d723d63b
+    Port:           5000/TCP (http)
+    Host Port:      0/TCP (http)
+    State:          Running
+      Started:      Wed, 05 Aug 2026 20:08:40 +0300
+    Last State:     Terminated
+      Reason:       Unknown
+      Exit Code:    255
+      Started:      Mon, 03 Aug 2026 17:31:21 +0300
+      Finished:     Wed, 05 Aug 2026 20:08:32 +0300
+    Ready:          True
+    Restart Count:  2
+    Limits:
+      cpu:     500m
+      memory:  256Mi
+    Requests:
+      cpu:      100m
+      memory:   128Mi
+    Liveness:   http-get http://:http/ delay=15s timeout=3s period=20s #success=1 #failure=3
+    Readiness:  http-get http://:http/ delay=5s timeout=3s period=10s #success=1 #failure=3
+    Environment Variables from:
+      app-config   ConfigMap  Optional: false
+      app-secrets  Secret     Optional: false
+    Environment:   <none>
+    Mounts:
+      /tmp from tmp (rw)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  tmp:
+    Type:        EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:      
+    SizeLimit:   <unset>
+QoS Class:       Burstable
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason          Age   From     Message
+  ----    ------          ----  ----     -------
+  Normal  SandboxChanged  11m   kubelet  Pod sandbox changed, it will be killed and re-created.
+  Normal  Pulled          11m   kubelet  spec.containers{backend}: Container image "devops-app-backend:1.0.0" already present on machine
+  Normal  Created         11m   kubelet  spec.containers{backend}: Created container backend
+  Normal  Started         11m   kubelet  spec.containers{backend}: Started container backend

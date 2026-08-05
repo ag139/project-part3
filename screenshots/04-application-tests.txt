@@ -1,0 +1,21 @@
+=== 1. HTTP access + frontend to backend ===
+{"message":"app is running"}
+
+
+=== 2. Application to database (write) ===
+{"status":"user added"}
+
+
+=== 3. Application to database (read) ===
+[[1,"test-final"],[2,"test-sns-final"],[3,"submission-test"]]
+
+
+=== 4. Application to S3 ===
+{"status":"file uploaded"}
+
+
+=== 5. S3 bucket listing ===
+                           PRE worker_upload/
+2026-08-05 20:21:06         26 proof.txt
+2026-04-08 09:43:35         12 test.txt
+2026-08-01 10:25:47         18 testfile.txt

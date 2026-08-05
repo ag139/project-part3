@@ -1,0 +1,20 @@
+=== BEFORE: pods running ===
+NAME                       READY   STATUS    RESTARTS      AGE
+backend-5764bcffdb-rl8ps   1/1     Running   2 (14m ago)   4d10h
+backend-5764bcffdb-tdglc   1/1     Running   0             81s
+
+=== Deleting one backend pod ===
+pod "backend-5764bcffdb-rl8ps" deleted from devops-app namespace
+
+=== Application still responding during restart ===
+{"message":"app is running"}
+
+
+=== AFTER: replacement pod created automatically ===
+NAME                       READY   STATUS    RESTARTS   AGE
+backend-5764bcffdb-dcsbx   1/1     Running   0          50s
+backend-5764bcffdb-tdglc   1/1     Running   0          2m11s
+
+=== Application still working ===
+{"message":"app is running"}
+

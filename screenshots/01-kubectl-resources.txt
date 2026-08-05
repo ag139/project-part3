@@ -1,0 +1,39 @@
+=== kubectl get nodes ===
+NAME                       STATUS   ROLES           AGE    VERSION
+devops-app-control-plane   Ready    control-plane   5d3h   v1.30.0
+
+=== kubectl get namespaces ===
+NAME                 STATUS   AGE
+default              Active   5d3h
+devops-app           Active   5d3h
+ingress-nginx        Active   5d3h
+kube-node-lease      Active   5d3h
+kube-public          Active   5d3h
+kube-system          Active   5d3h
+local-path-storage   Active   5d3h
+
+=== kubectl get pods -n devops-app ===
+NAME                        READY   STATUS    RESTARTS      AGE
+backend-5764bcffdb-5zrbl    1/1     Running   2 (10m ago)   4d9h
+backend-5764bcffdb-rl8ps    1/1     Running   2 (10m ago)   4d9h
+frontend-78b5b454c4-blqn4   1/1     Running   6 (10m ago)   4d10h
+frontend-78b5b454c4-p47g9   1/1     Running   6 (10m ago)   4d10h
+postgres-555b5d49c5-sn6fw   1/1     Running   2 (10m ago)   4d10h
+worker-f74446bf4-fkbjg      1/1     Running   2 (10m ago)   4d10h
+
+=== kubectl get deployments -n devops-app ===
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+backend    2/2     2            2           4d11h
+frontend   2/2     2            2           4d11h
+postgres   1/1     1            1           4d10h
+worker     1/1     1            1           4d11h
+
+=== kubectl get services -n devops-app ===
+NAME       TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+backend    ClusterIP   10.96.164.22    <none>        5000/TCP   4d11h
+frontend   ClusterIP   10.96.199.102   <none>        80/TCP     4d11h
+postgres   ClusterIP   10.96.128.152   <none>        5432/TCP   4d11h
+
+=== kubectl get ingress -n devops-app ===
+NAME                 CLASS   HOSTS              ADDRESS     PORTS   AGE
+devops-app-ingress   nginx   devops-app.local   localhost   80      4d11h
