@@ -1,0 +1,39 @@
+---
+- name: Run Docker container with Ansible
+  hosts: frontend
+  become: true
+
+  tasks:
+    - name: Pull nginx image
+      community.docker.docker_image:
+        name: nginx
+        source: pull
+
+    - name: create custom network
+      community.docker.docker_network:
+        name: app-net
+        state: present
+    - name: create docker volume
+      community.docker.docker_volume:
+       name: db_data
+       state: present
+       register: volume_result
+
+
+    - name: Run nginx container
+      community.docker.docker_container:
+        name: nginx-demo
+        image: nginx
+        state: started
+        restart_policy: always
+        ports:
+          - "8080:80"
+        volumes:
+          - "{{ playbook_dir }}/html:/usr/share/nginx/html"
+          - "db_data:/usr/share/nginx/html"
+        networks:
+          - name: app-net
+        env:
+          DB_HOST: "db"
+        command: sh -c "echo DB_HOST"
+

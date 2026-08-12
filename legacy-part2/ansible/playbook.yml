@@ -1,0 +1,19 @@
+- hosts: all
+  become: yes
+  roles:
+    - common
+
+- hosts: frontend
+  become: yes
+  roles:
+    - nginx
+
+- hosts: backend
+  become: yes
+  roles:
+    - backend
+
+- hosts: worker
+  become: yes
+  roles:
+    - worker

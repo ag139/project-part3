@@ -1,0 +1,35 @@
+- name: install python3
+  yum:
+    name: python3
+    state: present
+
+- name: create worker script
+  copy:
+    dest: /home/ec2-user/worker.py
+    content: |
+      import time
+      while True:
+          print("Worker running")
+          time.sleep(10)
+
+- name: create systemd service
+  copy:
+    dest: /etc/systemd/system/worker.service
+    content: |
+      [Unit]
+      Description=Worker Service
+      After=network.target
+
+      [Service]
+      ExecStart=/usr/bin/python3 /home/ec2-user/worker.py
+      Restart=always
+
+      [Install]
+      WantedBy=multi-user.target
+
+- name: start worker
+  systemd:
+    name: worker
+    state: started
+    enabled: yes
+# tasks file for roles/worker

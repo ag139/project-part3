@@ -1,0 +1,36 @@
+- name: Install and run Nginx
+  hosts: frontend
+  become: yes
+
+  tasks:
+    - name: Install nginx
+      yum:
+        name: nginx
+        state: present
+
+    - name: Start nginx
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Deploy nginx config
+      copy:
+        dest: /etc/nginx/nginx.conf
+        content: |
+          events {}
+
+          http {
+              server {
+                  listen 80;
+
+                  location / {
+                      proxy_pass http://10.0.2.47:5000;
+                  }
+              }
+          }
+
+    - name: Restart nginx
+      systemd:
+        name: nginx
+        state: restarted

@@ -1,0 +1,11 @@
+services:
+  backend:
+    environment:
+      FLASK_ENV: development
+      DEBUG: "true"
+    volumes:
+      - .:/app
+    restart: always
+
+  db:
+    restart: always

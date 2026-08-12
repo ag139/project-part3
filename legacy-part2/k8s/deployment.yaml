@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: my-python-app
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: my-python-app
+
+  template:
+    metadata:
+      labels:
+        app: my-python-app
+
+    spec:
+      containers:
+      - name: my-python-app
+
+        image: ayeletgeulayev/my-python-app:latest
+
+        imagePullPolicy: Always
+
+        ports:
+        - containerPort: 5000
