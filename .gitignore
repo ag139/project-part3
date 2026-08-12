@@ -3,3 +3,21 @@ k8s/secret.yaml
 *.env
 .env*
 credentials
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log
+terraform/terraform.tfvars
+
+# AWS CLI installer
+terraform/aws/
+
+# SSH keys
+*.pem
+project-key
+
+# Archives
+*.zip
