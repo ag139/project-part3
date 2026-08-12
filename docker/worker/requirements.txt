@@ -1,3 +1,3 @@
-# worker.py only uses Python's standard library (time, os) - no external
-# packages needed. File kept so the Dockerfile's pip install step stays
-# consistent with the other two services.
+# worker.py uses only the Python standard library (time, os).
+# No external dependencies. The file is kept so the Dockerfile's
+# pip install step stays consistent across all three services.
