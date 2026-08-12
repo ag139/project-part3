@@ -34,7 +34,8 @@ spec:
               containerPort: 5000
           envFrom:
             - configMapRef: { name: app-config }
-            - secretRef: { name: app-secrets }
+            - secretRef: { name: db-secrets }
+            - secretRef: { name: aws-secrets }
           resources:
             {{- toYaml .Values.backend.resources | nindent 12 }}
           securityContext:

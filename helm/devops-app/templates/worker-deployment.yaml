@@ -25,7 +25,6 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
             - configMapRef: { name: app-config }
-            - secretRef: { name: app-secrets }
           resources:
             {{- toYaml .Values.worker.resources | nindent 12 }}
           securityContext:

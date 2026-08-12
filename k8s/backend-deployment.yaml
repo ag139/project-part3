@@ -37,7 +37,9 @@ spec:
             - configMapRef:
                 name: app-config
             - secretRef:
-                name: app-secrets
+                name: db-secrets
+            - secretRef:
+                name: aws-secrets
           resources:
             requests:
               cpu: 100m
