@@ -42,10 +42,12 @@ spec:
         - podSelector: { matchLabels: { component: frontend } }
       ports: [{ protocol: TCP, port: 5000 }]
   egress:
+    - to:
+        - podSelector: { matchLabels: { component: postgres } }
+      ports: [{ protocol: TCP, port: 5432 }]
     - to: []
       ports:
         - { protocol: TCP, port: 443 }
-        - { protocol: TCP, port: 5432 }
         - { protocol: UDP, port: 53 }
         - { protocol: TCP, port: 53 }
 ---
@@ -59,10 +61,30 @@ spec:
     matchLabels: { component: worker }
   policyTypes: ["Ingress", "Egress"]
   egress:
+    - to:
+        - podSelector: { matchLabels: { component: postgres } }
+      ports: [{ protocol: TCP, port: 5432 }]
     - to: []
       ports:
         - { protocol: TCP, port: 443 }
-        - { protocol: TCP, port: 5432 }
         - { protocol: UDP, port: 53 }
         - { protocol: TCP, port: 53 }
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-postgres
+  namespace: {{ .Values.namespace }}
+spec:
+  podSelector:
+    matchLabels: { component: postgres }
+  policyTypes: ["Ingress", "Egress"]
+  ingress:
+    - from:
+        - podSelector: { matchLabels: { component: backend } }
+        - podSelector: { matchLabels: { component: worker } }
+      ports: [{ protocol: TCP, port: 5432 }]
+  egress:
+    - to: []
+      ports: [{ protocol: UDP, port: 53 }, { protocol: TCP, port: 53 }]
 {{- end }}
