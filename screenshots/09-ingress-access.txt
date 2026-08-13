@@ -1,0 +1,23 @@
+=== Ingress resource ===
+NAME                 CLASS   HOSTS              ADDRESS     PORTS   AGE
+devops-app-ingress   nginx   devops-app.local   localhost   80      12d
+
+=== Ingress controller service ===
+NAME                       TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE
+ingress-nginx-controller   LoadBalancer   10.96.80.200   <pending>     80:31866/TCP,443:32744/TCP   13d
+
+Reaching the cluster through the ingress-nginx NodePort at 172.24.0.2:31866
+with a Host header matching the Ingress rule (devops-app.local).
+
+=== HTTP through the Ingress: frontend to backend ===
+{"message":"app is running"}
+
+
+=== HTTP through the Ingress: database read ===
+[[1,"test-final"],[2,"test-sns-final"],[3,"submission-test"],[4,"after-secret-split"],[5,"pinned-deps"]]
+
+
+=== Backend is NOT reachable directly from outside ===
+NAME      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+backend   ClusterIP   10.96.164.22   <none>        5000/TCP   12d
+(ClusterIP only - no external IP, no Ingress rule)
