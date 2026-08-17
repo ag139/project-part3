@@ -51,19 +51,22 @@ pipeline {
 
         stage('Lint') {
             steps {
-                sh '''
-                  set -e
-                  python3 -m py_compile docker/backend/app.py docker/worker/worker.py
-                  echo "python syntax OK"
-                '''
+                container('python') {
+                    sh '''
+                      set -e
+                      python3 -m py_compile docker/backend/app.py docker/worker/worker.py
+                      echo "python syntax OK"
+                    '''
+                }
             }
         }
 
         stage('Tests') {
             steps {
-                sh '''
-                  set -e
-                  mkdir -p test-results
+                container('python') {
+                    sh '''
+                      set -e
+                      mkdir -p test-results
                   python3 - <<'PYTEST'
 import ast, sys, xml.etree.ElementTree as ET
 
@@ -116,7 +119,8 @@ for name, failure in cases:
     print(("FAIL " if failure else "PASS ") + name + (f" - {failure}" if failure else ""))
 sys.exit(1 if any(f for _, f in cases) else 0)
 PYTEST
-                '''
+                    '''
+                }
             }
             post {
                 always {
@@ -180,7 +184,7 @@ JSON
     post {
         always {
             sh 'rm -f /home/user/.docker/config.json 2>/dev/null || true'
-            cleanWs()
+            deleteDir()
         }
         success {
             echo "CI succeeded. Image tag ${env.IMAGE_TAG} is ready for deployment."
