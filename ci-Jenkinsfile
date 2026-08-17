@@ -81,11 +81,15 @@ def check(name, fn):
 
 def app_defines_routes():
     tree = ast.parse(open("docker/backend/app.py").read())
-    routes = [d.func.value.attr for n in ast.walk(tree)
-              if isinstance(n, ast.FunctionDef)
-              for d in n.decorator_list
-              if isinstance(d, ast.Call) and isinstance(d.func, ast.Attribute)]
-    assert routes.count("route") >= 4, f"expected at least 4 routes, found {routes.count('route')}"
+    count = 0
+    for n in ast.walk(tree):
+        if not isinstance(n, ast.FunctionDef):
+            continue
+        for d in n.decorator_list:
+            f = d.func if isinstance(d, ast.Call) else d
+            if isinstance(f, ast.Attribute) and f.attr == "route":
+                count += 1
+    assert count >= 4, f"expected at least 4 routes, found {count}"
 
 def app_reads_env():
     src = open("docker/backend/app.py").read()
