@@ -91,3 +91,7 @@ Finished: SUCCESS
 === after the build finished, the agent pod is gone ===
 NAME        READY   STATUS    RESTARTS   AGE
 jenkins-0   2/2     Running   0          17m
+
+=== after the build finished, the agent pod is gone ===
+NAME        READY   STATUS    RESTARTS   AGE
+jenkins-0   2/2     Running   0          19m
