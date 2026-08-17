@@ -2,32 +2,29 @@ controller:
   image:
     registry: docker.io
     repository: jenkins/jenkins
-    tag: "2.504.3-lts-jdk17"
+    tag: 2.504.3-lts-jdk17
   installPlugins:
-    - kubernetes:4437.v3a_18554d3f32
-    - workflow-aggregator:608.v67378e9d3db_1
-    - git:5.10.1
-    - configuration-as-code:2036.v0b_c2de701dcb_
-    - job-dsl:3732.v9a_c49a_61a_313
-    - credentials-binding:728.v902a_273b_8947
-    - pipeline-stage-view:2.41
-    - junit:1369.v15da_00283f06
-    - timestamper:1.30
+  - kubernetes:4437.v3a_18554d3f32
+  - workflow-aggregator:608.v67378e9d3db_1
+  - git:5.10.1
+  - configuration-as-code:2036.v0b_c2de701dcb_
+  - job-dsl:3732.v9a_c49a_61a_313
+  - credentials-binding:728.v902a_273b_8947
+  - pipeline-stage-view:2.41
+  - junit:1369.v15da_00283f06
+  - timestamper:1.30
   installLatestPlugins: false
   installLatestSpecifiedPlugins: false
-
   serviceAccount:
     create: false
     name: jenkins-controller
-
   resources:
     requests:
-      cpu: "500m"
-      memory: "1Gi"
+      cpu: 500m
+      memory: 1Gi
     limits:
-      cpu: "2000m"
-      memory: "2Gi"
-
+      cpu: 2000m
+      memory: 2Gi
   probes:
     startupProbe:
       failureThreshold: 30
@@ -40,70 +37,78 @@ controller:
       failureThreshold: 3
       periodSeconds: 10
       timeoutSeconds: 5
-
   serviceType: ClusterIP
   servicePort: 8080
-
   JCasC:
     defaultConfig: true
     configScripts:
-      welcome: |
-        jenkins:
-          systemMessage: "Managed by Configuration as Code. Do not configure through the UI."
-
+      welcome: "jenkins:\n  systemMessage: \"Managed by Configuration as Code. Do\
+        \ not configure through the UI.\"\n"
 persistence:
   enabled: true
   size: 8Gi
   storageClass: standard
-
 serviceAccount:
   create: false
   name: jenkins-controller
-
 agent:
   enabled: true
   podName: default
   namespace: jenkins
   idleMinutes: 0
-  podRetention: "Never"
+  podRetention: Never
   runAsUser: 1000
   runAsGroup: 1000
   resources:
     requests:
-      cpu: "200m"
-      memory: "512Mi"
+      cpu: 200m
+      memory: 512Mi
     limits:
-      cpu: "1000m"
-      memory: "1Gi"
-
+      cpu: 1000m
+      memory: 1Gi
 additionalAgents:
   ci:
     podName: ci-agent
     customJenkinsLabels: ci-agent
     serviceAccount: jenkins-ci
     idleMinutes: 0
-    podRetention: "Never"
+    podRetention: Never
     runAsUser: 1000
     runAsGroup: 1000
     resources:
       requests:
-        cpu: "200m"
-        memory: "512Mi"
+        cpu: 200m
+        memory: 512Mi
       limits:
-        cpu: "1000m"
-        memory: "1Gi"
+        cpu: 1000m
+        memory: 1Gi
+    additionalContainers:
+    - sideContainerName: buildkit
+      image:
+        repository: moby/buildkit
+        tag: v0.18.2-rootless
+      command: rootlesskit
+      args: buildkitd --oci-worker-no-process-sandbox --addr unix:///home/user/.local/share/buildkit/buildkitd.sock
+      privileged: false
+      resources:
+        requests:
+          cpu: 300m
+          memory: 1Gi
+        limits:
+          cpu: '2'
+          memory: 2Gi
   cd:
     podName: cd-agent
     customJenkinsLabels: cd-agent
     serviceAccount: jenkins-cd
     idleMinutes: 0
-    podRetention: "Never"
+    podRetention: Never
     runAsUser: 1000
     runAsGroup: 1000
     resources:
       requests:
-        cpu: "200m"
-        memory: "512Mi"
+        cpu: 200m
+        memory: 512Mi
       limits:
-        cpu: "1000m"
-        memory: "1Gi"
+        cpu: 1000m
+        memory: 1Gi

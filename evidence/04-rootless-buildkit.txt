@@ -1,0 +1,120 @@
+Started by user Jenkins Admin
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Agent ci-agent-wtg2v is provisioned from template ci-agent
+---
+apiVersion: "v1"
+kind: "Pod"
+metadata:
+  annotations:
+    kubernetes.jenkins.io/last-refresh: "1786982316119"
+  labels:
+    jenkins/jenkins-jenkins-agent: "true"
+    jenkins/label-digest: "e022f4b2ff6331d13f619659a9a22c63266a1f9a"
+    jenkins/label: "jenkins-jenkins-agent_ci-agent"
+    kubernetes.jenkins.io/controller: "http___jenkins_jenkins_svc_cluster_local_8080x"
+  name: "ci-agent-wtg2v"
+  namespace: "jenkins"
+spec:
+  containers:
+  - args:
+    - "buildkitd"
+    - "--oci-worker-no-process-sandbox"
+    - "--addr"
+    - "unix:///home/user/.local/share/buildkit/buildkitd.sock"
+    command:
+    - "rootlesskit"
+    env:
+    - name: "JENKINS_URL"
+      value: "http://jenkins.jenkins.svc.cluster.local:8080/"
+    image: "moby/buildkit:v0.18.2-rootless"
+    imagePullPolicy: "IfNotPresent"
+    name: "buildkit"
+    resources:
+      limits:
+        memory: "2Gi"
+        cpu: "2"
+      requests:
+        memory: "1Gi"
+        cpu: "300m"
+    securityContext:
+      privileged: false
+      runAsGroup: 1000
+      runAsUser: 1000
+    tty: false
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+    workingDir: "/home/jenkins/agent"
+  - args:
+    - "********"
+    - "ci-agent-wtg2v"
+    env:
+    - name: "JENKINS_SECRET"
+      value: "********"
+    - name: "JENKINS_TUNNEL"
+      value: "jenkins-agent.jenkins.svc.cluster.local:50000"
+    - name: "JENKINS_AGENT_NAME"
+      value: "ci-agent-wtg2v"
+    - name: "REMOTING_OPTS"
+      value: "-noReconnectAfter 1d"
+    - name: "JENKINS_NAME"
+      value: "ci-agent-wtg2v"
+    - name: "JENKINS_AGENT_WORKDIR"
+      value: "/home/jenkins/agent"
+    - name: "JENKINS_URL"
+      value: "http://jenkins.jenkins.svc.cluster.local:8080/"
+    image: "jenkins/inbound-agent:3385.vf1123fb_515da_-1"
+    imagePullPolicy: "IfNotPresent"
+    name: "jnlp"
+    resources:
+      limits:
+        memory: "1Gi"
+        cpu: "1000m"
+      requests:
+        memory: "512Mi"
+        cpu: "200m"
+    securityContext:
+      privileged: false
+      runAsGroup: 1000
+      runAsUser: 1000
+    tty: false
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+    workingDir: "/home/jenkins/agent"
+  nodeSelector:
+    kubernetes.io/os: "linux"
+  restartPolicy: "Never"
+  serviceAccountName: "jenkins-ci"
+  volumes:
+  - emptyDir:
+      medium: ""
+    name: "workspace-volume"
+
+Running on ci-agent-wtg2v in /home/jenkins/agent/workspace/buildkit-check
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Check buildkit)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
++ buildctl --version
+buildctl github.com/moby/buildkit v0.18.2 e4da654b1251f91e914fab18eba33743aefd7080
++ buildctl debug workers
+ID				PLATFORMS
+jj7echlgsx7t7d4ix3n3hhxib	linux/amd64,linux/amd64/v2,linux/amd64/v3,linux/386
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
