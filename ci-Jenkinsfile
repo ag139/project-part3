@@ -1,0 +1,192 @@
+pipeline {
+    agent { label 'ci-agent' }
+
+    options {
+        timestamps()
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        timeout(time: 30, unit: 'MINUTES')
+    }
+
+    environment {
+        REGISTRY       = 'docker.io'
+        REGISTRY_REPO  = 'ayeletgeulayev'
+        BUILDKIT_HOST  = 'unix:///home/user/.local/share/buildkit/buildkitd.sock'
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+                script {
+                    env.GIT_SHA   = sh(script: 'git rev-parse --short=12 HEAD', returnStdout: true).trim()
+                    env.GIT_BRANCH_NAME = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim()
+                    env.IMAGE_TAG = env.GIT_SHA
+                }
+                sh '''
+                  echo "branch:       ${GIT_BRANCH_NAME}"
+                  echo "commit:       ${GIT_SHA}"
+                  echo "build number: ${BUILD_NUMBER}"
+                  echo "image tag:    ${IMAGE_TAG}"
+                '''
+            }
+        }
+
+        stage('Validation') {
+            steps {
+                sh '''
+                  set -e
+                  for f in docker/backend/Dockerfile docker/frontend/Dockerfile docker/worker/Dockerfile; do
+                    test -f "$f" || { echo "missing $f"; exit 1; }
+                  done
+                  test -d k8s || { echo "missing k8s directory"; exit 1; }
+                  test -f helm/devops-app/Chart.yaml || { echo "missing helm chart"; exit 1; }
+                  echo "project structure OK"
+
+                  grep -rn ":latest" docker/*/Dockerfile && { echo "latest tag found in Dockerfile"; exit 1; } || true
+                  echo "no latest tags in Dockerfiles"
+                '''
+            }
+        }
+
+        stage('Lint') {
+            steps {
+                sh '''
+                  set -e
+                  python3 -m py_compile docker/backend/app.py docker/worker/worker.py
+                  echo "python syntax OK"
+                '''
+            }
+        }
+
+        stage('Tests') {
+            steps {
+                sh '''
+                  set -e
+                  mkdir -p test-results
+                  python3 - <<'PYTEST'
+import ast, sys, xml.etree.ElementTree as ET
+
+cases = []
+
+def check(name, fn):
+    try:
+        fn()
+        cases.append((name, None))
+    except AssertionError as e:
+        cases.append((name, str(e) or "assertion failed"))
+
+def app_defines_routes():
+    tree = ast.parse(open("docker/backend/app.py").read())
+    routes = [d.func.value.attr for n in ast.walk(tree)
+              if isinstance(n, ast.FunctionDef)
+              for d in n.decorator_list
+              if isinstance(d, ast.Call) and isinstance(d.func, ast.Attribute)]
+    assert routes.count("route") >= 4, f"expected at least 4 routes, found {routes.count('route')}"
+
+def app_reads_env():
+    src = open("docker/backend/app.py").read()
+    for key in ["DB_HOST", "DB_PASSWORD", "S3_BUCKET_NAME", "SNS_TOPIC_ARN"]:
+        assert f'"{key}"' in src, f"{key} not read from environment"
+
+def app_has_no_hardcoded_secrets():
+    src = open("docker/backend/app.py").read()
+    assert "AKIA" not in src, "hardcoded AWS key found"
+    assert "rds.amazonaws.com" not in src, "hardcoded RDS endpoint found"
+
+def worker_writes_heartbeat():
+    src = open("docker/worker/worker.py").read()
+    assert "/tmp/healthy" in src, "worker does not write a heartbeat file"
+
+check("app_defines_routes", app_defines_routes)
+check("app_reads_env", app_reads_env)
+check("app_has_no_hardcoded_secrets", app_has_no_hardcoded_secrets)
+check("worker_writes_heartbeat", worker_writes_heartbeat)
+
+suite = ET.Element("testsuite", name="ci-checks",
+                   tests=str(len(cases)),
+                   failures=str(sum(1 for _, f in cases if f)))
+for name, failure in cases:
+    tc = ET.SubElement(suite, "testcase", classname="ci", name=name)
+    if failure:
+        ET.SubElement(tc, "failure", message=failure).text = failure
+
+ET.ElementTree(suite).write("test-results/results.xml")
+for name, failure in cases:
+    print(("FAIL " if failure else "PASS ") + name + (f" - {failure}" if failure else ""))
+sys.exit(1 if any(f for _, f in cases) else 0)
+PYTEST
+                '''
+            }
+            post {
+                always {
+                    junit 'test-results/results.xml'
+                }
+            }
+        }
+
+        stage('Build and Push') {
+            steps {
+                container('buildkit') {
+                    withCredentials([usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'REG_USER',
+                        passwordVariable: 'REG_PASS')]) {
+                        sh '''
+                          set -e
+                          mkdir -p /home/user/.docker
+                          AUTH=$(printf "%s:%s" "$REG_USER" "$REG_PASS" | base64 | tr -d '\\n')
+                          cat > /home/user/.docker/config.json <<JSON
+{"auths":{"https://index.docker.io/v1/":{"auth":"$AUTH"}}}
+JSON
+
+                          for svc in backend frontend worker; do
+                            echo "building $svc"
+                            buildctl build \\
+                              --frontend dockerfile.v0 \\
+                              --local context=docker/$svc \\
+                              --local dockerfile=docker/$svc \\
+                              --output type=image,name=${REGISTRY_REPO}/devops-app-$svc:${IMAGE_TAG},push=true \\
+                              --metadata-file /tmp/meta-$svc.json
+                          done
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Publish Metadata') {
+            steps {
+                container('buildkit') {
+                    sh '''
+                      set -e
+                      : > image-metadata.txt
+                      echo "GIT_COMMIT=${GIT_SHA}" >> image-metadata.txt
+                      echo "BUILD_NUMBER=${BUILD_NUMBER}" >> image-metadata.txt
+                      echo "IMAGE_TAG=${IMAGE_TAG}" >> image-metadata.txt
+                      for svc in backend frontend worker; do
+                        DIGEST=$(grep -o '"containerimage.digest":"[^"]*"' /tmp/meta-$svc.json | cut -d'"' -f4)
+                        echo "IMAGE_${svc}=${REGISTRY_REPO}/devops-app-$svc:${IMAGE_TAG}" >> image-metadata.txt
+                        echo "DIGEST_${svc}=${DIGEST}" >> image-metadata.txt
+                      done
+                      cat image-metadata.txt
+                    '''
+                }
+                archiveArtifacts artifacts: 'image-metadata.txt', fingerprint: true
+            }
+        }
+    }
+
+    post {
+        always {
+            sh 'rm -f /home/user/.docker/config.json 2>/dev/null || true'
+            cleanWs()
+        }
+        success {
+            echo "CI succeeded. Image tag ${env.IMAGE_TAG} is ready for deployment."
+        }
+        failure {
+            echo "CI failed. No image was promoted for deployment."
+        }
+    }
+}
