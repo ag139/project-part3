@@ -1,0 +1,11 @@
+NAME                        READY   STATUS    RESTARTS   AGE    IP           NODE                NOMINATED NODE   READINESS GATES
+backend-7fd9648958-6zqfq    1/1     Running   0          102s   10.244.1.4   devops-ci-worker    <none>           <none>
+backend-7fd9648958-f4dbj    1/1     Running   0          102s   10.244.2.5   devops-ci-worker2   <none>           <none>
+frontend-886df56f6-bsvdr    1/1     Running   0          102s   10.244.2.6   devops-ci-worker2   <none>           <none>
+frontend-886df56f6-vlslq    1/1     Running   0          102s   10.244.1.5   devops-ci-worker    <none>           <none>
+postgres-549cfd9d55-qcdz2   1/1     Running   0          103s   10.244.2.7   devops-ci-worker2   <none>           <none>
+worker-55d485bf55-6zkr5     1/1     Running   0          103s   10.244.1.3   devops-ci-worker    <none>           <none>
+NAME                      STATUS   ROLES           AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                         KERNEL-VERSION                      CONTAINER-RUNTIME
+devops-ci-control-plane   Ready    control-plane   7m43s   v1.30.0   172.24.0.4    <none>        Debian GNU/Linux 12 (bookworm)   6.18.33.2-microsoft-standard-WSL2   containerd://1.7.15
+devops-ci-worker          Ready    <none>          7m24s   v1.30.0   172.24.0.3    <none>        Debian GNU/Linux 12 (bookworm)   6.18.33.2-microsoft-standard-WSL2   containerd://1.7.15
+devops-ci-worker2         Ready    <none>          7m23s   v1.30.0   172.24.0.5    <none>        Debian GNU/Linux 12 (bookworm)   6.18.33.2-microsoft-standard-WSL2   containerd://1.7.15

@@ -1,0 +1,43 @@
+=== namespaces ===
+NAME                 STATUS   AGE
+default              Active   27m
+devops-app           Active   21m
+ingress-nginx        Active   25m
+jenkins              Active   17m
+kube-node-lease      Active   27m
+kube-public          Active   27m
+kube-system          Active   27m
+local-path-storage   Active   27m
+
+=== jenkins pods ===
+NAME        READY   STATUS    RESTARTS   AGE     IP            NODE                NOMINATED NODE   READINESS GATES
+jenkins-0   2/2     Running   0          3m41s   10.244.2.11   devops-ci-worker2   <none>           <none>
+
+=== service, ingress, pvc ===
+NAME                    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)     AGE
+service/jenkins         ClusterIP   10.96.44.54    <none>        8080/TCP    16m
+service/jenkins-agent   ClusterIP   10.96.92.216   <none>        50000/TCP   16m
+
+NAME                            STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/jenkins   Bound    pvc-b4a91be8-a937-43f0-be46-aecebe0651c9   8Gi        RWO            standard       <unset>                 16m
+
+=== rbac ===
+NAME                                SECRETS   AGE
+serviceaccount/default              0         17m
+serviceaccount/jenkins-cd           0         17m
+serviceaccount/jenkins-ci           0         17m
+serviceaccount/jenkins-controller   0         17m
+
+NAME                                                     CREATED AT
+role.rbac.authorization.k8s.io/jenkins-casc-reload       2026-08-17T15:11:23Z
+role.rbac.authorization.k8s.io/jenkins-controller        2026-08-17T15:10:13Z
+role.rbac.authorization.k8s.io/jenkins-schedule-agents   2026-08-17T15:11:23Z
+
+NAME                                                             ROLE                           AGE
+rolebinding.rbac.authorization.k8s.io/jenkins-controller         Role/jenkins-controller        17m
+rolebinding.rbac.authorization.k8s.io/jenkins-schedule-agents    Role/jenkins-schedule-agents   16m
+rolebinding.rbac.authorization.k8s.io/jenkins-watch-configmaps   Role/jenkins-casc-reload       16m
+
+=== helm release ===
+NAME   	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART         	APP VERSION
+jenkins	jenkins  	3       	2026-08-17 18:24:00.741823833 +0300 IDT	deployed	jenkins-5.9.54	2.568.2    
