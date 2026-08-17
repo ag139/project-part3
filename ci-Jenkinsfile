@@ -155,7 +155,7 @@ JSON
                               --local context=docker/$svc \\
                               --local dockerfile=docker/$svc \\
                               --output type=image,name=${REGISTRY_REPO}/devops-app-$svc:${IMAGE_TAG},push=true \\
-                              --metadata-file /tmp/meta-$svc.json
+                              --metadata-file $(pwd)/meta-$svc.json
                           done
                         '''
                     }
@@ -173,7 +173,7 @@ JSON
                       echo "BUILD_NUMBER=${BUILD_NUMBER}" >> image-metadata.txt
                       echo "IMAGE_TAG=${IMAGE_TAG}" >> image-metadata.txt
                       for svc in backend frontend worker; do
-                        DIGEST=$(grep -o '"containerimage.digest":"[^"]*"' /tmp/meta-$svc.json | cut -d'"' -f4)
+                        DIGEST=$(grep -o '"containerimage.digest": *"[^"]*"' meta-$svc.json | head -1 | sed 's/.*"\(sha256:[^"]*\)".*/\1/')
                         echo "IMAGE_${svc}=${REGISTRY_REPO}/devops-app-$svc:${IMAGE_TAG}" >> image-metadata.txt
                         echo "DIGEST_${svc}=${DIGEST}" >> image-metadata.txt
                       done
