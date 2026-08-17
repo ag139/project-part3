@@ -1,0 +1,9 @@
+GIT_COMMIT=3650eddd9f28
+BUILD_NUMBER=5
+IMAGE_TAG=3650eddd9f28
+IMAGE_backend=ayeletgeulayev/devops-app-backend:3650eddd9f28
+DIGEST_backend=sha256:d6a25d233985aafabfd62c8991b68e34c13d50e35cdebe8e765789464f0b9fcf
+IMAGE_frontend=ayeletgeulayev/devops-app-frontend:3650eddd9f28
+DIGEST_frontend=sha256:a367637a31fe1f872c58f31866cecccf9949b39220e3d76017f7b3695649eb5d
+IMAGE_worker=ayeletgeulayev/devops-app-worker:3650eddd9f28
+DIGEST_worker=sha256:a03f02e47f6f50e7f84570b9b98c66f9e582e8048d29b49e4f9a863158ce7633

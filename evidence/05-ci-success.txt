@@ -2,21 +2,19 @@ Started by user Jenkins Admin
 Obtained ci-Jenkinsfile from git https://github.com/ag139/project-part3
 [Pipeline] Start of Pipeline
 [Pipeline] node
-Still waiting to schedule task
-‘ci-agent-cvsc5’ is offline
-Agent ci-agent-cvsc5 is provisioned from template ci-agent
+Agent ci-agent-s78dt is provisioned from template ci-agent
 ---
 apiVersion: "v1"
 kind: "Pod"
 metadata:
   annotations:
-    kubernetes.jenkins.io/last-refresh: "1786984136377"
+    kubernetes.jenkins.io/last-refresh: "1786984412674"
   labels:
     jenkins/jenkins-jenkins-agent: "true"
     jenkins/label-digest: "e022f4b2ff6331d13f619659a9a22c63266a1f9a"
     jenkins/label: "jenkins-jenkins-agent_ci-agent"
     kubernetes.jenkins.io/controller: "http___jenkins_jenkins_svc_cluster_local_8080x"
-  name: "ci-agent-cvsc5"
+  name: "ci-agent-s78dt"
   namespace: "jenkins"
 spec:
   containers:
@@ -79,18 +77,18 @@ spec:
     workingDir: "/home/jenkins/agent"
   - args:
     - "********"
-    - "ci-agent-cvsc5"
+    - "ci-agent-s78dt"
     env:
     - name: "JENKINS_SECRET"
       value: "********"
     - name: "JENKINS_TUNNEL"
       value: "jenkins-agent.jenkins.svc.cluster.local:50000"
     - name: "JENKINS_AGENT_NAME"
-      value: "ci-agent-cvsc5"
+      value: "ci-agent-s78dt"
     - name: "REMOTING_OPTS"
       value: "-noReconnectAfter 1d"
     - name: "JENKINS_NAME"
-      value: "ci-agent-cvsc5"
+      value: "ci-agent-s78dt"
     - name: "JENKINS_AGENT_WORKDIR"
       value: "/home/jenkins/agent"
     - name: "JENKINS_URL"
@@ -124,7 +122,7 @@ spec:
       medium: ""
     name: "workspace-volume"
 
-Running on ci-agent-cvsc5 in /home/jenkins/agent/workspace/ci-application
+Running on ci-agent-s78dt in /home/jenkins/agent/workspace/ci-application
 [Pipeline] {
 [Pipeline] stage
 [Pipeline] { (Declarative: Checkout SCM)
@@ -141,12 +139,12 @@ Fetching upstream changes from https://github.com/ag139/project-part3
  > git config remote.origin.url https://github.com/ag139/project-part3 # timeout=10
  > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
 Avoid second fetch
-Checking out Revision 0dbfad773dac7b9cfe9d4e5012a06da0e00151c2 (refs/remotes/origin/main)
-Commit message: "Fix route detection in CI test suite"
+Checking out Revision 3650eddd9f28ff91183d045b49150efad5bd93af (refs/remotes/origin/main)
  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
  > git config core.sparsecheckout # timeout=10
- > git checkout -f 0dbfad773dac7b9cfe9d4e5012a06da0e00151c2 # timeout=10
- > git rev-list --no-walk bc5fca621b508231b19be403b5556bf36a83c310 # timeout=10
+ > git checkout -f 3650eddd9f28ff91183d045b49150efad5bd93af # timeout=10
+Commit message: "Fix digest extraction escaping"
+ > git rev-list --no-walk 0dbfad773dac7b9cfe9d4e5012a06da0e00151c2 # timeout=10
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] withEnv
@@ -156,59 +154,59 @@ Commit message: "Fix route detection in CI test suite"
 [Pipeline] timestamps
 [Pipeline] {
 [Pipeline] timeout
-[2026-08-17T16:29:23.697Z] Timeout set to expire in 30 min
+[2026-08-17T16:34:01.703Z] Timeout set to expire in 30 min
 [Pipeline] {
 [Pipeline] stage
 [Pipeline] { (Checkout)
 [Pipeline] checkout
-[2026-08-17T16:29:23.875Z] The recommended git tool is: git
-[2026-08-17T16:29:23.917Z] No credentials specified
-[2026-08-17T16:29:23.942Z] Fetching changes from the remote Git repository
-[2026-08-17T16:29:24.836Z] Checking out Revision 0dbfad773dac7b9cfe9d4e5012a06da0e00151c2 (refs/remotes/origin/main)
-[2026-08-17T16:29:24.881Z] Commit message: "Fix route detection in CI test suite"
+[2026-08-17T16:34:01.873Z] The recommended git tool is: git
+[2026-08-17T16:34:01.917Z] No credentials specified
+[2026-08-17T16:34:01.984Z] Fetching changes from the remote Git repository
+[2026-08-17T16:34:02.844Z] Checking out Revision 3650eddd9f28ff91183d045b49150efad5bd93af (refs/remotes/origin/main)
+[2026-08-17T16:34:01.924Z]  > git rev-parse --resolve-git-dir /home/jenkins/agent/workspace/ci-application/.git # timeout=10
+[2026-08-17T16:34:01.998Z]  > git config remote.origin.url https://github.com/ag139/project-part3 # timeout=10
+[2026-08-17T16:34:02.017Z] Fetching upstream changes from https://github.com/ag139/project-part3
+[2026-08-17T16:34:02.018Z]  > git --version # timeout=10
+[2026-08-17T16:34:02.086Z]  > git --version # 'git version 2.47.3'
+[2026-08-17T16:34:02.086Z]  > git fetch --tags --force --progress -- https://github.com/ag139/project-part3 +refs/heads/*:refs/remotes/origin/* # timeout=10
+[2026-08-17T16:34:02.833Z]  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+[2026-08-17T16:34:02.848Z]  > git config core.sparsecheckout # timeout=10
+[2026-08-17T16:34:02.992Z] Commit message: "Fix digest extraction escaping"
 [Pipeline] script
 [Pipeline] {
-[2026-08-17T16:29:23.923Z]  > git rev-parse --resolve-git-dir /home/jenkins/agent/workspace/ci-application/.git # timeout=10
-[2026-08-17T16:29:23.959Z]  > git config remote.origin.url https://github.com/ag139/project-part3 # timeout=10
-[2026-08-17T16:29:24.039Z] Fetching upstream changes from https://github.com/ag139/project-part3
-[2026-08-17T16:29:24.039Z]  > git --version # timeout=10
-[2026-08-17T16:29:24.045Z]  > git --version # 'git version 2.47.3'
-[2026-08-17T16:29:24.046Z]  > git fetch --tags --force --progress -- https://github.com/ag139/project-part3 +refs/heads/*:refs/remotes/origin/* # timeout=10
-[2026-08-17T16:29:24.828Z]  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
-[2026-08-17T16:29:24.839Z]  > git config core.sparsecheckout # timeout=10
-[2026-08-17T16:29:24.846Z]  > git checkout -f 0dbfad773dac7b9cfe9d4e5012a06da0e00151c2 # timeout=10
 [Pipeline] sh
-[2026-08-17T16:29:25.564Z] + git rev-parse --short=12 HEAD
+[2026-08-17T16:34:02.890Z]  > git checkout -f 3650eddd9f28ff91183d045b49150efad5bd93af # timeout=10
+[2026-08-17T16:34:03.848Z] + git rev-parse --short=12 HEAD
 [Pipeline] sh
-[2026-08-17T16:29:26.022Z] + git rev-parse --abbrev-ref HEAD
+[2026-08-17T16:34:04.393Z] + git rev-parse --abbrev-ref HEAD
 [Pipeline] }
 [Pipeline] // script
 [Pipeline] sh
-[2026-08-17T16:29:26.502Z] + echo branch:       HEAD
-[2026-08-17T16:29:26.503Z] branch:       HEAD
-[2026-08-17T16:29:26.503Z] + echo commit:       0dbfad773dac
-[2026-08-17T16:29:26.503Z] commit:       0dbfad773dac
-[2026-08-17T16:29:26.503Z] + echo build number: 3
-[2026-08-17T16:29:26.503Z] build number: 3
-[2026-08-17T16:29:26.503Z] + echo image tag:    0dbfad773dac
-[2026-08-17T16:29:26.503Z] image tag:    0dbfad773dac
+[2026-08-17T16:34:05.075Z] + echo branch:       HEAD
+[2026-08-17T16:34:05.075Z] branch:       HEAD
+[2026-08-17T16:34:05.075Z] + echo commit:       3650eddd9f28
+[2026-08-17T16:34:05.075Z] commit:       3650eddd9f28
+[2026-08-17T16:34:05.075Z] + echo build number: 5
+[2026-08-17T16:34:05.075Z] build number: 5
+[2026-08-17T16:34:05.075Z] + echo image tag:    3650eddd9f28
+[2026-08-17T16:34:05.075Z] image tag:    3650eddd9f28
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] stage
 [Pipeline] { (Validation)
 [Pipeline] sh
-[2026-08-17T16:29:26.992Z] + set -e
-[2026-08-17T16:29:26.992Z] + test -f docker/backend/Dockerfile
-[2026-08-17T16:29:26.992Z] + test -f docker/frontend/Dockerfile
-[2026-08-17T16:29:26.992Z] + test -f docker/worker/Dockerfile
-[2026-08-17T16:29:26.992Z] + test -d k8s
-[2026-08-17T16:29:26.992Z] + test -f helm/devops-app/Chart.yaml
-[2026-08-17T16:29:26.992Z] + echo project structure OK
-[2026-08-17T16:29:26.992Z] project structure OK
-[2026-08-17T16:29:26.992Z] + grep -rn :latest docker/backend/Dockerfile docker/frontend/Dockerfile docker/worker/Dockerfile
-[2026-08-17T16:29:26.993Z] + true
-[2026-08-17T16:29:26.993Z] + echo no latest tags in Dockerfiles
-[2026-08-17T16:29:26.993Z] no latest tags in Dockerfiles
+[2026-08-17T16:34:05.750Z] + set -e
+[2026-08-17T16:34:05.750Z] + test -f docker/backend/Dockerfile
+[2026-08-17T16:34:05.750Z] + test -f docker/frontend/Dockerfile
+[2026-08-17T16:34:05.750Z] + test -f docker/worker/Dockerfile
+[2026-08-17T16:34:05.750Z] + test -d k8s
+[2026-08-17T16:34:05.750Z] + test -f helm/devops-app/Chart.yaml
+[2026-08-17T16:34:05.750Z] + echo project structure OK
+[2026-08-17T16:34:05.750Z] project structure OK
+[2026-08-17T16:34:05.750Z] + grep -rn :latest docker/backend/Dockerfile docker/frontend/Dockerfile docker/worker/Dockerfile
+[2026-08-17T16:34:05.750Z] + true
+[2026-08-17T16:34:05.750Z] + echo no latest tags in Dockerfiles
+[2026-08-17T16:34:05.750Z] no latest tags in Dockerfiles
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] stage
@@ -216,10 +214,10 @@ Commit message: "Fix route detection in CI test suite"
 [Pipeline] container
 [Pipeline] {
 [Pipeline] sh
-[2026-08-17T16:29:26.231Z] + set -e
-[2026-08-17T16:29:26.231Z] + python3 -m py_compile docker/backend/app.py docker/worker/worker.py
-[2026-08-17T16:29:26.815Z] + echo python syntax OK
-[2026-08-17T16:29:26.815Z] python syntax OK
+[2026-08-17T16:34:06.706Z] + set -e
+[2026-08-17T16:34:06.706Z] + python3 -m py_compile docker/backend/app.py docker/worker/worker.py
+[2026-08-17T16:34:07.676Z] + echo python syntax OK
+[2026-08-17T16:34:07.676Z] python syntax OK
 [Pipeline] }
 [Pipeline] // container
 [Pipeline] }
@@ -229,19 +227,19 @@ Commit message: "Fix route detection in CI test suite"
 [Pipeline] container
 [Pipeline] {
 [Pipeline] sh
-[2026-08-17T16:29:27.661Z] + set -e
-[2026-08-17T16:29:27.662Z] + mkdir -p test-results
-[2026-08-17T16:29:27.662Z] + python3 -
-[2026-08-17T16:29:27.931Z] PASS app_defines_routes
-[2026-08-17T16:29:27.931Z] PASS app_reads_env
-[2026-08-17T16:29:27.931Z] PASS app_has_no_hardcoded_secrets
-[2026-08-17T16:29:27.931Z] PASS worker_writes_heartbeat
+[2026-08-17T16:34:08.588Z] + set -e
+[2026-08-17T16:34:08.588Z] + mkdir -p test-results
+[2026-08-17T16:34:08.588Z] + python3 -
+[2026-08-17T16:34:08.857Z] PASS app_defines_routes
+[2026-08-17T16:34:08.857Z] PASS app_reads_env
+[2026-08-17T16:34:08.857Z] PASS app_has_no_hardcoded_secrets
+[2026-08-17T16:34:08.857Z] PASS worker_writes_heartbeat
 [Pipeline] }
 [Pipeline] // container
 Post stage
 [Pipeline] junit
-[2026-08-17T16:29:28.063Z] Recording test results
-[2026-08-17T16:29:30.074Z] [Checks API] No suitable checks publisher found.
+[2026-08-17T16:34:09.240Z] Recording test results
+[2026-08-17T16:34:11.025Z] [Checks API] No suitable checks publisher found.
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] stage
@@ -249,322 +247,332 @@ Post stage
 [Pipeline] container
 [Pipeline] {
 [Pipeline] withCredentials
-[2026-08-17T16:29:30.555Z] Masking supported pattern matches of $REG_PASS
+[2026-08-17T16:34:11.324Z] Masking supported pattern matches of $REG_PASS
 [Pipeline] {
 [Pipeline] sh
-[2026-08-17T16:29:31.165Z] + set -e
-[2026-08-17T16:29:31.165Z] + mkdir -p /home/user/.docker
-[2026-08-17T16:29:31.165Z] + printf '%s:%s' ayeletgeulayev ****
-[2026-08-17T16:29:31.165Z] + base64
-[2026-08-17T16:29:31.165Z] + tr -d '\n'
-[2026-08-17T16:29:31.165Z] + AUTH=YXllbGV0Z2V1bGF5ZXY6****
-[2026-08-17T16:29:31.165Z] + cat
-[2026-08-17T16:29:31.165Z] + echo 'building backend'
-[2026-08-17T16:29:31.165Z] building backend
-[2026-08-17T16:29:31.165Z] + buildctl build --frontend dockerfile.v0 --local 'context=docker/backend' --local 'dockerfile=docker/backend' --output 'type=image,name=ayeletgeulayev/devops-app-backend:0dbfad773dac,push=true' --metadata-file /tmp/meta-backend.json
-[2026-08-17T16:29:31.433Z] #1 [internal] load build definition from Dockerfile
-[2026-08-17T16:29:31.434Z] #1 transferring dockerfile: 477B done
-[2026-08-17T16:29:31.434Z] #1 DONE 0.1s
-[2026-08-17T16:29:31.434Z] 
-[2026-08-17T16:29:31.434Z] #2 [internal] load metadata for docker.io/library/python:3.12-slim
-[2026-08-17T16:29:32.019Z] #2 ...
-[2026-08-17T16:29:32.019Z] 
-[2026-08-17T16:29:32.019Z] #3 [auth] library/python:pull token for registry-1.docker.io
-[2026-08-17T16:29:32.019Z] #3 DONE 0.0s
-[2026-08-17T16:29:32.283Z] 
-[2026-08-17T16:29:32.283Z] #2 [internal] load metadata for docker.io/library/python:3.12-slim
-[2026-08-17T16:29:33.679Z] #2 DONE 2.1s
-[2026-08-17T16:29:33.679Z] 
-[2026-08-17T16:29:33.680Z] #4 [internal] load .dockerignore
-[2026-08-17T16:29:33.680Z] #4 transferring context: 106B done
-[2026-08-17T16:29:33.680Z] #4 DONE 0.0s
-[2026-08-17T16:29:33.680Z] 
-[2026-08-17T16:29:33.680Z] #5 [1/7] FROM docker.io/library/python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a
-[2026-08-17T16:29:33.680Z] #5 resolve docker.io/library/python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a 0.0s done
-[2026-08-17T16:29:33.680Z] #5 ...
-[2026-08-17T16:29:33.680Z] 
-[2026-08-17T16:29:33.680Z] #6 [internal] load build context
-[2026-08-17T16:29:33.680Z] #6 transferring context: 3.35kB done
-[2026-08-17T16:29:33.680Z] #6 DONE 0.1s
-[2026-08-17T16:29:33.680Z] 
-[2026-08-17T16:29:33.680Z] #5 [1/7] FROM docker.io/library/python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a
-[2026-08-17T16:29:33.952Z] #5 sha256:6760bfe2ff00c4530bc73b2f88a1e9615a56c9a77028f41f8bb4b978d08b8439 0B / 248B 0.2s
-[2026-08-17T16:29:33.952Z] #5 sha256:6760bfe2ff00c4530bc73b2f88a1e9615a56c9a77028f41f8bb4b978d08b8439 248B / 248B 0.2s done
-[2026-08-17T16:29:33.952Z] #5 sha256:b952fe9f6810de5dac5d24a3983aee5fce3884f7359a533ba325e48ecb745994 0B / 12.12MB 0.3s
-[2026-08-17T16:29:33.952Z] #5 sha256:fa18dfb1257a9c1afc75e233c55b0195dd02b8d6d18dd7e24c10238b039e7742 0B / 1.29MB 0.2s
-[2026-08-17T16:29:33.952Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 0B / 29.78MB 0.2s
-[2026-08-17T16:29:34.238Z] #5 sha256:b952fe9f6810de5dac5d24a3983aee5fce3884f7359a533ba325e48ecb745994 2.10MB / 12.12MB 0.5s
-[2026-08-17T16:29:34.238Z] #5 sha256:b952fe9f6810de5dac5d24a3983aee5fce3884f7359a533ba325e48ecb745994 6.29MB / 12.12MB 0.6s
-[2026-08-17T16:29:34.535Z] #5 sha256:fa18dfb1257a9c1afc75e233c55b0195dd02b8d6d18dd7e24c10238b039e7742 1.29MB / 1.29MB 0.7s done
-[2026-08-17T16:29:34.536Z] #5 sha256:b952fe9f6810de5dac5d24a3983aee5fce3884f7359a533ba325e48ecb745994 12.12MB / 12.12MB 0.9s done
-[2026-08-17T16:29:34.824Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 8.39MB / 29.78MB 1.1s
-[2026-08-17T16:29:34.825Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 11.53MB / 29.78MB 1.2s
-[2026-08-17T16:29:35.185Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 15.73MB / 29.78MB 1.4s
-[2026-08-17T16:29:35.186Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 17.83MB / 29.78MB 1.5s
-[2026-08-17T16:29:35.475Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 22.02MB / 29.78MB 1.7s
-[2026-08-17T16:29:35.475Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 24.12MB / 29.78MB 1.8s
-[2026-08-17T16:29:35.757Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 28.31MB / 29.78MB 2.0s
-[2026-08-17T16:29:35.757Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 29.78MB / 29.78MB 2.0s done
-[2026-08-17T16:29:36.033Z] #5 extracting sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d
-[2026-08-17T16:29:39.412Z] #5 extracting sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 3.6s done
-[2026-08-17T16:29:39.684Z] #5 extracting sha256:fa18dfb1257a9c1afc75e233c55b0195dd02b8d6d18dd7e24c10238b039e7742
-[2026-08-17T16:29:39.953Z] #5 extracting sha256:fa18dfb1257a9c1afc75e233c55b0195dd02b8d6d18dd7e24c10238b039e7742 0.6s done
-[2026-08-17T16:29:39.953Z] #5 DONE 6.5s
-[2026-08-17T16:29:40.234Z] 
-[2026-08-17T16:29:40.234Z] #5 [1/7] FROM docker.io/library/python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a
-[2026-08-17T16:29:40.234Z] #5 extracting sha256:b952fe9f6810de5dac5d24a3983aee5fce3884f7359a533ba325e48ecb745994
-[2026-08-17T16:29:42.211Z] #5 extracting sha256:b952fe9f6810de5dac5d24a3983aee5fce3884f7359a533ba325e48ecb745994 2.1s done
-[2026-08-17T16:29:42.212Z] #5 DONE 8.6s
-[2026-08-17T16:29:42.212Z] 
-[2026-08-17T16:29:42.212Z] #5 [1/7] FROM docker.io/library/python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a
-[2026-08-17T16:29:42.212Z] #5 extracting sha256:6760bfe2ff00c4530bc73b2f88a1e9615a56c9a77028f41f8bb4b978d08b8439 0.1s done
-[2026-08-17T16:29:42.212Z] #5 DONE 8.6s
-[2026-08-17T16:29:42.212Z] 
-[2026-08-17T16:29:42.212Z] #7 [2/7] WORKDIR /app
-[2026-08-17T16:29:42.212Z] #7 DONE 0.1s
-[2026-08-17T16:29:42.212Z] 
-[2026-08-17T16:29:42.212Z] #8 [3/7] RUN groupadd -r appgroup && useradd -r -g appgroup -u 1000 appuser
-[2026-08-17T16:29:42.479Z] #8 0.358 useradd warning: appuser's uid 1000 is greater than SYS_UID_MAX 999
-[2026-08-17T16:29:42.750Z] #8 DONE 0.5s
-[2026-08-17T16:29:42.750Z] 
-[2026-08-17T16:29:42.750Z] #9 [4/7] COPY requirements.txt .
-[2026-08-17T16:29:43.025Z] #9 DONE 0.1s
-[2026-08-17T16:29:43.025Z] 
-[2026-08-17T16:29:43.025Z] #10 [5/7] RUN pip install --no-cache-dir -r requirements.txt
-[2026-08-17T16:29:47.278Z] #10 4.108 Collecting Flask==3.1.3 (from -r requirements.txt (line 5))
-[2026-08-17T16:29:47.278Z] #10 4.356   Downloading flask-3.1.3-py3-none-any.whl.metadata (3.2 kB)
-[2026-08-17T16:29:47.548Z] #10 4.686 Collecting psycopg2-binary==2.9.12 (from -r requirements.txt (line 6))
-[2026-08-17T16:29:47.548Z] #10 4.757   Downloading psycopg2_binary-2.9.12-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (4.9 kB)
-[2026-08-17T16:29:48.501Z] #10 5.707 Collecting boto3==1.43.61 (from -r requirements.txt (line 7))
-[2026-08-17T16:29:48.501Z] #10 5.775   Downloading boto3-1.43.61-py3-none-any.whl.metadata (6.6 kB)
-[2026-08-17T16:29:48.501Z] #10 5.864 Collecting blinker>=1.9.0 (from Flask==3.1.3->-r requirements.txt (line 5))
-[2026-08-17T16:29:48.766Z] #10 5.931   Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
-[2026-08-17T16:29:48.767Z] #10 6.024 Collecting click>=8.1.3 (from Flask==3.1.3->-r requirements.txt (line 5))
-[2026-08-17T16:29:49.032Z] #10 6.093   Downloading click-8.4.2-py3-none-any.whl.metadata (2.6 kB)
-[2026-08-17T16:29:49.032Z] #10 6.178 Collecting itsdangerous>=2.2.0 (from Flask==3.1.3->-r requirements.txt (line 5))
-[2026-08-17T16:29:49.032Z] #10 6.248   Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
-[2026-08-17T16:29:49.032Z] #10 6.335 Collecting jinja2>=3.1.2 (from Flask==3.1.3->-r requirements.txt (line 5))
-[2026-08-17T16:29:49.296Z] #10 6.402   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
-[2026-08-17T16:29:49.296Z] #10 6.566 Collecting markupsafe>=2.1.1 (from Flask==3.1.3->-r requirements.txt (line 5))
-[2026-08-17T16:29:49.561Z] #10 6.634   Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
-[2026-08-17T16:29:49.561Z] #10 6.736 Collecting werkzeug>=3.1.0 (from Flask==3.1.3->-r requirements.txt (line 5))
-[2026-08-17T16:29:49.561Z] #10 6.803   Downloading werkzeug-3.1.8-py3-none-any.whl.metadata (4.0 kB)
-[2026-08-17T16:29:50.962Z] #10 7.933 Collecting botocore<1.44.0,>=1.43.61 (from boto3==1.43.61->-r requirements.txt (line 7))
-[2026-08-17T16:29:50.962Z] #10 7.999   Downloading botocore-1.43.72-py3-none-any.whl.metadata (5.6 kB)
-[2026-08-17T16:29:50.962Z] #10 8.086 Collecting jmespath<2.0.0,>=0.7.1 (from boto3==1.43.61->-r requirements.txt (line 7))
-[2026-08-17T16:29:50.962Z] #10 8.152   Downloading jmespath-1.1.0-py3-none-any.whl.metadata (7.6 kB)
-[2026-08-17T16:29:50.963Z] #10 8.253 Collecting s3transfer<0.20.0,>=0.19.0 (from boto3==1.43.61->-r requirements.txt (line 7))
-[2026-08-17T16:29:51.228Z] #10 8.323   Downloading s3transfer-0.19.2-py3-none-any.whl.metadata (1.7 kB)
-[2026-08-17T16:29:51.228Z] #10 8.416 Collecting python-dateutil<3.0.0,>=2.1 (from botocore<1.44.0,>=1.43.61->boto3==1.43.61->-r requirements.txt (line 7))
-[2026-08-17T16:29:51.228Z] #10 8.485   Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
-[2026-08-17T16:29:51.228Z] #10 8.624 Collecting urllib3!=2.2.0,<3,>=1.25.4 (from botocore<1.44.0,>=1.43.61->boto3==1.43.61->-r requirements.txt (line 7))
-[2026-08-17T16:29:51.495Z] #10 8.692   Downloading urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
-[2026-08-17T16:29:52.089Z] #10 9.310 Collecting six>=1.5 (from python-dateutil<3.0.0,>=2.1->botocore<1.44.0,>=1.43.61->boto3==1.43.61->-r requirements.txt (line 7))
-[2026-08-17T16:29:52.090Z] #10 9.380   Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
-[2026-08-17T16:29:52.090Z] #10 9.455 Downloading flask-3.1.3-py3-none-any.whl (103 kB)
-[2026-08-17T16:29:52.354Z] #10 9.618 Downloading psycopg2_binary-2.9.12-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.3 MB)
-[2026-08-17T16:29:52.888Z] #10 9.958    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.3/4.3 MB 16.2 MB/s eta 0:00:00
-[2026-08-17T16:29:52.889Z] #10 10.03 Downloading boto3-1.43.61-py3-none-any.whl (140 kB)
-[2026-08-17T16:29:52.889Z] #10 10.10 Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
-[2026-08-17T16:29:53.155Z] #10 10.17 Downloading botocore-1.43.72-py3-none-any.whl (15.6 MB)
-[2026-08-17T16:29:53.441Z] #10 10.59    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 15.6/15.6 MB 37.3 MB/s eta 0:00:00
-[2026-08-17T16:29:53.442Z] #10 10.67 Downloading click-8.4.2-py3-none-any.whl (119 kB)
-[2026-08-17T16:29:53.442Z] #10 10.74 Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
-[2026-08-17T16:29:53.705Z] #10 10.81 Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
-[2026-08-17T16:29:53.705Z] #10 10.88 Downloading jmespath-1.1.0-py3-none-any.whl (20 kB)
-[2026-08-17T16:29:53.705Z] #10 10.94 Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
-[2026-08-17T16:29:53.705Z] #10 11.01 Downloading s3transfer-0.19.2-py3-none-any.whl (90 kB)
-[2026-08-17T16:29:53.968Z] #10 11.08 Downloading werkzeug-3.1.8-py3-none-any.whl (226 kB)
-[2026-08-17T16:29:53.968Z] #10 11.16 Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
-[2026-08-17T16:29:53.968Z] #10 11.23 Downloading urllib3-2.7.0-py3-none-any.whl (131 kB)
-[2026-08-17T16:29:53.968Z] #10 11.30 Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
-[2026-08-17T16:29:54.232Z] #10 11.51 Installing collected packages: urllib3, six, psycopg2-binary, markupsafe, jmespath, itsdangerous, click, blinker, werkzeug, python-dateutil, jinja2, Flask, botocore, s3transfer, boto3
-[2026-08-17T16:29:56.843Z] #10 14.21 Successfully installed Flask-3.1.3 blinker-1.9.0 boto3-1.43.61 botocore-1.43.72 click-8.4.2 itsdangerous-2.2.0 jinja2-3.1.6 jmespath-1.1.0 markupsafe-3.0.3 psycopg2-binary-2.9.12 python-dateutil-2.9.0.post0 s3transfer-0.19.2 six-1.17.0 urllib3-2.7.0 werkzeug-3.1.8
-[2026-08-17T16:29:57.111Z] #10 14.21 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
-[2026-08-17T16:29:57.377Z] #10 14.56 
-[2026-08-17T16:29:57.377Z] #10 14.56 [notice] A new release of pip is available: 25.0.1 -> 26.2.1
-[2026-08-17T16:29:57.377Z] #10 14.56 [notice] To update, run: pip install --upgrade pip
-[2026-08-17T16:29:57.643Z] #10 DONE 14.9s
-[2026-08-17T16:29:57.910Z] 
-[2026-08-17T16:29:57.910Z] #11 [6/7] COPY . .
-[2026-08-17T16:29:57.910Z] #11 DONE 0.2s
-[2026-08-17T16:29:57.910Z] 
-[2026-08-17T16:29:57.910Z] #12 [7/7] RUN chown -R appuser:appgroup /app
-[2026-08-17T16:29:58.177Z] #12 DONE 0.2s
-[2026-08-17T16:29:58.177Z] 
-[2026-08-17T16:29:58.177Z] #13 exporting to image
-[2026-08-17T16:29:58.178Z] #13 exporting layers
-[2026-08-17T16:30:03.515Z] #13 exporting layers 4.8s done
-[2026-08-17T16:30:03.515Z] #13 exporting manifest sha256:9ad750c2940e815ac5dc1a46a656684d6846ea493baf921d1342da4ad07cfd75 0.0s done
-[2026-08-17T16:30:03.515Z] #13 exporting config sha256:3997f0da335891ae1ddebcad43d2dd3a0ceede6e7ccd7f4cf58e03900bf728ff 0.0s done
-[2026-08-17T16:30:03.515Z] #13 pushing layers
-[2026-08-17T16:30:03.515Z] #13 ...
-[2026-08-17T16:30:03.515Z] 
-[2026-08-17T16:30:03.515Z] #14 [auth] ayeletgeulayev/devops-app-backend:pull,push token for registry-1.docker.io
-[2026-08-17T16:30:03.515Z] #14 DONE 0.0s
-[2026-08-17T16:30:03.515Z] 
-[2026-08-17T16:30:03.515Z] #13 exporting to image
-[2026-08-17T16:30:25.503Z] #13 pushing layers 22.7s done
-[2026-08-17T16:30:25.503Z] #13 pushing manifest for docker.io/ayeletgeulayev/devops-app-backend:0dbfad773dac@sha256:9ad750c2940e815ac5dc1a46a656684d6846ea493baf921d1342da4ad07cfd75
-[2026-08-17T16:30:27.425Z] #13 pushing manifest for docker.io/ayeletgeulayev/devops-app-backend:0dbfad773dac@sha256:9ad750c2940e815ac5dc1a46a656684d6846ea493baf921d1342da4ad07cfd75 1.9s done
-[2026-08-17T16:30:27.425Z] #13 DONE 29.4s
-[2026-08-17T16:30:27.425Z] + echo 'building frontend'
-[2026-08-17T16:30:27.425Z] building frontend
-[2026-08-17T16:30:27.426Z] + buildctl build --frontend dockerfile.v0 --local 'context=docker/frontend' --local 'dockerfile=docker/frontend' --output 'type=image,name=ayeletgeulayev/devops-app-frontend:0dbfad773dac,push=true' --metadata-file /tmp/meta-frontend.json
-[2026-08-17T16:30:27.688Z] #1 [internal] load build definition from Dockerfile
-[2026-08-17T16:30:27.688Z] #1 transferring dockerfile: 363B done
-[2026-08-17T16:30:27.688Z] #1 DONE 0.0s
-[2026-08-17T16:30:27.688Z] 
-[2026-08-17T16:30:27.688Z] #2 [internal] load metadata for docker.io/library/nginx:1.27-alpine
-[2026-08-17T16:30:27.950Z] #2 ...
-[2026-08-17T16:30:27.950Z] 
-[2026-08-17T16:30:27.950Z] #3 [auth] library/nginx:pull token for registry-1.docker.io
-[2026-08-17T16:30:27.950Z] #3 DONE 0.0s
-[2026-08-17T16:30:27.950Z] 
-[2026-08-17T16:30:27.950Z] #2 [internal] load metadata for docker.io/library/nginx:1.27-alpine
-[2026-08-17T16:30:27.269Z] #2 DONE -0.2s
-[2026-08-17T16:30:27.532Z] 
-[2026-08-17T16:30:27.532Z] #4 [internal] load .dockerignore
-[2026-08-17T16:30:27.532Z] #4 transferring context: 61B done
-[2026-08-17T16:30:27.532Z] #4 DONE 0.0s
-[2026-08-17T16:30:27.532Z] 
-[2026-08-17T16:30:27.533Z] #5 [1/4] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
-[2026-08-17T16:30:27.533Z] #5 resolve docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10 0.0s done
-[2026-08-17T16:30:27.805Z] #5 DONE 0.3s
-[2026-08-17T16:30:27.805Z] 
-[2026-08-17T16:30:27.805Z] #6 [internal] load build context
-[2026-08-17T16:30:27.805Z] #6 transferring context: 690B done
-[2026-08-17T16:30:27.805Z] #6 DONE 0.1s
-[2026-08-17T16:30:27.805Z] 
-[2026-08-17T16:30:27.805Z] #5 [1/4] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
-[2026-08-17T16:30:27.805Z] #5 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 0B / 15.52MB 0.2s
-[2026-08-17T16:30:28.093Z] #5 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 3.15MB / 15.52MB 0.3s
-[2026-08-17T16:30:28.093Z] #5 sha256:34a64644b756511a2e217f0508e11d1a572085d66cd6dc9a555a082ad49a3102 1.40kB / 1.40kB 0.2s done
-[2026-08-17T16:30:28.093Z] #5 sha256:197eb75867ef4fcecd4724f17b0972ab0489436860a594a9445f8eaff8155053 1.21kB / 1.21kB 0.2s done
-[2026-08-17T16:30:28.093Z] #5 sha256:81bd8ed7ec6789b0cb7f1b47ee731c522f6dba83201ec73cd6bca1350f582948 402B / 402B 0.2s done
-[2026-08-17T16:30:28.093Z] #5 sha256:d7e5070240863957ebb0b5a44a5729963c3462666baa2947d00628cb5f2d5773 955B / 955B 0.2s done
-[2026-08-17T16:30:28.093Z] #5 sha256:b464cfdf2a6319875aeb27359ec549790ce14d8214fcb16ef915e4530e5ed235 0B / 629B 0.2s
-[2026-08-17T16:30:28.093Z] #5 sha256:61ca4f733c802afd9e05a32f0de0361b6d713b8b53292dc15fb093229f648674 0B / 1.79MB 0.2s
-[2026-08-17T16:30:28.409Z] #5 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 6.29MB / 15.52MB 0.5s
-[2026-08-17T16:30:28.409Z] #5 sha256:b464cfdf2a6319875aeb27359ec549790ce14d8214fcb16ef915e4530e5ed235 629B / 629B 0.2s done
-[2026-08-17T16:30:28.409Z] #5 sha256:61ca4f733c802afd9e05a32f0de0361b6d713b8b53292dc15fb093229f648674 1.79MB / 1.79MB 0.3s done
-[2026-08-17T16:30:28.409Z] #5 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 12.58MB / 15.52MB 0.8s
-[2026-08-17T16:30:28.409Z] #5 sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870 0B / 3.64MB 0.2s
-[2026-08-17T16:30:28.714Z] #5 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 15.52MB / 15.52MB 0.9s
-[2026-08-17T16:30:28.715Z] #5 sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870 1.05MB / 3.64MB 0.3s
-[2026-08-17T16:30:28.715Z] #5 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 15.52MB / 15.52MB 0.9s done
-[2026-08-17T16:30:28.716Z] #5 sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870 3.64MB / 3.64MB 0.5s done
-[2026-08-17T16:30:28.716Z] #5 extracting sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870
-[2026-08-17T16:30:28.986Z] #5 extracting sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870 0.4s done
-[2026-08-17T16:30:28.987Z] #5 DONE 1.7s
-[2026-08-17T16:30:29.259Z] 
-[2026-08-17T16:30:29.259Z] #5 [1/4] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
-[2026-08-17T16:30:29.260Z] #5 extracting sha256:61ca4f733c802afd9e05a32f0de0361b6d713b8b53292dc15fb093229f648674
-[2026-08-17T16:30:29.533Z] #5 extracting sha256:61ca4f733c802afd9e05a32f0de0361b6d713b8b53292dc15fb093229f648674 0.5s done
-[2026-08-17T16:30:29.533Z] #5 extracting sha256:b464cfdf2a6319875aeb27359ec549790ce14d8214fcb16ef915e4530e5ed235
-[2026-08-17T16:30:29.802Z] #5 extracting sha256:b464cfdf2a6319875aeb27359ec549790ce14d8214fcb16ef915e4530e5ed235 0.0s done
-[2026-08-17T16:30:29.802Z] #5 extracting sha256:d7e5070240863957ebb0b5a44a5729963c3462666baa2947d00628cb5f2d5773 0.0s done
-[2026-08-17T16:30:29.802Z] #5 extracting sha256:81bd8ed7ec6789b0cb7f1b47ee731c522f6dba83201ec73cd6bca1350f582948 0.0s done
-[2026-08-17T16:30:29.802Z] #5 DONE 2.3s
-[2026-08-17T16:30:29.802Z] 
-[2026-08-17T16:30:29.802Z] #5 [1/4] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
-[2026-08-17T16:30:29.802Z] #5 extracting sha256:197eb75867ef4fcecd4724f17b0972ab0489436860a594a9445f8eaff8155053 0.1s done
-[2026-08-17T16:30:29.802Z] #5 extracting sha256:34a64644b756511a2e217f0508e11d1a572085d66cd6dc9a555a082ad49a3102 0.0s done
-[2026-08-17T16:30:30.074Z] #5 extracting sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d
-[2026-08-17T16:30:31.489Z] #5 extracting sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 1.4s done
-[2026-08-17T16:30:31.489Z] #5 DONE 3.9s
-[2026-08-17T16:30:31.489Z] 
-[2026-08-17T16:30:31.489Z] #7 [2/4] RUN rm /etc/nginx/conf.d/default.conf 2>/dev/null || true
-[2026-08-17T16:30:31.489Z] #7 DONE 0.3s
-[2026-08-17T16:30:31.757Z] 
-[2026-08-17T16:30:31.758Z] #8 [3/4] COPY nginx.conf /etc/nginx/nginx.conf
-[2026-08-17T16:30:31.758Z] #8 DONE 0.1s
-[2026-08-17T16:30:31.758Z] 
-[2026-08-17T16:30:31.758Z] #9 [4/4] RUN chown -R nginx:nginx /var/cache/nginx /etc/nginx
-[2026-08-17T16:30:32.024Z] #9 DONE 0.3s
-[2026-08-17T16:30:32.290Z] 
-[2026-08-17T16:30:32.290Z] #10 exporting to image
-[2026-08-17T16:30:32.290Z] #10 exporting layers
-[2026-08-17T16:30:32.290Z] #10 exporting layers 0.3s done
-[2026-08-17T16:30:32.558Z] #10 exporting manifest sha256:cd9f2fbf9885b38d4a9ac20a3c4811a3f9c005193734575fcefcf377a28b7379 0.0s done
-[2026-08-17T16:30:32.558Z] #10 exporting config sha256:c07dc4c94a335344d828ca90c5077871c2093934c50e912ef10d1b7a65a48d22 0.0s done
-[2026-08-17T16:30:32.558Z] #10 pushing layers
-[2026-08-17T16:30:32.823Z] #10 ...
-[2026-08-17T16:30:32.823Z] 
-[2026-08-17T16:30:32.823Z] #11 [auth] ayeletgeulayev/devops-app-frontend:pull,push token for registry-1.docker.io
-[2026-08-17T16:30:32.823Z] #11 DONE 0.0s
-[2026-08-17T16:30:32.823Z] 
-[2026-08-17T16:30:32.823Z] #10 exporting to image
-[2026-08-17T16:30:42.837Z] #10 pushing layers 9.0s done
-[2026-08-17T16:30:42.837Z] #10 pushing manifest for docker.io/ayeletgeulayev/devops-app-frontend:0dbfad773dac@sha256:cd9f2fbf9885b38d4a9ac20a3c4811a3f9c005193734575fcefcf377a28b7379
-[2026-08-17T16:30:43.413Z] #10 pushing manifest for docker.io/ayeletgeulayev/devops-app-frontend:0dbfad773dac@sha256:cd9f2fbf9885b38d4a9ac20a3c4811a3f9c005193734575fcefcf377a28b7379 1.9s done
-[2026-08-17T16:30:43.413Z] #10 DONE 11.3s
-[2026-08-17T16:30:43.413Z] + echo 'building worker'
-[2026-08-17T16:30:43.413Z] building worker
-[2026-08-17T16:30:43.413Z] + buildctl build --frontend dockerfile.v0 --local 'context=docker/worker' --local 'dockerfile=docker/worker' --output 'type=image,name=ayeletgeulayev/devops-app-worker:0dbfad773dac,push=true' --metadata-file /tmp/meta-worker.json
-[2026-08-17T16:30:43.677Z] #1 [internal] load build definition from Dockerfile
-[2026-08-17T16:30:43.678Z] #1 transferring dockerfile: 329B done
-[2026-08-17T16:30:43.678Z] #1 DONE 0.0s
-[2026-08-17T16:30:43.678Z] 
-[2026-08-17T16:30:43.678Z] #2 [internal] load metadata for docker.io/library/python:3.12-slim
-[2026-08-17T16:30:43.678Z] #2 DONE 0.3s
-[2026-08-17T16:30:43.944Z] 
-[2026-08-17T16:30:43.945Z] #3 [internal] load .dockerignore
-[2026-08-17T16:30:43.945Z] #3 transferring context: 106B done
-[2026-08-17T16:30:43.945Z] #3 DONE 0.0s
-[2026-08-17T16:30:43.945Z] 
-[2026-08-17T16:30:43.945Z] #4 [1/7] FROM docker.io/library/python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a
-[2026-08-17T16:30:43.945Z] #4 resolve docker.io/library/python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a 0.0s done
-[2026-08-17T16:30:43.945Z] #4 DONE 0.0s
-[2026-08-17T16:30:43.945Z] 
-[2026-08-17T16:30:43.945Z] #5 [internal] load build context
-[2026-08-17T16:30:43.945Z] #5 transferring context: 1.20kB done
-[2026-08-17T16:30:43.945Z] #5 DONE 0.0s
-[2026-08-17T16:30:43.945Z] 
-[2026-08-17T16:30:43.945Z] #6 [2/7] WORKDIR /app
-[2026-08-17T16:30:43.945Z] #6 CACHED
-[2026-08-17T16:30:43.945Z] 
-[2026-08-17T16:30:43.945Z] #7 [3/7] RUN groupadd -r appgroup && useradd -r -g appgroup -u 1000 appuser
-[2026-08-17T16:30:43.945Z] #7 CACHED
-[2026-08-17T16:30:43.945Z] 
-[2026-08-17T16:30:43.945Z] #8 [4/7] COPY requirements.txt .
-[2026-08-17T16:30:43.945Z] #8 DONE 0.1s
-[2026-08-17T16:30:44.210Z] 
-[2026-08-17T16:30:44.210Z] #9 [5/7] RUN pip install --no-cache-dir -r requirements.txt
-[2026-08-17T16:30:48.463Z] #9 3.828 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
-[2026-08-17T16:30:48.464Z] #9 4.194 
-[2026-08-17T16:30:48.464Z] #9 4.194 [notice] A new release of pip is available: 25.0.1 -> 26.2.1
-[2026-08-17T16:30:48.464Z] #9 4.194 [notice] To update, run: pip install --upgrade pip
-[2026-08-17T16:30:48.464Z] #9 DONE 4.4s
-[2026-08-17T16:30:48.464Z] 
-[2026-08-17T16:30:48.464Z] #10 [6/7] COPY . .
-[2026-08-17T16:30:48.464Z] #10 DONE 0.1s
-[2026-08-17T16:30:48.464Z] 
-[2026-08-17T16:30:48.464Z] #11 [7/7] RUN chown -R appuser:appgroup /app
-[2026-08-17T16:30:48.733Z] #11 DONE 0.2s
-[2026-08-17T16:30:48.733Z] 
-[2026-08-17T16:30:48.733Z] #12 exporting to image
-[2026-08-17T16:30:48.733Z] #12 exporting layers
-[2026-08-17T16:30:49.686Z] #12 exporting layers 1.1s done
-[2026-08-17T16:30:49.947Z] #12 exporting manifest sha256:ba188610bed74365cde9aafd4c113b31cf64de1c2bdf974fa7cc17d70e1d777f 0.0s done
-[2026-08-17T16:30:49.947Z] #12 exporting config sha256:67479464598ebfb216a47af7d66676233e075ab90dfa4f10e5842914f69455b6 0.0s done
-[2026-08-17T16:30:49.947Z] #12 pushing layers
-[2026-08-17T16:30:50.209Z] #12 ...
-[2026-08-17T16:30:50.210Z] 
-[2026-08-17T16:30:50.210Z] #13 [auth] ayeletgeulayev/devops-app-worker:pull,push token for registry-1.docker.io
-[2026-08-17T16:30:50.210Z] #13 DONE 0.0s
-[2026-08-17T16:30:50.210Z] 
-[2026-08-17T16:30:50.210Z] #12 exporting to image
-[2026-08-17T16:30:50.783Z] #12 ...
-[2026-08-17T16:30:50.783Z] 
-[2026-08-17T16:30:50.783Z] #14 [auth] ayeletgeulayev/devops-app-backend:pull ayeletgeulayev/devops-app-worker:pull,push token for registry-1.docker.io
-[2026-08-17T16:30:50.783Z] #14 DONE 0.0s
-[2026-08-17T16:30:51.051Z] 
-[2026-08-17T16:30:51.051Z] #12 exporting to image
-[2026-08-17T16:30:53.596Z] #12 pushing layers 3.8s done
-[2026-08-17T16:30:53.596Z] #12 pushing manifest for docker.io/ayeletgeulayev/devops-app-worker:0dbfad773dac@sha256:ba188610bed74365cde9aafd4c113b31cf64de1c2bdf974fa7cc17d70e1d777f
-[2026-08-17T16:30:55.511Z] #12 pushing manifest for docker.io/ayeletgeulayev/devops-app-worker:0dbfad773dac@sha256:ba188610bed74365cde9aafd4c113b31cf64de1c2bdf974fa7cc17d70e1d777f 1.9s done
-[2026-08-17T16:30:55.511Z] #12 DONE 6.9s
+[2026-08-17T16:34:11.935Z] + set -e
+[2026-08-17T16:34:11.936Z] + mkdir -p /home/user/.docker
+[2026-08-17T16:34:11.936Z] + printf '%s:%s' ayeletgeulayev ****
+[2026-08-17T16:34:11.936Z] + base64
+[2026-08-17T16:34:11.936Z] + tr -d '\n'
+[2026-08-17T16:34:11.936Z] + AUTH=YXllbGV0Z2V1bGF5ZXY6****
+[2026-08-17T16:34:11.936Z] + cat
+[2026-08-17T16:34:11.936Z] + echo 'building backend'
+[2026-08-17T16:34:11.936Z] building backend
+[2026-08-17T16:34:11.936Z] + pwd
+[2026-08-17T16:34:11.936Z] + buildctl build --frontend dockerfile.v0 --local 'context=docker/backend' --local 'dockerfile=docker/backend' --output 'type=image,name=ayeletgeulayev/devops-app-backend:3650eddd9f28,push=true' --metadata-file /home/jenkins/agent/workspace/ci-application/meta-backend.json
+[2026-08-17T16:34:11.936Z] #1 [internal] load build definition from Dockerfile
+[2026-08-17T16:34:11.936Z] #1 transferring dockerfile: 477B done
+[2026-08-17T16:34:11.936Z] #1 DONE 0.1s
+[2026-08-17T16:34:11.936Z] 
+[2026-08-17T16:34:11.936Z] #2 [internal] load metadata for docker.io/library/python:3.12-slim
+[2026-08-17T16:34:12.901Z] #2 ...
+[2026-08-17T16:34:12.901Z] 
+[2026-08-17T16:34:12.901Z] #3 [auth] library/python:pull token for registry-1.docker.io
+[2026-08-17T16:34:12.901Z] #3 DONE 0.0s
+[2026-08-17T16:34:12.901Z] 
+[2026-08-17T16:34:12.901Z] #2 [internal] load metadata for docker.io/library/python:3.12-slim
+[2026-08-17T16:34:13.852Z] #2 DONE 1.8s
+[2026-08-17T16:34:14.115Z] 
+[2026-08-17T16:34:14.115Z] #4 [internal] load .dockerignore
+[2026-08-17T16:34:14.115Z] #4 transferring context: 106B done
+[2026-08-17T16:34:14.115Z] #4 DONE 0.0s
+[2026-08-17T16:34:14.115Z] 
+[2026-08-17T16:34:14.115Z] #5 [1/7] FROM docker.io/library/python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a
+[2026-08-17T16:34:14.116Z] #5 resolve docker.io/library/python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a 0.0s done
+[2026-08-17T16:34:14.384Z] #5 ...
+[2026-08-17T16:34:14.384Z] 
+[2026-08-17T16:34:14.384Z] #6 [internal] load build context
+[2026-08-17T16:34:14.384Z] #6 transferring context: 3.35kB done
+[2026-08-17T16:34:14.384Z] #6 DONE 0.1s
+[2026-08-17T16:34:14.384Z] 
+[2026-08-17T16:34:14.384Z] #5 [1/7] FROM docker.io/library/python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a
+[2026-08-17T16:34:14.384Z] #5 sha256:6760bfe2ff00c4530bc73b2f88a1e9615a56c9a77028f41f8bb4b978d08b8439 0B / 248B 0.2s
+[2026-08-17T16:34:14.384Z] #5 sha256:6760bfe2ff00c4530bc73b2f88a1e9615a56c9a77028f41f8bb4b978d08b8439 248B / 248B 0.2s done
+[2026-08-17T16:34:14.384Z] #5 sha256:b952fe9f6810de5dac5d24a3983aee5fce3884f7359a533ba325e48ecb745994 0B / 12.12MB 0.3s
+[2026-08-17T16:34:14.384Z] #5 sha256:fa18dfb1257a9c1afc75e233c55b0195dd02b8d6d18dd7e24c10238b039e7742 0B / 1.29MB 0.2s
+[2026-08-17T16:34:14.384Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 0B / 29.78MB 0.2s
+[2026-08-17T16:34:14.667Z] #5 sha256:b952fe9f6810de5dac5d24a3983aee5fce3884f7359a533ba325e48ecb745994 2.10MB / 12.12MB 0.5s
+[2026-08-17T16:34:14.667Z] #5 sha256:b952fe9f6810de5dac5d24a3983aee5fce3884f7359a533ba325e48ecb745994 7.34MB / 12.12MB 0.6s
+[2026-08-17T16:34:14.974Z] #5 sha256:fa18dfb1257a9c1afc75e233c55b0195dd02b8d6d18dd7e24c10238b039e7742 1.29MB / 1.29MB 0.7s done
+[2026-08-17T16:34:14.974Z] #5 sha256:b952fe9f6810de5dac5d24a3983aee5fce3884f7359a533ba325e48ecb745994 12.12MB / 12.12MB 0.9s done
+[2026-08-17T16:34:15.250Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 4.19MB / 29.78MB 1.1s
+[2026-08-17T16:34:15.250Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 6.29MB / 29.78MB 1.2s
+[2026-08-17T16:34:15.544Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 9.44MB / 29.78MB 1.4s
+[2026-08-17T16:34:15.544Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 12.58MB / 29.78MB 1.5s
+[2026-08-17T16:34:15.830Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 15.73MB / 29.78MB 1.7s
+[2026-08-17T16:34:16.117Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 18.87MB / 29.78MB 1.8s
+[2026-08-17T16:34:16.117Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 20.97MB / 29.78MB 2.0s
+[2026-08-17T16:34:16.430Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 24.12MB / 29.78MB 2.1s
+[2026-08-17T16:34:16.431Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 27.26MB / 29.78MB 2.3s
+[2026-08-17T16:34:16.431Z] #5 sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 29.78MB / 29.78MB 2.4s done
+[2026-08-17T16:34:16.717Z] #5 extracting sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d
+[2026-08-17T16:34:19.322Z] #5 extracting sha256:26c307b5e35a59ce911f5fde5b9458120ec8734e831ea2da5649a9ad14abfd3d 2.7s done
+[2026-08-17T16:34:19.323Z] #5 extracting sha256:fa18dfb1257a9c1afc75e233c55b0195dd02b8d6d18dd7e24c10238b039e7742
+[2026-08-17T16:34:19.922Z] #5 extracting sha256:fa18dfb1257a9c1afc75e233c55b0195dd02b8d6d18dd7e24c10238b039e7742 0.5s done
+[2026-08-17T16:34:19.923Z] #5 DONE 5.8s
+[2026-08-17T16:34:19.923Z] 
+[2026-08-17T16:34:19.923Z] #5 [1/7] FROM docker.io/library/python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a
+[2026-08-17T16:34:19.923Z] #5 extracting sha256:b952fe9f6810de5dac5d24a3983aee5fce3884f7359a533ba325e48ecb745994
+[2026-08-17T16:34:21.360Z] #5 extracting sha256:b952fe9f6810de5dac5d24a3983aee5fce3884f7359a533ba325e48ecb745994 1.5s done
+[2026-08-17T16:34:21.360Z] #5 DONE 7.4s
+[2026-08-17T16:34:21.626Z] 
+[2026-08-17T16:34:21.626Z] #5 [1/7] FROM docker.io/library/python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a
+[2026-08-17T16:34:21.626Z] #5 extracting sha256:6760bfe2ff00c4530bc73b2f88a1e9615a56c9a77028f41f8bb4b978d08b8439 0.0s done
+[2026-08-17T16:34:21.626Z] #5 DONE 7.4s
+[2026-08-17T16:34:21.626Z] 
+[2026-08-17T16:34:21.626Z] #7 [2/7] WORKDIR /app
+[2026-08-17T16:34:21.626Z] #7 DONE 0.0s
+[2026-08-17T16:34:21.626Z] 
+[2026-08-17T16:34:21.626Z] #8 [3/7] RUN groupadd -r appgroup && useradd -r -g appgroup -u 1000 appuser
+[2026-08-17T16:34:21.626Z] #8 0.250 useradd warning: appuser's uid 1000 is greater than SYS_UID_MAX 999
+[2026-08-17T16:34:21.895Z] #8 DONE 0.3s
+[2026-08-17T16:34:21.895Z] 
+[2026-08-17T16:34:21.895Z] #9 [4/7] COPY requirements.txt .
+[2026-08-17T16:34:21.895Z] #9 DONE 0.1s
+[2026-08-17T16:34:21.895Z] 
+[2026-08-17T16:34:21.895Z] #10 [5/7] RUN pip install --no-cache-dir -r requirements.txt
+[2026-08-17T16:34:26.146Z] #10 3.703 Collecting Flask==3.1.3 (from -r requirements.txt (line 5))
+[2026-08-17T16:34:26.146Z] #10 3.943   Downloading flask-3.1.3-py3-none-any.whl.metadata (3.2 kB)
+[2026-08-17T16:34:26.146Z] #10 4.242 Collecting psycopg2-binary==2.9.12 (from -r requirements.txt (line 6))
+[2026-08-17T16:34:26.408Z] #10 4.310   Downloading psycopg2_binary-2.9.12-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (4.9 kB)
+[2026-08-17T16:34:26.991Z] #10 5.202 Collecting boto3==1.43.61 (from -r requirements.txt (line 7))
+[2026-08-17T16:34:27.255Z] #10 5.271   Downloading boto3-1.43.61-py3-none-any.whl.metadata (6.6 kB)
+[2026-08-17T16:34:27.255Z] #10 5.356 Collecting blinker>=1.9.0 (from Flask==3.1.3->-r requirements.txt (line 5))
+[2026-08-17T16:34:27.255Z] #10 5.424   Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+[2026-08-17T16:34:27.255Z] #10 5.515 Collecting click>=8.1.3 (from Flask==3.1.3->-r requirements.txt (line 5))
+[2026-08-17T16:34:27.517Z] #10 5.583   Downloading click-8.4.2-py3-none-any.whl.metadata (2.6 kB)
+[2026-08-17T16:34:27.518Z] #10 5.661 Collecting itsdangerous>=2.2.0 (from Flask==3.1.3->-r requirements.txt (line 5))
+[2026-08-17T16:34:27.779Z] #10 5.731   Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+[2026-08-17T16:34:27.780Z] #10 5.821 Collecting jinja2>=3.1.2 (from Flask==3.1.3->-r requirements.txt (line 5))
+[2026-08-17T16:34:27.780Z] #10 5.892   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+[2026-08-17T16:34:27.780Z] #10 6.043 Collecting markupsafe>=2.1.1 (from Flask==3.1.3->-r requirements.txt (line 5))
+[2026-08-17T16:34:28.042Z] #10 6.109   Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+[2026-08-17T16:34:28.042Z] #10 6.210 Collecting werkzeug>=3.1.0 (from Flask==3.1.3->-r requirements.txt (line 5))
+[2026-08-17T16:34:28.306Z] #10 6.277   Downloading werkzeug-3.1.8-py3-none-any.whl.metadata (4.0 kB)
+[2026-08-17T16:34:28.884Z] #10 7.133 Collecting botocore<1.44.0,>=1.43.61 (from boto3==1.43.61->-r requirements.txt (line 7))
+[2026-08-17T16:34:29.148Z] #10 7.205   Downloading botocore-1.43.72-py3-none-any.whl.metadata (5.6 kB)
+[2026-08-17T16:34:29.148Z] #10 7.288 Collecting jmespath<2.0.0,>=0.7.1 (from boto3==1.43.61->-r requirements.txt (line 7))
+[2026-08-17T16:34:29.412Z] #10 7.356   Downloading jmespath-1.1.0-py3-none-any.whl.metadata (7.6 kB)
+[2026-08-17T16:34:29.412Z] #10 7.457 Collecting s3transfer<0.20.0,>=0.19.0 (from boto3==1.43.61->-r requirements.txt (line 7))
+[2026-08-17T16:34:29.412Z] #10 7.523   Downloading s3transfer-0.19.2-py3-none-any.whl.metadata (1.7 kB)
+[2026-08-17T16:34:29.413Z] #10 7.612 Collecting python-dateutil<3.0.0,>=2.1 (from botocore<1.44.0,>=1.43.61->boto3==1.43.61->-r requirements.txt (line 7))
+[2026-08-17T16:34:29.677Z] #10 7.678   Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+[2026-08-17T16:34:29.677Z] #10 7.792 Collecting urllib3!=2.2.0,<3,>=1.25.4 (from botocore<1.44.0,>=1.43.61->boto3==1.43.61->-r requirements.txt (line 7))
+[2026-08-17T16:34:29.941Z] #10 7.861   Downloading urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+[2026-08-17T16:34:30.208Z] #10 8.402 Collecting six>=1.5 (from python-dateutil<3.0.0,>=2.1->botocore<1.44.0,>=1.43.61->boto3==1.43.61->-r requirements.txt (line 7))
+[2026-08-17T16:34:30.472Z] #10 8.470   Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+[2026-08-17T16:34:30.472Z] #10 8.549 Downloading flask-3.1.3-py3-none-any.whl (103 kB)
+[2026-08-17T16:34:30.472Z] #10 8.708 Downloading psycopg2_binary-2.9.12-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.3 MB)
+[2026-08-17T16:34:31.077Z] #10 9.051    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.3/4.3 MB 16.1 MB/s eta 0:00:00
+[2026-08-17T16:34:31.077Z] #10 9.121 Downloading boto3-1.43.61-py3-none-any.whl (140 kB)
+[2026-08-17T16:34:31.077Z] #10 9.193 Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+[2026-08-17T16:34:31.347Z] #10 9.261 Downloading botocore-1.43.72-py3-none-any.whl (15.6 MB)
+[2026-08-17T16:34:31.612Z] #10 9.651    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 15.6/15.6 MB 40.6 MB/s eta 0:00:00
+[2026-08-17T16:34:31.613Z] #10 9.728 Downloading click-8.4.2-py3-none-any.whl (119 kB)
+[2026-08-17T16:34:31.613Z] #10 9.798 Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+[2026-08-17T16:34:31.882Z] #10 9.867 Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+[2026-08-17T16:34:31.882Z] #10 9.935 Downloading jmespath-1.1.0-py3-none-any.whl (20 kB)
+[2026-08-17T16:34:31.882Z] #10 10.01 Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+[2026-08-17T16:34:31.882Z] #10 10.08 Downloading s3transfer-0.19.2-py3-none-any.whl (90 kB)
+[2026-08-17T16:34:32.149Z] #10 10.15 Downloading werkzeug-3.1.8-py3-none-any.whl (226 kB)
+[2026-08-17T16:34:32.149Z] #10 10.22 Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+[2026-08-17T16:34:32.149Z] #10 10.30 Downloading urllib3-2.7.0-py3-none-any.whl (131 kB)
+[2026-08-17T16:34:32.149Z] #10 10.40 Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+[2026-08-17T16:34:32.413Z] #10 10.63 Installing collected packages: urllib3, six, psycopg2-binary, markupsafe, jmespath, itsdangerous, click, blinker, werkzeug, python-dateutil, jinja2, Flask, botocore, s3transfer, boto3
+[2026-08-17T16:34:34.987Z] #10 12.98 Successfully installed Flask-3.1.3 blinker-1.9.0 boto3-1.43.61 botocore-1.43.72 click-8.4.2 itsdangerous-2.2.0 jinja2-3.1.6 jmespath-1.1.0 markupsafe-3.0.3 psycopg2-binary-2.9.12 python-dateutil-2.9.0.post0 s3transfer-0.19.2 six-1.17.0 urllib3-2.7.0 werkzeug-3.1.8
+[2026-08-17T16:34:34.988Z] #10 12.98 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+[2026-08-17T16:34:35.254Z] #10 13.40 
+[2026-08-17T16:34:35.254Z] #10 13.40 [notice] A new release of pip is available: 25.0.1 -> 26.2.1
+[2026-08-17T16:34:35.254Z] #10 13.40 [notice] To update, run: pip install --upgrade pip
+[2026-08-17T16:34:35.844Z] #10 DONE 13.9s
+[2026-08-17T16:34:35.844Z] 
+[2026-08-17T16:34:35.844Z] #11 [6/7] COPY . .
+[2026-08-17T16:34:35.844Z] #11 DONE 0.2s
+[2026-08-17T16:34:36.110Z] 
+[2026-08-17T16:34:36.110Z] #12 [7/7] RUN chown -R appuser:appgroup /app
+[2026-08-17T16:34:36.110Z] #12 DONE 0.3s
+[2026-08-17T16:34:36.383Z] 
+[2026-08-17T16:34:36.383Z] #13 exporting to image
+[2026-08-17T16:34:36.383Z] #13 exporting layers
+[2026-08-17T16:34:41.723Z] #13 exporting layers 4.8s done
+[2026-08-17T16:34:41.723Z] #13 exporting manifest sha256:d6a25d233985aafabfd62c8991b68e34c13d50e35cdebe8e765789464f0b9fcf 0.0s done
+[2026-08-17T16:34:41.723Z] #13 exporting config sha256:c00b8828ba0dcf36cc29de4cca8356d032d4e4dab3ff95d16d9624718f4224b8 0.0s done
+[2026-08-17T16:34:41.723Z] #13 pushing layers
+[2026-08-17T16:34:41.723Z] #13 ...
+[2026-08-17T16:34:41.723Z] 
+[2026-08-17T16:34:41.723Z] #14 [auth] ayeletgeulayev/devops-app-backend:pull,push token for registry-1.docker.io
+[2026-08-17T16:34:41.723Z] #14 DONE 0.0s
+[2026-08-17T16:34:41.723Z] 
+[2026-08-17T16:34:41.723Z] #13 exporting to image
+[2026-08-17T16:34:47.019Z] #13 pushing layers 5.6s done
+[2026-08-17T16:34:47.019Z] #13 pushing manifest for docker.io/ayeletgeulayev/devops-app-backend:3650eddd9f28@sha256:d6a25d233985aafabfd62c8991b68e34c13d50e35cdebe8e765789464f0b9fcf
+[2026-08-17T16:34:48.936Z] #13 pushing manifest for docker.io/ayeletgeulayev/devops-app-backend:3650eddd9f28@sha256:d6a25d233985aafabfd62c8991b68e34c13d50e35cdebe8e765789464f0b9fcf 1.9s done
+[2026-08-17T16:34:48.937Z] #13 DONE 12.3s
+[2026-08-17T16:34:48.937Z] + echo 'building frontend'
+[2026-08-17T16:34:48.937Z] building frontend
+[2026-08-17T16:34:48.937Z] + pwd
+[2026-08-17T16:34:48.937Z] + buildctl build --frontend dockerfile.v0 --local 'context=docker/frontend' --local 'dockerfile=docker/frontend' --output 'type=image,name=ayeletgeulayev/devops-app-frontend:3650eddd9f28,push=true' --metadata-file /home/jenkins/agent/workspace/ci-application/meta-frontend.json
+[2026-08-17T16:34:48.937Z] #1 [internal] load build definition from Dockerfile
+[2026-08-17T16:34:48.937Z] #1 transferring dockerfile: 363B done
+[2026-08-17T16:34:48.937Z] #1 DONE 0.0s
+[2026-08-17T16:34:48.937Z] 
+[2026-08-17T16:34:48.937Z] #2 [internal] load metadata for docker.io/library/nginx:1.27-alpine
+[2026-08-17T16:34:48.937Z] #2 ...
+[2026-08-17T16:34:48.937Z] 
+[2026-08-17T16:34:48.937Z] #3 [auth] library/nginx:pull token for registry-1.docker.io
+[2026-08-17T16:34:48.937Z] #3 DONE 0.0s
+[2026-08-17T16:34:49.200Z] 
+[2026-08-17T16:34:49.200Z] #2 [internal] load metadata for docker.io/library/nginx:1.27-alpine
+[2026-08-17T16:34:50.150Z] #2 DONE 1.3s
+[2026-08-17T16:34:50.150Z] 
+[2026-08-17T16:34:50.151Z] #4 [internal] load .dockerignore
+[2026-08-17T16:34:50.151Z] #4 transferring context: 61B done
+[2026-08-17T16:34:50.151Z] #4 DONE 0.0s
+[2026-08-17T16:34:50.151Z] 
+[2026-08-17T16:34:50.151Z] #5 [1/4] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+[2026-08-17T16:34:50.151Z] #5 resolve docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10 0.0s done
+[2026-08-17T16:34:50.415Z] #5 ...
+[2026-08-17T16:34:50.415Z] 
+[2026-08-17T16:34:50.415Z] #6 [internal] load build context
+[2026-08-17T16:34:50.415Z] #6 transferring context: 690B done
+[2026-08-17T16:34:50.415Z] #6 DONE 0.1s
+[2026-08-17T16:34:50.415Z] 
+[2026-08-17T16:34:50.415Z] #5 [1/4] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+[2026-08-17T16:34:50.415Z] #5 DONE 0.3s
+[2026-08-17T16:34:50.415Z] 
+[2026-08-17T16:34:50.415Z] #5 [1/4] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+[2026-08-17T16:34:50.415Z] #5 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 0B / 15.52MB 0.2s
+[2026-08-17T16:34:50.683Z] #5 sha256:34a64644b756511a2e217f0508e11d1a572085d66cd6dc9a555a082ad49a3102 1.40kB / 1.40kB 0.2s done
+[2026-08-17T16:34:50.684Z] #5 sha256:197eb75867ef4fcecd4724f17b0972ab0489436860a594a9445f8eaff8155053 1.21kB / 1.21kB 0.2s done
+[2026-08-17T16:34:50.684Z] #5 sha256:81bd8ed7ec6789b0cb7f1b47ee731c522f6dba83201ec73cd6bca1350f582948 402B / 402B 0.2s done
+[2026-08-17T16:34:50.684Z] #5 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 2.10MB / 15.52MB 0.3s
+[2026-08-17T16:34:50.684Z] #5 sha256:d7e5070240863957ebb0b5a44a5729963c3462666baa2947d00628cb5f2d5773 0B / 955B 0.2s
+[2026-08-17T16:34:50.958Z] #5 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 5.24MB / 15.52MB 0.5s
+[2026-08-17T16:34:50.958Z] #5 sha256:d7e5070240863957ebb0b5a44a5729963c3462666baa2947d00628cb5f2d5773 955B / 955B 0.2s done
+[2026-08-17T16:34:50.958Z] #5 sha256:b464cfdf2a6319875aeb27359ec549790ce14d8214fcb16ef915e4530e5ed235 629B / 629B 0.3s done
+[2026-08-17T16:34:50.958Z] #5 sha256:61ca4f733c802afd9e05a32f0de0361b6d713b8b53292dc15fb093229f648674 0B / 1.79MB 0.2s
+[2026-08-17T16:34:51.239Z] #5 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 8.39MB / 15.52MB 0.6s
+[2026-08-17T16:34:51.239Z] #5 sha256:61ca4f733c802afd9e05a32f0de0361b6d713b8b53292dc15fb093229f648674 1.79MB / 1.79MB 0.3s done
+[2026-08-17T16:34:51.239Z] #5 sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870 1.05MB / 3.64MB 0.3s
+[2026-08-17T16:34:51.239Z] #5 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 10.49MB / 15.52MB 0.8s
+[2026-08-17T16:34:51.239Z] #5 sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870 3.64MB / 3.64MB 0.4s done
+[2026-08-17T16:34:51.517Z] #5 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 14.68MB / 15.52MB 1.1s
+[2026-08-17T16:34:51.517Z] #5 extracting sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870
+[2026-08-17T16:34:51.517Z] #5 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 15.52MB / 15.52MB 1.1s done
+[2026-08-17T16:34:51.790Z] #5 extracting sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870 0.5s done
+[2026-08-17T16:34:51.790Z] #5 extracting sha256:61ca4f733c802afd9e05a32f0de0361b6d713b8b53292dc15fb093229f648674
+[2026-08-17T16:34:52.383Z] #5 extracting sha256:61ca4f733c802afd9e05a32f0de0361b6d713b8b53292dc15fb093229f648674 0.5s done
+[2026-08-17T16:34:52.383Z] #5 DONE 2.1s
+[2026-08-17T16:34:52.383Z] 
+[2026-08-17T16:34:52.383Z] #5 [1/4] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+[2026-08-17T16:34:52.383Z] #5 extracting sha256:b464cfdf2a6319875aeb27359ec549790ce14d8214fcb16ef915e4530e5ed235 0.0s done
+[2026-08-17T16:34:52.383Z] #5 extracting sha256:d7e5070240863957ebb0b5a44a5729963c3462666baa2947d00628cb5f2d5773 0.0s done
+[2026-08-17T16:34:52.383Z] #5 extracting sha256:81bd8ed7ec6789b0cb7f1b47ee731c522f6dba83201ec73cd6bca1350f582948 0.0s done
+[2026-08-17T16:34:52.383Z] #5 DONE 2.3s
+[2026-08-17T16:34:52.383Z] 
+[2026-08-17T16:34:52.383Z] #5 [1/4] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+[2026-08-17T16:34:52.383Z] #5 extracting sha256:197eb75867ef4fcecd4724f17b0972ab0489436860a594a9445f8eaff8155053 0.1s done
+[2026-08-17T16:34:52.383Z] #5 extracting sha256:34a64644b756511a2e217f0508e11d1a572085d66cd6dc9a555a082ad49a3102 0.1s done
+[2026-08-17T16:34:52.383Z] #5 DONE 2.4s
+[2026-08-17T16:34:52.656Z] 
+[2026-08-17T16:34:52.657Z] #5 [1/4] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+[2026-08-17T16:34:52.657Z] #5 extracting sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d
+[2026-08-17T16:34:54.084Z] #5 extracting sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 1.5s done
+[2026-08-17T16:34:54.084Z] #5 DONE 3.9s
+[2026-08-17T16:34:54.084Z] 
+[2026-08-17T16:34:54.084Z] #7 [2/4] RUN rm /etc/nginx/conf.d/default.conf 2>/dev/null || true
+[2026-08-17T16:34:54.349Z] #7 DONE 0.3s
+[2026-08-17T16:34:54.349Z] 
+[2026-08-17T16:34:54.349Z] #8 [3/4] COPY nginx.conf /etc/nginx/nginx.conf
+[2026-08-17T16:34:54.349Z] #8 DONE 0.1s
+[2026-08-17T16:34:54.349Z] 
+[2026-08-17T16:34:54.349Z] #9 [4/4] RUN chown -R nginx:nginx /var/cache/nginx /etc/nginx
+[2026-08-17T16:34:54.614Z] #9 DONE 0.3s
+[2026-08-17T16:34:54.890Z] 
+[2026-08-17T16:34:54.890Z] #10 exporting to image
+[2026-08-17T16:34:54.891Z] #10 exporting layers
+[2026-08-17T16:34:54.891Z] #10 exporting layers 0.3s done
+[2026-08-17T16:34:55.154Z] #10 exporting manifest sha256:a367637a31fe1f872c58f31866cecccf9949b39220e3d76017f7b3695649eb5d 0.0s done
+[2026-08-17T16:34:55.154Z] #10 exporting config sha256:7b5b5d77271bf18c4ae24811d9ac88722cfd6b7e847eab28019456bb9ca8cdd3 0.0s done
+[2026-08-17T16:34:55.154Z] #10 pushing layers
+[2026-08-17T16:34:55.418Z] #10 ...
+[2026-08-17T16:34:55.418Z] 
+[2026-08-17T16:34:55.418Z] #11 [auth] ayeletgeulayev/devops-app-frontend:pull,push token for registry-1.docker.io
+[2026-08-17T16:34:55.418Z] #11 DONE 0.0s
+[2026-08-17T16:34:55.418Z] 
+[2026-08-17T16:34:55.418Z] #10 exporting to image
+[2026-08-17T16:34:57.334Z] #10 pushing layers 2.2s done
+[2026-08-17T16:34:57.334Z] #10 pushing manifest for docker.io/ayeletgeulayev/devops-app-frontend:3650eddd9f28@sha256:a367637a31fe1f872c58f31866cecccf9949b39220e3d76017f7b3695649eb5d
+[2026-08-17T16:34:59.245Z] #10 pushing manifest for docker.io/ayeletgeulayev/devops-app-frontend:3650eddd9f28@sha256:a367637a31fe1f872c58f31866cecccf9949b39220e3d76017f7b3695649eb5d 1.9s done
+[2026-08-17T16:34:59.245Z] #10 DONE 4.5s
+[2026-08-17T16:34:59.245Z] + echo 'building worker'
+[2026-08-17T16:34:59.245Z] building worker
+[2026-08-17T16:34:59.245Z] + pwd
+[2026-08-17T16:34:59.245Z] + buildctl build --frontend dockerfile.v0 --local 'context=docker/worker' --local 'dockerfile=docker/worker' --output 'type=image,name=ayeletgeulayev/devops-app-worker:3650eddd9f28,push=true' --metadata-file /home/jenkins/agent/workspace/ci-application/meta-worker.json
+[2026-08-17T16:34:59.245Z] #1 [internal] load build definition from Dockerfile
+[2026-08-17T16:34:59.245Z] #1 transferring dockerfile: 329B done
+[2026-08-17T16:34:59.245Z] #1 DONE 0.0s
+[2026-08-17T16:34:59.245Z] 
+[2026-08-17T16:34:59.245Z] #2 [internal] load metadata for docker.io/library/python:3.12-slim
+[2026-08-17T16:34:59.506Z] #2 DONE 0.3s
+[2026-08-17T16:34:59.506Z] 
+[2026-08-17T16:34:59.506Z] #3 [internal] load .dockerignore
+[2026-08-17T16:34:59.506Z] #3 transferring context: 106B done
+[2026-08-17T16:34:59.506Z] #3 DONE 0.0s
+[2026-08-17T16:34:59.506Z] 
+[2026-08-17T16:34:59.506Z] #4 [1/7] FROM docker.io/library/python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a
+[2026-08-17T16:34:59.506Z] #4 resolve docker.io/library/python:3.12-slim@sha256:2c941e860699f878900b0edc2403613c234d4b32eda3cc9fa7036991a2a63c4a 0.0s done
+[2026-08-17T16:34:59.506Z] #4 DONE 0.0s
+[2026-08-17T16:34:59.506Z] 
+[2026-08-17T16:34:59.506Z] #5 [internal] load build context
+[2026-08-17T16:34:59.506Z] #5 transferring context: 1.20kB done
+[2026-08-17T16:34:59.506Z] #5 DONE 0.0s
+[2026-08-17T16:34:59.506Z] 
+[2026-08-17T16:34:59.506Z] #6 [2/7] WORKDIR /app
+[2026-08-17T16:34:59.506Z] #6 CACHED
+[2026-08-17T16:34:59.506Z] 
+[2026-08-17T16:34:59.506Z] #7 [3/7] RUN groupadd -r appgroup && useradd -r -g appgroup -u 1000 appuser
+[2026-08-17T16:34:59.506Z] #7 CACHED
+[2026-08-17T16:34:59.506Z] 
+[2026-08-17T16:34:59.506Z] #8 [4/7] COPY requirements.txt .
+[2026-08-17T16:34:59.506Z] #8 DONE 0.0s
+[2026-08-17T16:34:59.770Z] 
+[2026-08-17T16:34:59.770Z] #9 [5/7] RUN pip install --no-cache-dir -r requirements.txt
+[2026-08-17T16:35:02.378Z] #9 3.768 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+[2026-08-17T16:35:02.378Z] #9 4.150 
+[2026-08-17T16:35:02.378Z] #9 4.150 [notice] A new release of pip is available: 25.0.1 -> 26.2.1
+[2026-08-17T16:35:02.378Z] #9 4.150 [notice] To update, run: pip install --upgrade pip
+[2026-08-17T16:35:02.378Z] #9 DONE 4.4s
+[2026-08-17T16:35:02.378Z] 
+[2026-08-17T16:35:02.378Z] #10 [6/7] COPY . .
+[2026-08-17T16:35:02.378Z] #10 DONE -1.5s
+[2026-08-17T16:35:02.378Z] 
+[2026-08-17T16:35:02.378Z] #11 [7/7] RUN chown -R appuser:appgroup /app
+[2026-08-17T16:35:02.644Z] #11 DONE 0.2s
+[2026-08-17T16:35:02.911Z] 
+[2026-08-17T16:35:02.911Z] #12 exporting to image
+[2026-08-17T16:35:02.911Z] #12 exporting layers
+[2026-08-17T16:35:03.865Z] #12 exporting layers 1.1s done
+[2026-08-17T16:35:03.865Z] #12 exporting manifest sha256:a03f02e47f6f50e7f84570b9b98c66f9e582e8048d29b49e4f9a863158ce7633 0.0s done
+[2026-08-17T16:35:03.865Z] #12 exporting config sha256:a315d804e093b46d4c93c2752510159db5637b6f5ab6591e9bb939b00e984c5b 0.0s done
+[2026-08-17T16:35:03.865Z] #12 pushing layers
+[2026-08-17T16:35:04.127Z] #12 ...
+[2026-08-17T16:35:04.128Z] 
+[2026-08-17T16:35:04.128Z] #13 [auth] ayeletgeulayev/devops-app-worker:pull,push token for registry-1.docker.io
+[2026-08-17T16:35:04.128Z] #13 DONE 0.0s
+[2026-08-17T16:35:04.128Z] 
+[2026-08-17T16:35:04.128Z] #12 exporting to image
+[2026-08-17T16:35:04.704Z] #12 ...
+[2026-08-17T16:35:04.704Z] 
+[2026-08-17T16:35:04.704Z] #14 [auth] ayeletgeulayev/devops-app-backend:pull ayeletgeulayev/devops-app-worker:pull,push token for registry-1.docker.io
+[2026-08-17T16:35:04.704Z] #14 DONE 0.0s
+[2026-08-17T16:35:04.704Z] 
+[2026-08-17T16:35:04.704Z] #12 exporting to image
+[2026-08-17T16:35:07.248Z] #12 pushing layers 3.2s done
+[2026-08-17T16:35:07.248Z] #12 pushing manifest for docker.io/ayeletgeulayev/devops-app-worker:3650eddd9f28@sha256:a03f02e47f6f50e7f84570b9b98c66f9e582e8048d29b49e4f9a863158ce7633
+[2026-08-17T16:35:09.164Z] #12 pushing manifest for docker.io/ayeletgeulayev/devops-app-worker:3650eddd9f28@sha256:a03f02e47f6f50e7f84570b9b98c66f9e582e8048d29b49e4f9a863158ce7633 1.9s done
+[2026-08-17T16:35:09.164Z] #12 DONE 6.2s
 [Pipeline] }
 [Pipeline] // withCredentials
 [Pipeline] }
@@ -576,50 +584,56 @@ Post stage
 [Pipeline] container
 [Pipeline] {
 [Pipeline] sh
-[2026-08-17T16:30:56.697Z] + set -e
-[2026-08-17T16:30:56.697Z] + :
-[2026-08-17T16:30:56.697Z] + echo 'GIT_COMMIT=0dbfad773dac'
-[2026-08-17T16:30:56.697Z] + echo 'BUILD_NUMBER=3'
-[2026-08-17T16:30:56.697Z] + echo 'IMAGE_TAG=0dbfad773dac'
-[2026-08-17T16:30:56.697Z] + grep -o '"containerimage.digest":"[^"]*"' /tmp/meta-backend.json
-[2026-08-17T16:30:56.697Z] + cut '-d"' -f4
-[2026-08-17T16:30:56.697Z] + DIGEST=
-[2026-08-17T16:30:56.697Z] + echo 'IMAGE_backend=ayeletgeulayev/devops-app-backend:0dbfad773dac'
-[2026-08-17T16:30:56.697Z] + echo 'DIGEST_backend='
-[2026-08-17T16:30:56.697Z] + grep -o '"containerimage.digest":"[^"]*"' /tmp/meta-frontend.json
-[2026-08-17T16:30:56.697Z] + cut '-d"' -f4
-[2026-08-17T16:30:56.697Z] + DIGEST=
-[2026-08-17T16:30:56.697Z] + echo 'IMAGE_frontend=ayeletgeulayev/devops-app-frontend:0dbfad773dac'
-[2026-08-17T16:30:56.697Z] + echo 'DIGEST_frontend='
-[2026-08-17T16:30:56.697Z] + grep -o '"containerimage.digest":"[^"]*"' /tmp/meta-worker.json
-[2026-08-17T16:30:56.697Z] + cut '-d"' -f4
-[2026-08-17T16:30:56.697Z] + DIGEST=
-[2026-08-17T16:30:56.697Z] + echo 'IMAGE_worker=ayeletgeulayev/devops-app-worker:0dbfad773dac'
-[2026-08-17T16:30:56.697Z] + echo 'DIGEST_worker='
-[2026-08-17T16:30:56.697Z] + cat image-metadata.txt
-[2026-08-17T16:30:56.697Z] GIT_COMMIT=0dbfad773dac
-[2026-08-17T16:30:56.697Z] BUILD_NUMBER=3
-[2026-08-17T16:30:56.697Z] IMAGE_TAG=0dbfad773dac
-[2026-08-17T16:30:56.697Z] IMAGE_backend=ayeletgeulayev/devops-app-backend:0dbfad773dac
-[2026-08-17T16:30:56.697Z] DIGEST_backend=
-[2026-08-17T16:30:56.697Z] IMAGE_frontend=ayeletgeulayev/devops-app-frontend:0dbfad773dac
-[2026-08-17T16:30:56.697Z] DIGEST_frontend=
-[2026-08-17T16:30:56.697Z] IMAGE_worker=ayeletgeulayev/devops-app-worker:0dbfad773dac
-[2026-08-17T16:30:56.697Z] DIGEST_worker=
+[2026-08-17T16:35:10.010Z] + set -e
+[2026-08-17T16:35:10.010Z] + :
+[2026-08-17T16:35:10.010Z] + echo 'GIT_COMMIT=3650eddd9f28'
+[2026-08-17T16:35:10.010Z] + echo 'BUILD_NUMBER=5'
+[2026-08-17T16:35:10.010Z] + echo 'IMAGE_TAG=3650eddd9f28'
+[2026-08-17T16:35:10.010Z] + tr , '
+[2026-08-17T16:35:10.010Z] '
+[2026-08-17T16:35:10.010Z] + grep containerimage.digest
+[2026-08-17T16:35:10.010Z] + grep -o 'sha256:[a-f0-9]*'
+[2026-08-17T16:35:10.010Z] + DIGEST=sha256:d6a25d233985aafabfd62c8991b68e34c13d50e35cdebe8e765789464f0b9fcf
+[2026-08-17T16:35:10.010Z] + echo 'IMAGE_backend=ayeletgeulayev/devops-app-backend:3650eddd9f28'
+[2026-08-17T16:35:10.010Z] + echo 'DIGEST_backend=sha256:d6a25d233985aafabfd62c8991b68e34c13d50e35cdebe8e765789464f0b9fcf'
+[2026-08-17T16:35:10.010Z] + tr , '
+[2026-08-17T16:35:10.010Z] '
+[2026-08-17T16:35:10.010Z] + grep containerimage.digest
+[2026-08-17T16:35:10.010Z] + grep -o 'sha256:[a-f0-9]*'
+[2026-08-17T16:35:10.010Z] + DIGEST=sha256:a367637a31fe1f872c58f31866cecccf9949b39220e3d76017f7b3695649eb5d
+[2026-08-17T16:35:10.010Z] + echo 'IMAGE_frontend=ayeletgeulayev/devops-app-frontend:3650eddd9f28'
+[2026-08-17T16:35:10.010Z] + echo 'DIGEST_frontend=sha256:a367637a31fe1f872c58f31866cecccf9949b39220e3d76017f7b3695649eb5d'
+[2026-08-17T16:35:10.010Z] + tr , '
+[2026-08-17T16:35:10.010Z] '
+[2026-08-17T16:35:10.010Z] + grep containerimage.digest
+[2026-08-17T16:35:10.010Z] + grep -o 'sha256:[a-f0-9]*'
+[2026-08-17T16:35:10.010Z] + DIGEST=sha256:a03f02e47f6f50e7f84570b9b98c66f9e582e8048d29b49e4f9a863158ce7633
+[2026-08-17T16:35:10.010Z] + echo 'IMAGE_worker=ayeletgeulayev/devops-app-worker:3650eddd9f28'
+[2026-08-17T16:35:10.010Z] + echo 'DIGEST_worker=sha256:a03f02e47f6f50e7f84570b9b98c66f9e582e8048d29b49e4f9a863158ce7633'
+[2026-08-17T16:35:10.010Z] + cat image-metadata.txt
+[2026-08-17T16:35:10.010Z] GIT_COMMIT=3650eddd9f28
+[2026-08-17T16:35:10.010Z] BUILD_NUMBER=5
+[2026-08-17T16:35:10.010Z] IMAGE_TAG=3650eddd9f28
+[2026-08-17T16:35:10.010Z] IMAGE_backend=ayeletgeulayev/devops-app-backend:3650eddd9f28
+[2026-08-17T16:35:10.010Z] DIGEST_backend=sha256:d6a25d233985aafabfd62c8991b68e34c13d50e35cdebe8e765789464f0b9fcf
+[2026-08-17T16:35:10.010Z] IMAGE_frontend=ayeletgeulayev/devops-app-frontend:3650eddd9f28
+[2026-08-17T16:35:10.010Z] DIGEST_frontend=sha256:a367637a31fe1f872c58f31866cecccf9949b39220e3d76017f7b3695649eb5d
+[2026-08-17T16:35:10.010Z] IMAGE_worker=ayeletgeulayev/devops-app-worker:3650eddd9f28
+[2026-08-17T16:35:10.010Z] DIGEST_worker=sha256:a03f02e47f6f50e7f84570b9b98c66f9e582e8048d29b49e4f9a863158ce7633
 [Pipeline] }
 [Pipeline] // container
 [Pipeline] archiveArtifacts
-[2026-08-17T16:30:56.827Z] Archiving artifacts
-[2026-08-17T16:30:57.203Z] Recording fingerprints
+[2026-08-17T16:35:10.122Z] Archiving artifacts
+[2026-08-17T16:35:10.359Z] Recording fingerprints
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] stage
 [Pipeline] { (Declarative: Post Actions)
 [Pipeline] sh
-[2026-08-17T16:30:57.729Z] + rm -f /home/user/.docker/config.json
+[2026-08-17T16:35:10.873Z] + rm -f /home/user/.docker/config.json
 [Pipeline] deleteDir
 [Pipeline] echo
-[2026-08-17T16:30:57.860Z] CI succeeded. Image tag 0dbfad773dac is ready for deployment.
+[2026-08-17T16:35:11.010Z] CI succeeded. Image tag 3650eddd9f28 is ready for deployment.
 [Pipeline] }
 [Pipeline] // stage
 [Pipeline] }
