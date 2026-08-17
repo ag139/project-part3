@@ -173,7 +173,7 @@ JSON
                       echo "BUILD_NUMBER=${BUILD_NUMBER}" >> image-metadata.txt
                       echo "IMAGE_TAG=${IMAGE_TAG}" >> image-metadata.txt
                       for svc in backend frontend worker; do
-                        DIGEST=$(grep -o '"containerimage.digest": *"[^"]*"' meta-$svc.json | head -1 | sed 's/.*"\(sha256:[^"]*\)".*/\1/')
+                        DIGEST=$(tr ',' '\n' < meta-$svc.json | grep containerimage.digest | grep -o 'sha256:[a-f0-9]*')
                         echo "IMAGE_${svc}=${REGISTRY_REPO}/devops-app-$svc:${IMAGE_TAG}" >> image-metadata.txt
                         echo "DIGEST_${svc}=${DIGEST}" >> image-metadata.txt
                       done
