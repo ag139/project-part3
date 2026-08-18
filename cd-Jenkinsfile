@@ -1,0 +1,228 @@
+pipeline {
+    agent { label 'cd-agent' }
+
+    options {
+        timestamps()
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        timeout(time: 20, unit: 'MINUTES')
+        disableConcurrentBuilds()
+    }
+
+    parameters {
+        string(name: 'IMAGE_TAG', defaultValue: '', description: 'Immutable image tag produced by CI. latest is rejected.')
+        string(name: 'TARGET_NAMESPACE', defaultValue: 'devops-app', description: 'Target namespace.')
+        string(name: 'CI_BUILD_NUMBER', defaultValue: '', description: 'CI build number, for traceability.')
+    }
+
+    environment {
+        REGISTRY_REPO   = 'ayeletgeulayev'
+        RELEASE_NAME    = 'devops-app'
+        CHART_PATH      = './helm/devops-app'
+        ALLOWED_NS      = 'devops-app'
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+                sh '''
+                  echo "deploy requested by: ${BUILD_USER_ID:-$(echo $BUILD_TAG)}"
+                  echo "cd build number:     ${BUILD_NUMBER}"
+                  echo "ci build number:     ${CI_BUILD_NUMBER}"
+                  echo "image tag:           ${IMAGE_TAG}"
+                  echo "target namespace:    ${TARGET_NAMESPACE}"
+                  echo "chart:               ${CHART_PATH}"
+                '''
+            }
+        }
+
+        stage('Input Validation') {
+            steps {
+                script {
+                    if (!params.IMAGE_TAG?.trim()) {
+                        error "IMAGE_TAG is required. Provide the tag produced by the CI pipeline."
+                    }
+                    if (params.IMAGE_TAG.trim().toLowerCase() == 'latest') {
+                        error "IMAGE_TAG must be immutable. latest is not accepted."
+                    }
+                    if (params.TARGET_NAMESPACE.trim() != env.ALLOWED_NS) {
+                        error "Namespace ${params.TARGET_NAMESPACE} is not permitted. Allowed: ${env.ALLOWED_NS}"
+                    }
+                }
+                sh '''
+                  set -e
+                  for svc in backend frontend worker; do
+                    REF="${REGISTRY_REPO}/devops-app-${svc}:${IMAGE_TAG}"
+                    echo "verifying ${REF} exists in the registry"
+                    TOKEN=$(wget -qO- "https://auth.docker.io/token?service=registry.docker.io&scope=repository:${REGISTRY_REPO}/devops-app-${svc}:pull" \
+                      | tr ',' '\\n' | grep '"token"' | cut -d'"' -f4)
+                    CODE=$(wget -S --header="Authorization: Bearer ${TOKEN}" \
+                      --header="Accept: application/vnd.oci.image.manifest.v1+json" \
+                      --header="Accept: application/vnd.docker.distribution.manifest.v2+json" \
+                      -qO /dev/null "https://registry-1.docker.io/v2/${REGISTRY_REPO}/devops-app-${svc}/manifests/${IMAGE_TAG}" 2>&1 \
+                      && echo OK || echo FAIL)
+                    if [ "$CODE" = "FAIL" ]; then
+                      echo "image ${REF} was not found in the registry"
+                      exit 1
+                    fi
+                    echo "${REF} confirmed"
+                  done
+                '''
+            }
+        }
+
+        stage('Manifest Validation') {
+            steps {
+                container('tools') {
+                    sh '''
+                      set -e
+                      helm lint ${CHART_PATH}
+                      helm template ${RELEASE_NAME} ${CHART_PATH} \
+                        --namespace ${TARGET_NAMESPACE} \
+                        --set image.registry=${REGISTRY_REPO}/ \
+                        --set image.tag=${IMAGE_TAG} > /tmp/rendered.yaml
+                      echo "rendered objects:"
+                      grep -c "^kind:" /tmp/rendered.yaml
+                      kubectl apply --dry-run=client -f /tmp/rendered.yaml > /dev/null
+                      echo "manifest validation passed"
+                '''
+                }
+            }
+        }
+
+        stage('Authenticate') {
+            steps {
+                container('tools') {
+                    sh '''
+                      set -e
+                      echo "authenticating with the in-cluster ServiceAccount"
+                      kubectl config current-context || true
+                      echo "permission check for the target namespace:"
+                      kubectl auth can-i update deployments -n ${TARGET_NAMESPACE}
+                      kubectl auth can-i delete deployments -n ${TARGET_NAMESPACE} || echo "delete not permitted, as intended"
+                '''
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                container('tools') {
+                    sh '''
+                      set -e
+                      helm upgrade --install ${RELEASE_NAME} ${CHART_PATH} \
+                        --namespace ${TARGET_NAMESPACE} \
+                        --set image.registry=${REGISTRY_REPO}/ \
+                        --set image.tag=${IMAGE_TAG} \
+                        --set secrets.dbUser=app \
+                        --reuse-values \
+                        --wait --timeout 5m
+                '''
+                }
+            }
+        }
+
+        stage('Rollout') {
+            steps {
+                container('tools') {
+                    sh '''
+                      set -e
+                      for dep in backend frontend worker; do
+                        kubectl rollout status deployment/${dep} -n ${TARGET_NAMESPACE} --timeout=180s
+                      done
+                '''
+                }
+            }
+        }
+
+        stage('Verify') {
+            steps {
+                container('tools') {
+                    sh '''
+                      set -e
+                      echo "=== deployments ==="
+                      kubectl get deployments -n ${TARGET_NAMESPACE}
+                      echo
+                      echo "=== pods ==="
+                      kubectl get pods -n ${TARGET_NAMESPACE} -o wide
+                      echo
+                      echo "=== services ==="
+                      kubectl get services -n ${TARGET_NAMESPACE}
+                      echo
+                      echo "=== running images ==="
+                      RUNNING=$(kubectl get pods -n ${TARGET_NAMESPACE} -o jsonpath='{..image}' | tr ' ' '\\n' | sort -u)
+                      echo "$RUNNING"
+                      echo
+                      for svc in backend frontend worker; do
+                        echo "$RUNNING" | grep -q "devops-app-${svc}:${IMAGE_TAG}" \
+                          && echo "${svc} is running the requested tag ${IMAGE_TAG}" \
+                          || { echo "${svc} is NOT running ${IMAGE_TAG}"; exit 1; }
+                      done
+                '''
+                }
+            }
+        }
+
+        stage('Smoke Test') {
+            steps {
+                container('tools') {
+                    sh '''
+                      set -e
+                      echo "calling the application through its in-cluster Service"
+                      BODY=$(wget -qO- --timeout=15 "http://frontend.${TARGET_NAMESPACE}.svc.cluster.local/")
+                      echo "response: ${BODY}"
+                      echo "${BODY}" | grep -q "app is running" || { echo "unexpected response"; exit 1; }
+
+                      USERS=$(wget -qO- --timeout=15 "http://frontend.${TARGET_NAMESPACE}.svc.cluster.local/users")
+                      echo "users endpoint: ${USERS}"
+
+                      echo "smoke test passed"
+                '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            container('tools') {
+                sh '''
+              echo "===================================================="
+              echo "deployment succeeded"
+              echo "  image tag:      ${IMAGE_TAG}"
+              echo "  namespace:      ${TARGET_NAMESPACE}"
+              echo "  release:        ${RELEASE_NAME}"
+              echo "  cd build:       ${BUILD_NUMBER}"
+              echo "  originating ci: ${CI_BUILD_NUMBER}"
+              echo "===================================================="
+              helm history ${RELEASE_NAME} -n ${TARGET_NAMESPACE} --max 5
+                '''
+            }
+        }
+        failure {
+            container('tools') {
+                sh '''
+              echo "deployment failed. collecting diagnostics."
+              echo "=== pods ==="
+              kubectl get pods -n ${TARGET_NAMESPACE} -o wide || true
+              echo
+              echo "=== recent events ==="
+              kubectl get events -n ${TARGET_NAMESPACE} \
+                --sort-by=.metadata.creationTimestamp | tail -25 || true
+              echo
+              echo "=== helm history ==="
+              helm history ${RELEASE_NAME} -n ${TARGET_NAMESPACE} --max 5 || true
+              echo
+              echo "TO ROLL BACK, run:"
+              echo "  helm rollback ${RELEASE_NAME} -n ${TARGET_NAMESPACE}"
+              echo "or roll back a single deployment:"
+              echo "  kubectl rollout undo deployment/backend -n ${TARGET_NAMESPACE}"
+                '''
+            }
+        }
+        always {
+            deleteDir()
+        }
+    }
+}

@@ -15,6 +15,8 @@ controller:
   - timestamper:1.30
   - kubernetes-credentials-provider
   - ws-cleanup
+  - github
+  - github-branch-source
   installLatestPlugins: false
   installLatestSpecifiedPlugins: false
   serviceAccount:
@@ -136,3 +138,18 @@ additionalAgents:
       limits:
         cpu: 1000m
         memory: 1Gi
+    additionalContainers:
+    - sideContainerName: tools
+      image:
+        repository: alpine/k8s
+        tag: 1.30.0
+      command: sleep
+      args: infinity
+      privileged: false
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
