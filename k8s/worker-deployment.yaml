@@ -28,7 +28,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: worker
-          image: devops-app-worker:1.0.1
+          image: ayeletgeulayev/devops-app-worker:3650eddd9f28
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:

@@ -28,7 +28,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: frontend
-          image: devops-app-frontend:1.0.1
+          image: ayeletgeulayev/devops-app-frontend:3650eddd9f28
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

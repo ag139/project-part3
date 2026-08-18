@@ -13,6 +13,8 @@ controller:
   - pipeline-stage-view:2.41
   - junit:1369.v15da_00283f06
   - timestamper:1.30
+  - kubernetes-credentials-provider
+  - ws-cleanup
   installLatestPlugins: false
   installLatestSpecifiedPlugins: false
   serviceAccount:
@@ -44,6 +46,12 @@ controller:
     configScripts:
       welcome: "jenkins:\n  systemMessage: \"Managed by Configuration as Code. Do\
         \ not configure through the UI.\"\n"
+      seed-job: "jobs:\n  - script: >\n      job('seed-job') {\n        description('Creates\
+        \ the CI and CD jobs from Job DSL in the repository.')\n        scm {\n  \
+        \        git {\n            remote { url('https://github.com/ag139/project-part3.git')\
+        \ }\n            branch('*/main')\n          }\n        }\n        steps {\n\
+        \          dsl {\n            external('jenkins/jobs/seed.groovy')\n     \
+        \       removeAction('DELETE')\n          }\n        }\n      }\n"
 persistence:
   enabled: true
   size: 8Gi
