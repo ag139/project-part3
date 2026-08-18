@@ -71,11 +71,11 @@ spec:
             requests: { cpu: 100m, memory: 128Mi }
             limits: { cpu: 500m, memory: 512Mi }
           readinessProbe:
-            exec: { command: ["pg_isready", "-U", "app"] }
+            exec: { command: ["pg_isready", "-U", "app", "-d", "appdb"] }
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
-            exec: { command: ["pg_isready", "-U", "app"] }
+            exec: { command: ["pg_isready", "-U", "app", "-d", "appdb"] }
             initialDelaySeconds: 15
             periodSeconds: 20
           volumeMounts:

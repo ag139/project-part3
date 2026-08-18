@@ -64,11 +64,11 @@ spec:
           resources:
             {{- toYaml .Values.postgres.resources | nindent 12 }}
           readinessProbe:
-            exec: { command: ["pg_isready", "-U", "{{ .Values.secrets.dbUser }}"] }
+            exec: { command: ["pg_isready", "-U", "{{ .Values.secrets.dbUser }}", "-d", "{{ .Values.config.dbName }}"] }
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
-            exec: { command: ["pg_isready", "-U", "{{ .Values.secrets.dbUser }}"] }
+            exec: { command: ["pg_isready", "-U", "{{ .Values.secrets.dbUser }}", "-d", "{{ .Values.config.dbName }}"] }
             initialDelaySeconds: 15
             periodSeconds: 20
           volumeMounts:
