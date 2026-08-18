@@ -1,0 +1,100 @@
+<svg width="900" height="620" viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M1 1L9 5L1 9" fill="none" stroke="#555" stroke-width="1.4"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="620" fill="#fff"/>
+
+  <text x="36" y="38" font-size="15" font-weight="600" fill="#222">Jenkins on Kubernetes</text>
+  <line x1="36" y1="50" x2="864" y2="50" stroke="#ddd" stroke-width="1"/>
+
+  <!-- cluster -->
+  <rect x="36" y="74" width="560" height="470" rx="3" fill="none" stroke="#aaa" stroke-width="1"/>
+  <text x="50" y="92" font-size="10" fill="#777">kind cluster, 3 nodes</text>
+
+  <!-- ns jenkins -->
+  <rect x="54" y="106" width="524" height="248" rx="3" fill="none" stroke="#ccc" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="66" y="122" font-size="9.5" fill="#999">namespace: jenkins</text>
+
+  <rect x="74" y="134" width="200" height="68" rx="2" fill="#fff" stroke="#555" stroke-width="1.3"/>
+  <text x="174" y="154" text-anchor="middle" font-size="12" font-weight="600" fill="#222">Jenkins controller</text>
+  <text x="174" y="171" text-anchor="middle" font-size="9.5" fill="#777">StatefulSet + PVC</text>
+  <text x="174" y="186" text-anchor="middle" font-size="9.5" fill="#777">jenkins-controller</text>
+
+  <rect x="308" y="134" width="250" height="68" rx="2" fill="#faf7f0" stroke="#b09a68" stroke-width="1"/>
+  <text x="433" y="154" text-anchor="middle" font-size="11.5" font-weight="600" fill="#6b5a2e">JCasC + Job DSL</text>
+  <text x="433" y="171" text-anchor="middle" font-size="9.5" fill="#6b5a2e">clouds, agent templates,</text>
+  <text x="433" y="186" text-anchor="middle" font-size="9.5" fill="#6b5a2e">credentials, both jobs</text>
+
+  <line x1="306" y1="168" x2="278" y2="168" stroke="#999" stroke-width="1" stroke-dasharray="3 3"/>
+
+  <line x1="174" y1="202" x2="174" y2="232" stroke="#555" stroke-width="1.4" marker-end="url(#a)"/>
+  <text x="184" y="221" font-size="9" fill="#999">creates per build</text>
+
+  <rect x="74" y="232" width="230" height="102" rx="2" fill="#fff" stroke="#555" stroke-width="1.3"/>
+  <text x="189" y="252" text-anchor="middle" font-size="12" font-weight="600" fill="#222">ci-agent</text>
+  <text x="189" y="269" text-anchor="middle" font-size="9.5" fill="#777">jnlp, buildkit rootless, python</text>
+  <line x1="90" y1="280" x2="288" y2="280" stroke="#eee" stroke-width="1"/>
+  <text x="189" y="296" text-anchor="middle" font-size="9.5" fill="#777">SA jenkins-ci</text>
+  <text x="189" y="311" text-anchor="middle" font-size="9.5" fill="#777">no API token</text>
+  <text x="189" y="326" text-anchor="middle" font-size="9.5" fill="#777">no deploy rights</text>
+
+  <rect x="328" y="232" width="230" height="102" rx="2" fill="#fff" stroke="#555" stroke-width="1.3"/>
+  <text x="443" y="252" text-anchor="middle" font-size="12" font-weight="600" fill="#222">cd-agent</text>
+  <text x="443" y="269" text-anchor="middle" font-size="9.5" fill="#777">jnlp, kubectl, helm</text>
+  <line x1="344" y1="280" x2="542" y2="280" stroke="#eee" stroke-width="1"/>
+  <text x="443" y="296" text-anchor="middle" font-size="9.5" fill="#777">SA jenkins-cd</text>
+  <text x="443" y="311" text-anchor="middle" font-size="9.5" fill="#777">Role in devops-app only</text>
+  <text x="443" y="326" text-anchor="middle" font-size="9.5" fill="#777">no build tooling</text>
+
+  <!-- ns app -->
+  <rect x="54" y="378" width="524" height="146" rx="3" fill="none" stroke="#ccc" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="66" y="394" font-size="9.5" fill="#999">namespace: devops-app</text>
+
+  <rect x="74" y="408" width="112" height="52" rx="2" fill="#fff" stroke="#555" stroke-width="1"/>
+  <text x="130" y="428" text-anchor="middle" font-size="11" font-weight="600" fill="#222">frontend</text>
+  <text x="130" y="444" text-anchor="middle" font-size="9" fill="#777">2 pods</text>
+
+  <rect x="200" y="408" width="112" height="52" rx="2" fill="#fff" stroke="#555" stroke-width="1"/>
+  <text x="256" y="428" text-anchor="middle" font-size="11" font-weight="600" fill="#222">backend</text>
+  <text x="256" y="444" text-anchor="middle" font-size="9" fill="#777">2 pods</text>
+
+  <rect x="326" y="408" width="112" height="52" rx="2" fill="#fff" stroke="#555" stroke-width="1"/>
+  <text x="382" y="428" text-anchor="middle" font-size="11" font-weight="600" fill="#222">worker</text>
+  <text x="382" y="444" text-anchor="middle" font-size="9" fill="#777">1 pod</text>
+
+  <rect x="452" y="408" width="112" height="52" rx="2" fill="#fff" stroke="#555" stroke-width="1"/>
+  <text x="508" y="428" text-anchor="middle" font-size="11" font-weight="600" fill="#222">postgres</text>
+  <text x="508" y="444" text-anchor="middle" font-size="9" fill="#777">1 pod + PVC</text>
+
+  <text x="74" y="486" font-size="9.5" fill="#999">jenkins-deployer: create, update, patch on chart resources. No delete.</text>
+  <text x="74" y="502" font-size="9.5" fill="#999">Namespace-scoped Role only. No cluster-wide permissions.</text>
+
+  <line x1="443" y1="334" x2="443" y2="376" stroke="#555" stroke-width="1.4" marker-end="url(#a)"/>
+  <text x="452" y="360" font-size="9" fill="#999">helm upgrade</text>
+
+  <!-- registry -->
+  <rect x="646" y="74" width="218" height="200" rx="3" fill="none" stroke="#aaa" stroke-width="1"/>
+  <text x="660" y="92" font-size="10" fill="#777">registry</text>
+
+  <rect x="666" y="110" width="178" height="88" rx="2" fill="#fff" stroke="#555" stroke-width="1.2"/>
+  <text x="755" y="132" text-anchor="middle" font-size="12" font-weight="600" fill="#222">Docker Hub</text>
+  <text x="755" y="152" text-anchor="middle" font-size="9.5" fill="#777">devops-app-backend</text>
+  <text x="755" y="167" text-anchor="middle" font-size="9.5" fill="#777">devops-app-frontend</text>
+  <text x="755" y="182" text-anchor="middle" font-size="9.5" fill="#777">devops-app-worker</text>
+
+  <text x="666" y="222" font-size="9.5" fill="#999">tag = short git commit hash</text>
+  <text x="666" y="238" font-size="9.5" fill="#999">push credentials from a</text>
+  <text x="666" y="254" font-size="9.5" fill="#999">labelled Kubernetes Secret</text>
+
+  <path d="M306 268 L664 165" fill="none" stroke="#555" stroke-width="1.4" marker-end="url(#a)"/>
+  <text x="470" y="205" font-size="9" fill="#999" transform="rotate(-16 470 205)">push</text>
+
+  <path d="M664 190 L560 268" fill="none" stroke="#555" stroke-width="1.4" marker-end="url(#a)"/>
+  <text x="620" y="240" font-size="9" fill="#999" transform="rotate(37 620 240)">pull</text>
+
+  <line x1="36" y1="574" x2="864" y2="574" stroke="#ddd" stroke-width="1"/>
+  <text x="36" y="594" font-size="9.5" fill="#999">Agent pods are created for one build and deleted when it ends. CI cannot reach the application namespace; CD cannot push images.</text>
+</svg>
