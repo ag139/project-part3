@@ -192,6 +192,13 @@ JSON
         }
         success {
             echo "CI succeeded. Image tag ${env.IMAGE_TAG} is ready for deployment."
+            build job: 'cd-application',
+                  wait: false,
+                  parameters: [
+                      string(name: 'IMAGE_TAG',        value: env.IMAGE_TAG),
+                      string(name: 'TARGET_NAMESPACE', value: 'devops-app'),
+                      string(name: 'CI_BUILD_NUMBER',  value: env.BUILD_NUMBER)
+                  ]
         }
         failure {
             echo "CI failed. No image was promoted for deployment."
