@@ -1,0 +1,63 @@
+=== application still running after the failed deployment ===
+NAME                        READY   STATUS             RESTARTS   AGE   IP            NODE                NOMINATED NODE   READINESS GATES
+backend-6566cb9759-nrzpn    0/1     ImagePullBackOff   0          11m   10.244.1.33   devops-ci-worker    <none>           <none>
+backend-9dcdc95f8-5w7sl     1/1     Running            0          14m   10.244.1.29   devops-ci-worker    <none>           <none>
+backend-9dcdc95f8-l9psq     1/1     Running            0          14m   10.244.2.21   devops-ci-worker2   <none>           <none>
+frontend-644889d779-wgvkc   0/1     ErrImagePull       0          11m   10.244.2.23   devops-ci-worker2   <none>           <none>
+frontend-655b98fc4b-j2btw   1/1     Running            0          14m   10.244.1.30   devops-ci-worker    <none>           <none>
+frontend-655b98fc4b-kx9jr   1/1     Running            0          14m   10.244.2.22   devops-ci-worker2   <none>           <none>
+postgres-6d9596b9b7-4pxqc   1/1     Running            0          19m   10.244.1.27   devops-ci-worker    <none>           <none>
+worker-5686579557-pn4fl     1/1     Running            0          14m   10.244.1.31   devops-ci-worker    <none>           <none>
+worker-86f5cbb96d-bk8w2     0/1     ErrImagePull       0          11m   10.244.1.34   devops-ci-worker    <none>           <none>
+
+ayeletgeulayev/devops-app-backend:7a459eca5dba
+ayeletgeulayev/devops-app-backend:does-not-exist-0000
+ayeletgeulayev/devops-app-frontend:7a459eca5dba
+ayeletgeulayev/devops-app-frontend:does-not-exist-0000
+ayeletgeulayev/devops-app-worker:7a459eca5dba
+ayeletgeulayev/devops-app-worker:does-not-exist-0000
+docker.io/ayeletgeulayev/devops-app-backend:7a459eca5dba
+docker.io/ayeletgeulayev/devops-app-frontend:7a459eca5dba
+docker.io/ayeletgeulayev/devops-app-worker:7a459eca5dba
+docker.io/library/postgres:16
+postgres:16
+
+=== helm history shows the failed revision did not replace the good one ===
+REVISION	UPDATED                 	STATUS    	CHART           	APP VERSION	DESCRIPTION                                                                                       
+1       	Tue Aug 18 17:50:22 2026	superseded	devops-app-1.0.1	1.0.1      	Install complete                                                                                  
+2       	Tue Aug 18 17:55:22 2026	superseded	devops-app-1.0.1	1.0.1      	Upgrade complete                                                                                  
+3       	Tue Aug 18 18:00:33 2026	deployed  	devops-app-1.0.1	1.0.1      	Upgrade complete                                                                                  
+4       	Tue Aug 18 18:03:56 2026	failed    	devops-app-1.0.1	1.0.1      	Upgrade "devops-app" failed: client rate limiter Wait returned an error: context deadline exceeded
+
+=== rollback: removing the failed revision ===
+Rollback was a success! Happy Helming!
+
+=== state after rollback ===
+NAME                        READY   STATUS        RESTARTS   AGE   IP            NODE                NOMINATED NODE   READINESS GATES
+backend-6566cb9759-nrzpn    0/1     Terminating   0          11m   <none>        devops-ci-worker    <none>           <none>
+backend-9dcdc95f8-5w7sl     1/1     Running       0          15m   10.244.1.29   devops-ci-worker    <none>           <none>
+backend-9dcdc95f8-l9psq     1/1     Running       0          14m   10.244.2.21   devops-ci-worker2   <none>           <none>
+frontend-644889d779-wgvkc   0/1     Terminating   0          11m   10.244.2.23   devops-ci-worker2   <none>           <none>
+frontend-655b98fc4b-j2btw   1/1     Running       0          15m   10.244.1.30   devops-ci-worker    <none>           <none>
+frontend-655b98fc4b-kx9jr   1/1     Running       0          14m   10.244.2.22   devops-ci-worker2   <none>           <none>
+postgres-6d9596b9b7-4pxqc   1/1     Running       0          20m   10.244.1.27   devops-ci-worker    <none>           <none>
+worker-5686579557-pn4fl     1/1     Running       0          15m   10.244.1.31   devops-ci-worker    <none>           <none>
+worker-86f5cbb96d-bk8w2     0/1     Terminating   0          11m   <none>        devops-ci-worker    <none>           <none>
+
+ayeletgeulayev/devops-app-backend:7a459eca5dba
+ayeletgeulayev/devops-app-backend:does-not-exist-0000
+ayeletgeulayev/devops-app-frontend:7a459eca5dba
+ayeletgeulayev/devops-app-worker:7a459eca5dba
+ayeletgeulayev/devops-app-worker:does-not-exist-0000
+docker.io/ayeletgeulayev/devops-app-backend:7a459eca5dba
+docker.io/ayeletgeulayev/devops-app-frontend:7a459eca5dba
+docker.io/ayeletgeulayev/devops-app-worker:7a459eca5dba
+docker.io/library/postgres:16
+postgres:16
+
+REVISION	UPDATED                 	STATUS    	CHART           	APP VERSION	DESCRIPTION                                                                                       
+1       	Tue Aug 18 17:50:22 2026	superseded	devops-app-1.0.1	1.0.1      	Install complete                                                                                  
+2       	Tue Aug 18 17:55:22 2026	superseded	devops-app-1.0.1	1.0.1      	Upgrade complete                                                                                  
+3       	Tue Aug 18 18:00:33 2026	superseded	devops-app-1.0.1	1.0.1      	Upgrade complete                                                                                  
+4       	Tue Aug 18 18:03:56 2026	failed    	devops-app-1.0.1	1.0.1      	Upgrade "devops-app" failed: client rate limiter Wait returned an error: context deadline exceeded
+5       	Tue Aug 18 21:15:56 2026	deployed  	devops-app-1.0.1	1.0.1      	Rollback to 3                                                                                     
