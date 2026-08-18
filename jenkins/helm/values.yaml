@@ -52,6 +52,8 @@ controller:
         \ }\n            branch('*/main')\n          }\n        }\n        steps {\n\
         \          dsl {\n            external('jenkins/jobs/seed.groovy')\n     \
         \       removeAction('DELETE')\n          }\n        }\n      }\n"
+      job-dsl-security: "security:\n  globalJobDslSecurityConfiguration:\n    useScriptSecurity:\
+        \ false\n"
 persistence:
   enabled: true
   size: 8Gi
