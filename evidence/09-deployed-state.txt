@@ -1,0 +1,26 @@
+=== agent pods are gone after the builds ===
+NAME        READY   STATUS    RESTARTS   AGE
+jenkins-0   2/2     Running   0          36m
+
+=== application running the CI-produced tag ===
+NAME                        READY   STATUS    RESTARTS   AGE    IP            NODE                NOMINATED NODE   READINESS GATES
+backend-65db46bfd7-2qwng    1/1     Running   0          6m1s   10.244.2.19   devops-ci-worker2   <none>           <none>
+backend-65db46bfd7-s4nkq    1/1     Running   0          6m1s   10.244.1.21   devops-ci-worker    <none>           <none>
+frontend-5f8b444c4f-5cqhb   1/1     Running   0          6m1s   10.244.1.23   devops-ci-worker    <none>           <none>
+frontend-5f8b444c4f-mtlm8   1/1     Running   0          6m1s   10.244.2.18   devops-ci-worker2   <none>           <none>
+postgres-6d9596b9b7-4pxqc   1/1     Running   0          57s    10.244.1.27   devops-ci-worker    <none>           <none>
+worker-bffc7c96-ntm9v       1/1     Running   0          6m1s   10.244.1.22   devops-ci-worker    <none>           <none>
+
+ayeletgeulayev/devops-app-backend:2ebd7da0dbe6
+ayeletgeulayev/devops-app-frontend:2ebd7da0dbe6
+ayeletgeulayev/devops-app-worker:2ebd7da0dbe6
+docker.io/ayeletgeulayev/devops-app-backend:2ebd7da0dbe6
+docker.io/ayeletgeulayev/devops-app-frontend:2ebd7da0dbe6
+docker.io/ayeletgeulayev/devops-app-worker:2ebd7da0dbe6
+docker.io/library/postgres:16
+postgres:16
+
+=== helm release history ===
+REVISION	UPDATED                 	STATUS    	CHART           	APP VERSION	DESCRIPTION     
+1       	Tue Aug 18 17:50:22 2026	superseded	devops-app-1.0.1	1.0.1      	Install complete
+2       	Tue Aug 18 17:55:22 2026	deployed  	devops-app-1.0.1	1.0.1      	Upgrade complete
