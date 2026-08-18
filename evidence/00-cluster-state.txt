@@ -1,0 +1,94 @@
+=== nodes ===
+NAME                      STATUS   ROLES           AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                         KERNEL-VERSION                      CONTAINER-RUNTIME
+devops-ci-control-plane   Ready    control-plane   99m   v1.30.0   172.24.0.2    <none>        Debian GNU/Linux 12 (bookworm)   6.18.33.2-microsoft-standard-WSL2   containerd://1.7.15
+devops-ci-worker          Ready    <none>          99m   v1.30.0   172.24.0.3    <none>        Debian GNU/Linux 12 (bookworm)   6.18.33.2-microsoft-standard-WSL2   containerd://1.7.15
+devops-ci-worker2         Ready    <none>          99m   v1.30.0   172.24.0.4    <none>        Debian GNU/Linux 12 (bookworm)   6.18.33.2-microsoft-standard-WSL2   containerd://1.7.15
+
+=== namespaces ===
+NAME                 STATUS   AGE
+default              Active   99m
+devops-app           Active   97m
+ingress-nginx        Active   98m
+jenkins              Active   97m
+kube-node-lease      Active   99m
+kube-public          Active   99m
+kube-system          Active   99m
+local-path-storage   Active   99m
+
+=== jenkins ===
+NAME            READY   STATUS    RESTARTS   AGE   IP            NODE                NOMINATED NODE   READINESS GATES
+pod/jenkins-0   2/2     Running   0          57m   10.244.2.15   devops-ci-worker2   <none>           <none>
+
+NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)     AGE   SELECTOR
+service/jenkins         ClusterIP   10.96.116.30    <none>        8080/TCP    95m   app.kubernetes.io/component=jenkins-controller,app.kubernetes.io/instance=jenkins
+service/jenkins-agent   ClusterIP   10.96.115.229   <none>        50000/TCP   95m   app.kubernetes.io/component=jenkins-controller,app.kubernetes.io/instance=jenkins
+
+NAME                            STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE   VOLUMEMODE
+persistentvolumeclaim/jenkins   Bound    pvc-4604e788-c5a7-4564-a2bb-8a441001fc07   8Gi        RWO            standard       <unset>                 95m   Filesystem
+
+=== jenkins rbac ===
+NAME                                SECRETS   AGE
+serviceaccount/default              0         97m
+serviceaccount/jenkins-cd           0         97m
+serviceaccount/jenkins-ci           0         97m
+serviceaccount/jenkins-controller   0         97m
+
+NAME                                                     CREATED AT
+role.rbac.authorization.k8s.io/jenkins-casc-reload       2026-08-18T16:42:26Z
+role.rbac.authorization.k8s.io/jenkins-controller        2026-08-18T16:40:26Z
+role.rbac.authorization.k8s.io/jenkins-schedule-agents   2026-08-18T16:42:26Z
+
+NAME                                                             ROLE                           AGE
+rolebinding.rbac.authorization.k8s.io/jenkins-controller         Role/jenkins-controller        97m
+rolebinding.rbac.authorization.k8s.io/jenkins-schedule-agents    Role/jenkins-schedule-agents   95m
+rolebinding.rbac.authorization.k8s.io/jenkins-watch-configmaps   Role/jenkins-casc-reload       95m
+
+=== deployer rbac in the application namespace ===
+NAME                                                 CREATED AT
+role.rbac.authorization.k8s.io/devops-app-readonly   2026-08-18T17:50:25Z
+role.rbac.authorization.k8s.io/jenkins-deployer      2026-08-18T16:40:26Z
+
+NAME                                                             ROLE                       AGE
+rolebinding.rbac.authorization.k8s.io/backend-readonly-binding   Role/devops-app-readonly   27m
+rolebinding.rbac.authorization.k8s.io/jenkins-deployer           Role/jenkins-deployer      97m
+
+=== application ===
+NAME                            READY   STATUS    RESTARTS   AGE   IP            NODE                NOMINATED NODE   READINESS GATES
+pod/backend-9dcdc95f8-5w7sl     1/1     Running   0          17m   10.244.1.29   devops-ci-worker    <none>           <none>
+pod/backend-9dcdc95f8-l9psq     1/1     Running   0          16m   10.244.2.21   devops-ci-worker2   <none>           <none>
+pod/frontend-655b98fc4b-j2btw   1/1     Running   0          17m   10.244.1.30   devops-ci-worker    <none>           <none>
+pod/frontend-655b98fc4b-kx9jr   1/1     Running   0          16m   10.244.2.22   devops-ci-worker2   <none>           <none>
+pod/postgres-6d9596b9b7-4pxqc   1/1     Running   0          22m   10.244.1.27   devops-ci-worker    <none>           <none>
+pod/worker-5686579557-pn4fl     1/1     Running   0          17m   10.244.1.31   devops-ci-worker    <none>           <none>
+
+NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE   SELECTOR
+service/backend    ClusterIP   10.96.174.183   <none>        5000/TCP   27m   app=devops-app,component=backend
+service/frontend   ClusterIP   10.96.167.54    <none>        80/TCP     27m   app=devops-app,component=frontend
+service/postgres   ClusterIP   10.96.102.216   <none>        5432/TCP   27m   app=devops-app,component=postgres
+
+NAME                                           CLASS   HOSTS              ADDRESS        PORTS   AGE
+ingress.networking.k8s.io/devops-app-ingress   nginx   devops-app.local   10.96.47.110   80      27m
+
+=== running images ===
+ayeletgeulayev/devops-app-backend:7a459eca5dba
+ayeletgeulayev/devops-app-frontend:7a459eca5dba
+ayeletgeulayev/devops-app-worker:7a459eca5dba
+docker.io/ayeletgeulayev/devops-app-backend:7a459eca5dba
+docker.io/ayeletgeulayev/devops-app-frontend:7a459eca5dba
+docker.io/ayeletgeulayev/devops-app-worker:7a459eca5dba
+docker.io/library/postgres:16
+postgres:16
+
+=== helm releases ===
+NAME         	NAMESPACE    	REVISION	UPDATED                                	STATUS  	CHART               	APP VERSION
+devops-app   	devops-app   	5       	2026-08-18 21:15:56.588284387 +0300 IDT	deployed	devops-app-1.0.1    	1.0.1      
+ingress-nginx	ingress-nginx	1       	2026-08-18 19:39:51.009346827 +0300 IDT	deployed	ingress-nginx-4.15.1	1.15.1     
+jenkins      	jenkins      	7       	2026-08-18 20:18:48.211137245 +0300 IDT	deployed	jenkins-5.9.54      	2.568.2    
+
+=== application release history ===
+REVISION	UPDATED                 	STATUS    	CHART           	APP VERSION	DESCRIPTION                                                                                       
+1       	Tue Aug 18 17:50:22 2026	superseded	devops-app-1.0.1	1.0.1      	Install complete                                                                                  
+2       	Tue Aug 18 17:55:22 2026	superseded	devops-app-1.0.1	1.0.1      	Upgrade complete                                                                                  
+3       	Tue Aug 18 18:00:33 2026	superseded	devops-app-1.0.1	1.0.1      	Upgrade complete                                                                                  
+4       	Tue Aug 18 18:03:56 2026	failed    	devops-app-1.0.1	1.0.1      	Upgrade "devops-app" failed: client rate limiter Wait returned an error: context deadline exceeded
+5       	Tue Aug 18 21:15:56 2026	deployed  	devops-app-1.0.1	1.0.1      	Rollback to 3                                                                                     
