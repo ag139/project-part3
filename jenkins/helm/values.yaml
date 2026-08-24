@@ -166,3 +166,17 @@ additionalAgents:
         limits:
           cpu: 500m
           memory: 512Mi
+    - sideContainerName: crane
+      image:
+        repository: gcr.io/go-containerregistry/crane
+        tag: v0.20.2
+      command: sleep
+      args: infinity
+      privileged: false
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 500m
+          memory: 256Mi

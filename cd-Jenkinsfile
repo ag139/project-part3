@@ -51,23 +51,35 @@ pipeline {
                     }
                     echo "tag ${params.IMAGE_TAG} accepted: not empty, not latest, namespace permitted"
                 }
-                container('tools') {
+                container('crane') {
                     sh '''
                         set -e
+                        MISSING=0
                         for svc in backend frontend worker; do
                           REF="${REGISTRY_REPO}/devops-app-${svc}:${IMAGE_TAG}"
                           echo "verifying ${REF} exists in the registry"
-                          if crane manifest "${REF}" > /dev/null 2>&1; then
-                            echo "${REF} confirmed in registry"
-                          elif skopeo inspect "docker://${REF}" > /dev/null 2>&1; then
-                            echo "${REF} confirmed in registry"
+                          if DIGEST=$(crane digest "${REF}" 2>/dev/null); then
+                            echo "${REF} confirmed, digest ${DIGEST}"
+                            echo "${svc}=${DIGEST}" >> resolved-digests.txt
                           else
-                            echo "could not verify ${REF} with the tools available on this agent"
-                            echo "relying on the deployment itself to fail if the image is missing"
+                            echo "ERROR: ${REF} was not found in the registry"
+                            MISSING=1
                           fi
                         done
+
+                        if [ "$MISSING" -eq 1 ]; then
+                          echo
+                          echo "one or more images are missing from the registry."
+                          echo "refusing to deploy a tag that has not been published by CI."
+                          exit 1
+                        fi
+
+                        echo
+                        echo "=== all images verified, digests resolved ==="
+                        cat resolved-digests.txt
                     '''
                 }
+                archiveArtifacts artifacts: 'resolved-digests.txt', allowEmptyArchive: true
             }
         }
 
