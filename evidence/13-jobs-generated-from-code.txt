@@ -1,0 +1,104 @@
+Started by user Jenkins Admin
+Started by user Jenkins Admin
+Running as SYSTEM
+Agent default-7x2c3 is provisioned from template default
+---
+apiVersion: "v1"
+kind: "Pod"
+metadata:
+  annotations:
+    kubernetes.jenkins.io/last-refresh: "1787577860878"
+  labels:
+    jenkins/jenkins-jenkins-agent: "true"
+    jenkins/label-digest: "500b4f18aee87616849e4f4c2435020898e34aa0"
+    jenkins/label: "jenkins-jenkins-agent"
+    kubernetes.jenkins.io/controller: "http___jenkins_jenkins_svc_cluster_local_8080x"
+  name: "default-7x2c3"
+  namespace: "jenkins"
+spec:
+  containers:
+  - args:
+    - "********"
+    - "default-7x2c3"
+    env:
+    - name: "JENKINS_SECRET"
+      value: "********"
+    - name: "JENKINS_TUNNEL"
+      value: "jenkins-agent.jenkins.svc.cluster.local:50000"
+    - name: "JENKINS_AGENT_NAME"
+      value: "default-7x2c3"
+    - name: "REMOTING_OPTS"
+      value: "-noReconnectAfter 1d"
+    - name: "JENKINS_NAME"
+      value: "default-7x2c3"
+    - name: "JENKINS_AGENT_WORKDIR"
+      value: "/home/jenkins/agent"
+    - name: "JENKINS_URL"
+      value: "http://jenkins.jenkins.svc.cluster.local:8080/"
+    image: "jenkins/inbound-agent:3385.vf1123fb_515da_-1"
+    imagePullPolicy: "IfNotPresent"
+    name: "jnlp"
+    resources:
+      limits:
+        memory: "1Gi"
+        cpu: "1000m"
+      requests:
+        memory: "512Mi"
+        cpu: "200m"
+    securityContext:
+      privileged: false
+      runAsGroup: 1000
+      runAsUser: 1000
+    tty: false
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+    workingDir: "/home/jenkins/agent"
+  nodeSelector:
+    kubernetes.io/os: "linux"
+  restartPolicy: "Never"
+  serviceAccountName: "default"
+  volumes:
+  - emptyDir:
+      medium: ""
+    name: "workspace-volume"
+
+Building remotely on default-7x2c3 (jenkins-jenkins-agent) in workspace /home/jenkins/agent/workspace/seed-job
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/ag139/project-part3.git
+ > git init /home/jenkins/agent/workspace/seed-job # timeout=10
+Fetching upstream changes from https://github.com/ag139/project-part3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/ag139/project-part3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/ag139/project-part3.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision e48f4d91ec10543ed15aa7d3a0914917fc5cfefb (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f e48f4d91ec10543ed15aa7d3a0914917fc5cfefb # timeout=10
+Commit message: "Add Jenkins architecture and CI/CD flow diagrams"
+First time build. Skipping changelog.
+Processing DSL script jenkins/jobs/seed.groovy
+Warning: (seed.groovy, line 7) triggers is deprecated
+Added items:
+    GeneratedJob{name='cd-application'}
+    GeneratedJob{name='ci-application'}
+Finished: SUCCESS
+
+=== job listing from the Jenkins API, both jobs present ===
+
+=== job listing from the Jenkins API, both jobs generated from Job DSL ===
+  "jobs" : [
+    {
+      "_class" : "org.jenkinsci.plugins.workflow.job.WorkflowJob",
+      "name" : "cd-application",
+
+=== all jobs present in Jenkins ===
+cd-application
+ci-application
+seed-job

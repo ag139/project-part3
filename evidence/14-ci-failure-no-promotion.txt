@@ -1,0 +1,292 @@
+Started by user Jenkins Admin
+Checking out git https://github.com/ag139/project-part3.git into /var/jenkins_home/workspace/ci-application@script/e373b9a52cc24b9e9c5d4ba15fcc2b4e6edf87b2965f0e8f30c49dce96cde76c to read ci-Jenkinsfile
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/ag139/project-part3.git
+ > git init /var/jenkins_home/workspace/ci-application@script/e373b9a52cc24b9e9c5d4ba15fcc2b4e6edf87b2965f0e8f30c49dce96cde76c # timeout=10
+Fetching upstream changes from https://github.com/ag139/project-part3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/ag139/project-part3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/ag139/project-part3.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/demo/failing-ci^{commit} # timeout=10
+Checking out Revision d75d02a1187ed843b535aeb03d9726333e7f5c1a (refs/remotes/origin/demo/failing-ci)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f d75d02a1187ed843b535aeb03d9726333e7f5c1a # timeout=10
+Commit message: "Deliberately break syntax to demonstrate CI failing before any push"
+First time build. Skipping changelog.
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Still waiting to schedule task
+‘ci-agent-hzdsh’ is offline
+Agent ci-agent-hzdsh is provisioned from template ci-agent
+---
+apiVersion: "v1"
+kind: "Pod"
+metadata:
+  annotations:
+    kubernetes.jenkins.io/last-refresh: "1787578354012"
+  labels:
+    jenkins/jenkins-jenkins-agent: "true"
+    jenkins/label-digest: "e022f4b2ff6331d13f619659a9a22c63266a1f9a"
+    jenkins/label: "jenkins-jenkins-agent_ci-agent"
+    kubernetes.jenkins.io/controller: "http___jenkins_jenkins_svc_cluster_local_8080x"
+  name: "ci-agent-hzdsh"
+  namespace: "jenkins"
+spec:
+  containers:
+  - args:
+    - "buildkitd"
+    - "--oci-worker-no-process-sandbox"
+    - "--addr"
+    - "unix:///home/user/.local/share/buildkit/buildkitd.sock"
+    command:
+    - "rootlesskit"
+    env:
+    - name: "JENKINS_URL"
+      value: "http://jenkins.jenkins.svc.cluster.local:8080/"
+    image: "moby/buildkit:v0.18.2-rootless"
+    imagePullPolicy: "IfNotPresent"
+    name: "buildkit"
+    resources:
+      limits:
+        memory: "2Gi"
+        cpu: "2"
+      requests:
+        memory: "1Gi"
+        cpu: "300m"
+    securityContext:
+      privileged: false
+      runAsGroup: 1000
+      runAsUser: 1000
+    tty: false
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+    workingDir: "/home/jenkins/agent"
+  - args:
+    - "infinity"
+    command:
+    - "sleep"
+    env:
+    - name: "JENKINS_URL"
+      value: "http://jenkins.jenkins.svc.cluster.local:8080/"
+    image: "python:3.12-slim"
+    imagePullPolicy: "IfNotPresent"
+    name: "python"
+    resources:
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+    securityContext:
+      privileged: false
+      runAsGroup: 1000
+      runAsUser: 1000
+    tty: false
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+    workingDir: "/home/jenkins/agent"
+  - args:
+    - "********"
+    - "ci-agent-hzdsh"
+    env:
+    - name: "JENKINS_SECRET"
+      value: "********"
+    - name: "JENKINS_TUNNEL"
+      value: "jenkins-agent.jenkins.svc.cluster.local:50000"
+    - name: "JENKINS_AGENT_NAME"
+      value: "ci-agent-hzdsh"
+    - name: "REMOTING_OPTS"
+      value: "-noReconnectAfter 1d"
+    - name: "JENKINS_NAME"
+      value: "ci-agent-hzdsh"
+    - name: "JENKINS_AGENT_WORKDIR"
+      value: "/home/jenkins/agent"
+    - name: "JENKINS_URL"
+      value: "http://jenkins.jenkins.svc.cluster.local:8080/"
+    image: "jenkins/inbound-agent:3385.vf1123fb_515da_-1"
+    imagePullPolicy: "IfNotPresent"
+    name: "jnlp"
+    resources:
+      limits:
+        memory: "1Gi"
+        cpu: "1000m"
+      requests:
+        memory: "512Mi"
+        cpu: "200m"
+    securityContext:
+      privileged: false
+      runAsGroup: 1000
+      runAsUser: 1000
+    tty: false
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+    workingDir: "/home/jenkins/agent"
+  nodeSelector:
+    kubernetes.io/os: "linux"
+  restartPolicy: "Never"
+  serviceAccountName: "jenkins-ci"
+  volumes:
+  - emptyDir:
+      medium: ""
+    name: "workspace-volume"
+
+Running on ci-agent-hzdsh in /home/jenkins/agent/workspace/ci-application
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/ag139/project-part3.git
+ > git init /home/jenkins/agent/workspace/ci-application # timeout=10
+Fetching upstream changes from https://github.com/ag139/project-part3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/ag139/project-part3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/ag139/project-part3.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+Checking out Revision d75d02a1187ed843b535aeb03d9726333e7f5c1a (refs/remotes/origin/demo/failing-ci)
+ > git rev-parse refs/remotes/origin/demo/failing-ci^{commit} # timeout=10
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f d75d02a1187ed843b535aeb03d9726333e7f5c1a # timeout=10
+Commit message: "Deliberately break syntax to demonstrate CI failing before any push"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timestamps
+[Pipeline] {
+[Pipeline] timeout
+[2026-08-24T13:33:12.208Z] Timeout set to expire in 30 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+[2026-08-24T13:33:12.513Z] The recommended git tool is: NONE
+[2026-08-24T13:33:12.561Z] No credentials specified
+[2026-08-24T13:33:12.587Z] Fetching changes from the remote Git repository
+[2026-08-24T13:33:13.482Z] Checking out Revision d75d02a1187ed843b535aeb03d9726333e7f5c1a (refs/remotes/origin/demo/failing-ci)
+[2026-08-24T13:33:12.578Z]  > git rev-parse --resolve-git-dir /home/jenkins/agent/workspace/ci-application/.git # timeout=10
+[2026-08-24T13:33:12.603Z]  > git config remote.origin.url https://github.com/ag139/project-part3.git # timeout=10
+[2026-08-24T13:33:12.682Z] Fetching upstream changes from https://github.com/ag139/project-part3.git
+[2026-08-24T13:33:12.683Z]  > git --version # timeout=10
+[2026-08-24T13:33:12.689Z]  > git --version # 'git version 2.47.3'
+[2026-08-24T13:33:12.690Z]  > git fetch --tags --force --progress -- https://github.com/ag139/project-part3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+[2026-08-24T13:33:13.451Z]  > git rev-parse refs/remotes/origin/demo/failing-ci^{commit} # timeout=10
+[2026-08-24T13:33:13.486Z]  > git config core.sparsecheckout # timeout=10
+[2026-08-24T13:33:13.493Z]  > git checkout -f d75d02a1187ed843b535aeb03d9726333e7f5c1a # timeout=10
+[2026-08-24T13:33:13.591Z] Commit message: "Deliberately break syntax to demonstrate CI failing before any push"
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
+[2026-08-24T13:33:14.514Z] + git rev-parse --short=12 HEAD
+[Pipeline] sh
+[2026-08-24T13:33:14.977Z] + git rev-parse --abbrev-ref HEAD
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] sh
+[2026-08-24T13:33:15.482Z] + echo branch:       HEAD
+[2026-08-24T13:33:15.482Z] branch:       HEAD
+[2026-08-24T13:33:15.482Z] + echo commit:       d75d02a1187e
+[2026-08-24T13:33:15.483Z] commit:       d75d02a1187e
+[2026-08-24T13:33:15.483Z] + echo build number: 1
+[2026-08-24T13:33:15.483Z] build number: 1
+[2026-08-24T13:33:15.483Z] + echo image tag:    d75d02a1187e
+[2026-08-24T13:33:15.483Z] image tag:    d75d02a1187e
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Validation)
+[Pipeline] sh
+[2026-08-24T13:33:16.038Z] + set -e
+[2026-08-24T13:33:16.038Z] + test -f docker/backend/Dockerfile
+[2026-08-24T13:33:16.038Z] + test -f docker/frontend/Dockerfile
+[2026-08-24T13:33:16.038Z] + test -f docker/worker/Dockerfile
+[2026-08-24T13:33:16.038Z] + test -d k8s
+[2026-08-24T13:33:16.038Z] + test -f helm/devops-app/Chart.yaml
+[2026-08-24T13:33:16.038Z] + echo project structure OK
+[2026-08-24T13:33:16.038Z] project structure OK
+[2026-08-24T13:33:16.039Z] + grep -rn :latest docker/backend/Dockerfile docker/frontend/Dockerfile docker/worker/Dockerfile
+[2026-08-24T13:33:16.039Z] + true
+[2026-08-24T13:33:16.039Z] + echo no latest tags in Dockerfiles
+[2026-08-24T13:33:16.039Z] no latest tags in Dockerfiles
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Lint)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-08-24T13:33:16.983Z] + set -e
+[2026-08-24T13:33:16.983Z] + python3 -m py_compile docker/backend/app.py docker/worker/worker.py
+[2026-08-24T13:33:17.571Z]   File "docker/backend/app.py", line 38
+[2026-08-24T13:33:17.571Z]     @app.route("/", methods=["GET"]
+[2026-08-24T13:33:17.571Z]               ^
+[2026-08-24T13:33:17.571Z] SyntaxError: '(' was never closed
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Tests)
+Stage "Tests" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build and Push)
+Stage "Build and Push" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Publish Metadata)
+Stage "Publish Metadata" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] sh
+[2026-08-24T13:33:19.202Z] + rm -f /home/user/.docker/config.json
+[Pipeline] deleteDir
+[Pipeline] echo
+[2026-08-24T13:33:19.356Z] CI failed. No image was promoted for deployment.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // timestamps
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE
+
+=== the pipeline stopped at Lint and never reached Build and Push ===
+No image was built, so nothing was pushed to the registry.
+
+=== cd-application was not scheduled ===
+legacyIds
+permalinks
