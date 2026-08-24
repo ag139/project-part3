@@ -169,7 +169,7 @@ additionalAgents:
     - sideContainerName: crane
       image:
         repository: gcr.io/go-containerregistry/crane
-        tag: v0.20.2
+        tag: v0.20.3
       command: sleep
       args: infinity
       privileged: false
