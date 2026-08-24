@@ -1,7 +1,8 @@
 import os
-from flask import Flask, jsonify, request
-import psycopg2
+
 import boto3
+import psycopg2
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -84,4 +85,6 @@ def upload_file():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    # noqa/nosec: binding to all interfaces is required inside a container,
+    # otherwise the nginx pod could not reach this service at all.
+    app.run(host="0.0.0.0", port=5000)  # nosec B104  # noqa: S104

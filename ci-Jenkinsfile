@@ -55,10 +55,26 @@ pipeline {
                 container('python') {
                     sh '''
                       set -e
-                      python3 -m py_compile docker/backend/app.py docker/worker/worker.py
-                      echo "python syntax OK"
+                      pip install --quiet --no-cache-dir -r tests/requirements.txt
+
+                      echo "=== ruff: style, correctness and security rules ==="
+                      ruff check docker/backend docker/worker tests \
+                        --output-format=concise | tee lint-report.txt
+
+                      echo
+                      echo "=== bandit: python security analysis ==="
+                      bandit -r docker/backend docker/worker \
+                        -f txt -o bandit-report.txt --severity-level medium || true
+                      cat bandit-report.txt
+
+                      if grep -qE "Severity: (High|Medium)" bandit-report.txt; then
+                        echo "bandit reported a medium or high severity issue"
+                        exit 1
+                      fi
+                      echo "static analysis passed"
                     '''
                 }
+                archiveArtifacts artifacts: 'lint-report.txt,bandit-report.txt', allowEmptyArchive: true
             }
         }
 
@@ -67,63 +83,11 @@ pipeline {
                 container('python') {
                     sh '''
                       set -e
+                      pip install --quiet --no-cache-dir -r tests/requirements.txt
                       mkdir -p test-results
-                  python3 - <<'PYTEST'
-import ast, sys, xml.etree.ElementTree as ET
-
-cases = []
-
-def check(name, fn):
-    try:
-        fn()
-        cases.append((name, None))
-    except AssertionError as e:
-        cases.append((name, str(e) or "assertion failed"))
-
-def app_defines_routes():
-    tree = ast.parse(open("docker/backend/app.py").read())
-    count = 0
-    for n in ast.walk(tree):
-        if not isinstance(n, ast.FunctionDef):
-            continue
-        for d in n.decorator_list:
-            f = d.func if isinstance(d, ast.Call) else d
-            if isinstance(f, ast.Attribute) and f.attr == "route":
-                count += 1
-    assert count >= 4, f"expected at least 4 routes, found {count}"
-
-def app_reads_env():
-    src = open("docker/backend/app.py").read()
-    for key in ["DB_HOST", "DB_PASSWORD", "S3_BUCKET_NAME", "SNS_TOPIC_ARN"]:
-        assert f'"{key}"' in src, f"{key} not read from environment"
-
-def app_has_no_hardcoded_secrets():
-    src = open("docker/backend/app.py").read()
-    assert "AKIA" not in src, "hardcoded AWS key found"
-    assert "rds.amazonaws.com" not in src, "hardcoded RDS endpoint found"
-
-def worker_writes_heartbeat():
-    src = open("docker/worker/worker.py").read()
-    assert "/tmp/healthy" in src, "worker does not write a heartbeat file"
-
-check("app_defines_routes", app_defines_routes)
-check("app_reads_env", app_reads_env)
-check("app_has_no_hardcoded_secrets", app_has_no_hardcoded_secrets)
-check("worker_writes_heartbeat", worker_writes_heartbeat)
-
-suite = ET.Element("testsuite", name="ci-checks",
-                   tests=str(len(cases)),
-                   failures=str(sum(1 for _, f in cases if f)))
-for name, failure in cases:
-    tc = ET.SubElement(suite, "testcase", classname="ci", name=name)
-    if failure:
-        ET.SubElement(tc, "failure", message=failure).text = failure
-
-ET.ElementTree(suite).write("test-results/results.xml")
-for name, failure in cases:
-    print(("FAIL " if failure else "PASS ") + name + (f" - {failure}" if failure else ""))
-sys.exit(1 if any(f for _, f in cases) else 0)
-PYTEST
+                      python -m pytest tests/ \
+                        --junitxml=test-results/results.xml \
+                        -v
                     '''
                 }
             }
