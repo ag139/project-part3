@@ -11,6 +11,7 @@ pipeline {
         REGISTRY       = 'docker.io'
         REGISTRY_REPO  = 'ayeletgeulayev'
         BUILDKIT_HOST  = 'unix:///home/user/.local/share/buildkit/buildkitd.sock'
+        MAX_CRITICAL   = '10'
     }
 
     stages {
@@ -160,6 +161,65 @@ JSON
                         '''
                     }
                 }
+            }
+        }
+
+        stage('Scan Images') {
+            steps {
+                container('trivy') {
+                    withCredentials([usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'REG_USER',
+                        passwordVariable: 'REG_PASS')]) {
+                        sh '''
+                          set -e
+                          export TRIVY_USERNAME="$REG_USER"
+                          export TRIVY_PASSWORD="$REG_PASS"
+                          mkdir -p scan-reports
+                          FAILED=0
+                          for svc in backend frontend worker; do
+                            REF="${REGISTRY_REPO}/devops-app-${svc}:${IMAGE_TAG}"
+                            echo "=============================================="
+                            echo "scanning ${REF}"
+                            echo "=============================================="
+
+                            trivy image --scanners vuln --no-progress \
+                              --severity HIGH,CRITICAL \
+                              --format table \
+                              "${REF}" | tee "scan-reports/${svc}.txt"
+
+                            trivy image --scanners vuln --no-progress \
+                              --severity HIGH,CRITICAL \
+                              --format json \
+                              --output "scan-reports/${svc}.json" \
+                              "${REF}"
+
+                            CRIT=$(trivy image --scanners vuln --no-progress \
+                                    --severity CRITICAL --format json "${REF}" \
+                                    | grep -o '"Severity": *"CRITICAL"' | wc -l)
+
+                            echo "${svc}: ${CRIT} critical findings"
+                            echo "${svc}=${CRIT}" >> scan-reports/critical-counts.txt
+
+                            if [ "${CRIT}" -gt "${MAX_CRITICAL}" ]; then
+                              echo "POLICY VIOLATION: ${svc} has ${CRIT} critical findings, limit is ${MAX_CRITICAL}"
+                              FAILED=1
+                            fi
+                          done
+
+                          echo
+                          echo "=== critical findings per image ==="
+                          cat scan-reports/critical-counts.txt
+
+                          if [ "$FAILED" -eq 1 ]; then
+                            echo "one or more images exceeded the critical vulnerability policy"
+                            exit 1
+                          fi
+                          echo "all images are within the agreed policy"
+                        '''
+                    }
+                }
+                archiveArtifacts artifacts: 'scan-reports/*', fingerprint: true
             }
         }
 
