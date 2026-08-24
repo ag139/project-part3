@@ -35,7 +35,7 @@ def get_connection():
     )
 
 
-@app.route("/", methods=["GET"])
+@app.route("/", methods=["GET"]
 def home():
     return jsonify({"message": "app is running"})
 
