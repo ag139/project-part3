@@ -55,6 +55,9 @@ pipeline {
                 container('python') {
                     sh '''
                       set -e
+                      export PIP_TARGET=$WORKSPACE/.pip
+                      export PATH=$PIP_TARGET/bin:$PATH
+                      export PYTHONPATH=$PIP_TARGET:$PYTHONPATH
                       pip install --quiet --no-cache-dir -r tests/requirements.txt
 
                       echo "=== ruff: style, correctness and security rules ==="
@@ -83,6 +86,9 @@ pipeline {
                 container('python') {
                     sh '''
                       set -e
+                      export PIP_TARGET=$WORKSPACE/.pip
+                      export PATH=$PIP_TARGET/bin:$PATH
+                      export PYTHONPATH=$PIP_TARGET:$PYTHONPATH
                       pip install --quiet --no-cache-dir -r tests/requirements.txt
                       mkdir -p test-results
                       python -m pytest tests/ \
