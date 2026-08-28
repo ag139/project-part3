@@ -1,37 +1,37 @@
 === nodes ===
 NAME                      STATUS   ROLES           AGE    VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                         KERNEL-VERSION                      CONTAINER-RUNTIME
-devops-ci-control-plane   Ready    control-plane   127m   v1.30.0   172.24.0.3    <none>        Debian GNU/Linux 12 (bookworm)   6.18.33.2-microsoft-standard-WSL2   containerd://1.7.15
+devops-ci-control-plane   Ready    control-plane   128m   v1.30.0   172.24.0.3    <none>        Debian GNU/Linux 12 (bookworm)   6.18.33.2-microsoft-standard-WSL2   containerd://1.7.15
 devops-ci-worker          Ready    <none>          127m   v1.30.0   172.24.0.2    <none>        Debian GNU/Linux 12 (bookworm)   6.18.33.2-microsoft-standard-WSL2   containerd://1.7.15
-devops-ci-worker2         Ready    <none>          127m   v1.30.0   172.24.0.4    <none>        Debian GNU/Linux 12 (bookworm)   6.18.33.2-microsoft-standard-WSL2   containerd://1.7.15
+devops-ci-worker2         Ready    <none>          128m   v1.30.0   172.24.0.4    <none>        Debian GNU/Linux 12 (bookworm)   6.18.33.2-microsoft-standard-WSL2   containerd://1.7.15
 
 === namespaces ===
 NAME                 STATUS   AGE
-default              Active   127m
-devops-app           Active   125m
+default              Active   128m
+devops-app           Active   126m
 ingress-nginx        Active   127m
-jenkins              Active   125m
-kube-node-lease      Active   127m
-kube-public          Active   127m
-kube-system          Active   127m
-local-path-storage   Active   127m
+jenkins              Active   126m
+kube-node-lease      Active   128m
+kube-public          Active   128m
+kube-system          Active   128m
+local-path-storage   Active   128m
 
 === jenkins ===
 NAME            READY   STATUS    RESTARTS   AGE   IP           NODE                NOMINATED NODE   READINESS GATES
 pod/jenkins-0   2/2     Running   0          27m   10.244.1.5   devops-ci-worker2   <none>           <none>
 
 NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)     AGE    SELECTOR
-service/jenkins         ClusterIP   10.96.142.143   <none>        8080/TCP    125m   app.kubernetes.io/component=jenkins-controller,app.kubernetes.io/instance=jenkins
-service/jenkins-agent   ClusterIP   10.96.67.105    <none>        50000/TCP   125m   app.kubernetes.io/component=jenkins-controller,app.kubernetes.io/instance=jenkins
+service/jenkins         ClusterIP   10.96.142.143   <none>        8080/TCP    126m   app.kubernetes.io/component=jenkins-controller,app.kubernetes.io/instance=jenkins
+service/jenkins-agent   ClusterIP   10.96.67.105    <none>        50000/TCP   126m   app.kubernetes.io/component=jenkins-controller,app.kubernetes.io/instance=jenkins
 
 NAME                            STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE    VOLUMEMODE
-persistentvolumeclaim/jenkins   Bound    pvc-909a4807-bc99-43c2-a417-405dda91c983   8Gi        RWO            standard       <unset>                 125m   Filesystem
+persistentvolumeclaim/jenkins   Bound    pvc-909a4807-bc99-43c2-a417-405dda91c983   8Gi        RWO            standard       <unset>                 126m   Filesystem
 
 === jenkins rbac ===
 NAME                                SECRETS   AGE
-serviceaccount/default              0         125m
-serviceaccount/jenkins-cd           0         125m
-serviceaccount/jenkins-ci           0         125m
-serviceaccount/jenkins-controller   0         125m
+serviceaccount/default              0         126m
+serviceaccount/jenkins-cd           0         126m
+serviceaccount/jenkins-ci           0         126m
+serviceaccount/jenkins-controller   0         126m
 
 NAME                                                     CREATED AT
 role.rbac.authorization.k8s.io/jenkins-casc-reload       2026-08-28T07:23:10Z
@@ -39,9 +39,9 @@ role.rbac.authorization.k8s.io/jenkins-controller        2026-08-28T07:23:06Z
 role.rbac.authorization.k8s.io/jenkins-schedule-agents   2026-08-28T07:23:10Z
 
 NAME                                                             ROLE                           AGE
-rolebinding.rbac.authorization.k8s.io/jenkins-controller         Role/jenkins-controller        125m
-rolebinding.rbac.authorization.k8s.io/jenkins-schedule-agents    Role/jenkins-schedule-agents   125m
-rolebinding.rbac.authorization.k8s.io/jenkins-watch-configmaps   Role/jenkins-casc-reload       125m
+rolebinding.rbac.authorization.k8s.io/jenkins-controller         Role/jenkins-controller        126m
+rolebinding.rbac.authorization.k8s.io/jenkins-schedule-agents    Role/jenkins-schedule-agents   126m
+rolebinding.rbac.authorization.k8s.io/jenkins-watch-configmaps   Role/jenkins-casc-reload       126m
 
 === deployer rbac in the application namespace ===
 NAME                                                 CREATED AT
@@ -50,16 +50,16 @@ role.rbac.authorization.k8s.io/jenkins-deployer      2026-08-28T07:23:06Z
 
 NAME                                                             ROLE                       AGE
 rolebinding.rbac.authorization.k8s.io/backend-readonly-binding   Role/devops-app-readonly   17m
-rolebinding.rbac.authorization.k8s.io/jenkins-deployer           Role/jenkins-deployer      125m
+rolebinding.rbac.authorization.k8s.io/jenkins-deployer           Role/jenkins-deployer      126m
 
 === application ===
-NAME                            READY   STATUS    RESTARTS   AGE     IP            NODE                NOMINATED NODE   READINESS GATES
-pod/backend-54f464f9df-hwzzb    1/1     Running   0          10m     10.244.1.8    devops-ci-worker2   <none>           <none>
-pod/backend-54f464f9df-nf5ts    1/1     Running   0          10m     10.244.2.21   devops-ci-worker    <none>           <none>
-pod/frontend-6676fc655f-p27rk   1/1     Running   0          10m     10.244.2.22   devops-ci-worker    <none>           <none>
-pod/frontend-6676fc655f-ps9xk   1/1     Running   0          10m     10.244.1.9    devops-ci-worker2   <none>           <none>
-pod/postgres-764b7f8bcf-4nxxq   1/1     Running   0          9m56s   10.244.2.24   devops-ci-worker    <none>           <none>
-pod/worker-7c78cdf7d6-pf8tf     1/1     Running   0          10m     10.244.2.23   devops-ci-worker    <none>           <none>
+NAME                            READY   STATUS    RESTARTS   AGE   IP            NODE                NOMINATED NODE   READINESS GATES
+pod/backend-54f464f9df-hwzzb    1/1     Running   0          10m   10.244.1.8    devops-ci-worker2   <none>           <none>
+pod/backend-54f464f9df-nf5ts    1/1     Running   0          10m   10.244.2.21   devops-ci-worker    <none>           <none>
+pod/frontend-6676fc655f-p27rk   1/1     Running   0          10m   10.244.2.22   devops-ci-worker    <none>           <none>
+pod/frontend-6676fc655f-ps9xk   1/1     Running   0          10m   10.244.1.9    devops-ci-worker2   <none>           <none>
+pod/postgres-764b7f8bcf-4nxxq   1/1     Running   0          10m   10.244.2.24   devops-ci-worker    <none>           <none>
+pod/worker-7c78cdf7d6-pf8tf     1/1     Running   0          10m   10.244.2.23   devops-ci-worker    <none>           <none>
 
 NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE   SELECTOR
 service/backend    ClusterIP   10.96.122.110   <none>        5000/TCP   17m   app=devops-app,component=backend
