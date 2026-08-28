@@ -1,0 +1,35 @@
+=== chart and plugin versions are pinned ===
+    repository: jenkins/jenkins
+    tag: 2.504.3-lts-jdk17
+  installPlugins:
+  - kubernetes:4437.v3a_18554d3f32
+30:  --version 5.9.54 \
+
+  installPlugins:
+  - kubernetes:4437.v3a_18554d3f32
+  - workflow-aggregator:608.v67378e9d3db_1
+  - git:5.10.1
+  - configuration-as-code:2036.v0b_c2de701dcb_
+  - job-dsl:3732.v9a_c49a_61a_313
+  - credentials-binding:728.v902a_273b_8947
+  - pipeline-stage-view:2.41
+  - junit:1369.v15da_00283f06
+  - timestamper:1.30
+  - ws-cleanup:0.49
+  - github:1.47.0
+  - kubernetes-credentials-provider:1.315.v92008589c044
+  installLatestPlugins: false
+  installLatestSpecifiedPlugins: false
+
+=== no failed plugins on startup ===
+none
+
+=== pod security context ===
+{"fsGroup":1000,"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000,"seccompProfile":{"type":"RuntimeDefault"}}
+{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsGroup":1000,"runAsUser":1000}
+
+=== network policies in the jenkins namespace ===
+NAME               POD-SELECTOR                                     AGE
+allow-agents       jenkins/jenkins-jenkins-agent=true               5m33s
+allow-controller   app.kubernetes.io/component=jenkins-controller   5m33s
+default-deny-all   <none>                                           5m33s

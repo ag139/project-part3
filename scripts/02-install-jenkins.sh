@@ -24,7 +24,10 @@ kubectl annotate secret dockerhub-creds -n jenkins \
 echo "==> installing Jenkins"
 helm repo add jenkins https://charts.jenkins.io >/dev/null
 helm repo update >/dev/null
+# Chart version is pinned so a reinstall reproduces the tested combination
+# of chart, Jenkins core and plugin versions.
 helm upgrade --install jenkins jenkins/jenkins \
+  --version 5.9.54 \
   --namespace jenkins \
   --values jenkins/helm/values.yaml \
   --wait --timeout 15m
