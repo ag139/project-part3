@@ -94,6 +94,7 @@ pipeline {
                 container('tools') {
                     sh '''
                       set -e
+                      helm version --short
                       helm lint ${CHART_PATH}
                       helm template ${RELEASE_NAME} ${CHART_PATH} \
                         --namespace ${TARGET_NAMESPACE} \
