@@ -1,4 +1,4 @@
-=== chart version pinned in the install script ===
+=== chart version pinned ===
 30:  --version 5.9.54 \
 
 === plugin versions pinned, latest disabled ===
@@ -29,9 +29,20 @@ none
 
 === network policies ===
 NAME               POD-SELECTOR                                     AGE
-allow-agents       jenkins/jenkins-jenkins-agent=true               7m59s
-allow-controller   app.kubernetes.io/component=jenkins-controller   7m59s
-default-deny-all   <none>                                           7m59s
+allow-agents       jenkins/jenkins-jenkins-agent=true               10m
+allow-controller   app.kubernetes.io/component=jenkins-controller   10m
+default-deny-all   <none>                                           10m
 
-=== webhook exposed on its own path, not the whole UI ===
+=== only the webhook path is exposed, not the UI ===
+NAME              CLASS   HOSTS   ADDRESS   PORTS   AGE
+jenkins-webhook   nginx   *                 80      27s
+path: /github-webhook/
 
+=== lifecycle scripts ===
+00-start.sh
+01-setup-cluster.sh
+02-install-jenkins.sh
+03-deploy-application.sh
+04-collect-evidence.sh
+05-verify.sh
+07-uninstall.sh
