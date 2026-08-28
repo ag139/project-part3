@@ -1,0 +1,418 @@
+Started by user Jenkins Admin
+Checking out git https://github.com/ag139/project-part3.git into /var/jenkins_home/workspace/cd-application@script/3bdd64284d0e84d05706acba9b4b4b9787bb37708cc654b6e4509366f722582d to read cd-Jenkinsfile
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/cd-application@script/3bdd64284d0e84d05706acba9b4b4b9787bb37708cc654b6e4509366f722582d/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/ag139/project-part3.git # timeout=10
+Fetching upstream changes from https://github.com/ag139/project-part3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/ag139/project-part3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 2b816f4fc06f65902a4b13a2835c54dc7fcb1a85 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 2b816f4fc06f65902a4b13a2835c54dc7fcb1a85 # timeout=10
+Commit message: "Use a crane image that ships both crane and a shell"
+ > git rev-list --no-walk 2b816f4fc06f65902a4b13a2835c54dc7fcb1a85 # timeout=10
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Agent cd-agent-vm8v0 is provisioned from template cd-agent
+---
+apiVersion: "v1"
+kind: "Pod"
+metadata:
+  annotations:
+    kubernetes.jenkins.io/last-refresh: "1787908256771"
+  labels:
+    jenkins/jenkins-jenkins-agent: "true"
+    jenkins/label-digest: "c504c8675cde4d5ab4ecda548f29decec8770cd4"
+    jenkins/label: "jenkins-jenkins-agent_cd-agent"
+    kubernetes.jenkins.io/controller: "http___jenkins_jenkins_svc_cluster_local_8080x"
+  name: "cd-agent-vm8v0"
+  namespace: "jenkins"
+spec:
+  containers:
+  - args:
+    - "infinity"
+    command:
+    - "sleep"
+    env:
+    - name: "JENKINS_URL"
+      value: "http://jenkins.jenkins.svc.cluster.local:8080/"
+    image: "alpine/crane:0.20.3"
+    imagePullPolicy: "IfNotPresent"
+    name: "crane"
+    resources:
+      limits:
+        memory: "256Mi"
+        cpu: "500m"
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+    securityContext:
+      privileged: false
+      runAsGroup: 1000
+      runAsUser: 1000
+    tty: false
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+    workingDir: "/home/jenkins/agent"
+  - args:
+    - "********"
+    - "cd-agent-vm8v0"
+    env:
+    - name: "JENKINS_SECRET"
+      value: "********"
+    - name: "JENKINS_TUNNEL"
+      value: "jenkins-agent.jenkins.svc.cluster.local:50000"
+    - name: "JENKINS_AGENT_NAME"
+      value: "cd-agent-vm8v0"
+    - name: "REMOTING_OPTS"
+      value: "-noReconnectAfter 1d"
+    - name: "JENKINS_NAME"
+      value: "cd-agent-vm8v0"
+    - name: "JENKINS_AGENT_WORKDIR"
+      value: "/home/jenkins/agent"
+    - name: "JENKINS_URL"
+      value: "http://jenkins.jenkins.svc.cluster.local:8080/"
+    image: "jenkins/inbound-agent:3385.vf1123fb_515da_-1"
+    imagePullPolicy: "IfNotPresent"
+    name: "jnlp"
+    resources:
+      limits:
+        memory: "1Gi"
+        cpu: "1000m"
+      requests:
+        memory: "512Mi"
+        cpu: "200m"
+    securityContext:
+      privileged: false
+      runAsGroup: 1000
+      runAsUser: 1000
+    tty: false
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+    workingDir: "/home/jenkins/agent"
+  - args:
+    - "infinity"
+    command:
+    - "sleep"
+    env:
+    - name: "JENKINS_URL"
+      value: "http://jenkins.jenkins.svc.cluster.local:8080/"
+    image: "alpine/k8s:1.30.13"
+    imagePullPolicy: "IfNotPresent"
+    name: "tools"
+    resources:
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+    securityContext:
+      privileged: false
+      runAsGroup: 1000
+      runAsUser: 1000
+    tty: false
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+    workingDir: "/home/jenkins/agent"
+  nodeSelector:
+    kubernetes.io/os: "linux"
+  restartPolicy: "Never"
+  serviceAccountName: "jenkins-cd"
+  volumes:
+  - emptyDir:
+      medium: ""
+    name: "workspace-volume"
+
+Running on cd-agent-vm8v0 in /home/jenkins/agent/workspace/cd-application
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/ag139/project-part3.git
+ > git init /home/jenkins/agent/workspace/cd-application # timeout=10
+Fetching upstream changes from https://github.com/ag139/project-part3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/ag139/project-part3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/ag139/project-part3.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+Checking out Revision 2b816f4fc06f65902a4b13a2835c54dc7fcb1a85 (refs/remotes/origin/main)
+Commit message: "Use a crane image that ships both crane and a shell"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timestamps
+[Pipeline] {
+[Pipeline] timeout
+[2026-08-28T09:11:22.857Z] Timeout set to expire in 20 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+[2026-08-28T09:11:23.024Z] The recommended git tool is: NONE
+[2026-08-28T09:11:23.059Z] No credentials specified
+[2026-08-28T09:11:23.074Z] Fetching changes from the remote Git repository
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 2b816f4fc06f65902a4b13a2835c54dc7fcb1a85 # timeout=10
+[2026-08-28T09:11:23.954Z] Checking out Revision 2b816f4fc06f65902a4b13a2835c54dc7fcb1a85 (refs/remotes/origin/main)
+[2026-08-28T09:11:23.065Z]  > git rev-parse --resolve-git-dir /home/jenkins/agent/workspace/cd-application/.git # timeout=10
+[2026-08-28T09:11:23.088Z]  > git config remote.origin.url https://github.com/ag139/project-part3.git # timeout=10
+[2026-08-28T09:11:23.160Z] Fetching upstream changes from https://github.com/ag139/project-part3.git
+[2026-08-28T09:11:23.160Z]  > git --version # timeout=10
+[2026-08-28T09:11:23.171Z]  > git --version # 'git version 2.47.3'
+[2026-08-28T09:11:23.172Z]  > git fetch --tags --force --progress -- https://github.com/ag139/project-part3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+[2026-08-28T09:11:23.918Z]  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+[2026-08-28T09:11:23.958Z]  > git config core.sparsecheckout # timeout=10
+[2026-08-28T09:11:23.965Z]  > git checkout -f 2b816f4fc06f65902a4b13a2835c54dc7fcb1a85 # timeout=10
+[2026-08-28T09:11:24.052Z] Commit message: "Use a crane image that ships both crane and a shell"
+[Pipeline] sh
+[2026-08-28T09:11:24.679Z] + echo jenkins-cd-application-8
+[2026-08-28T09:11:24.679Z] + echo deploy requested by: jenkins-cd-application-8
+[2026-08-28T09:11:24.679Z] deploy requested by: jenkins-cd-application-8
+[2026-08-28T09:11:24.679Z] + echo cd build number:     8
+[2026-08-28T09:11:24.679Z] cd build number:     8
+[2026-08-28T09:11:24.679Z] + echo ci build number:     manual
+[2026-08-28T09:11:24.680Z] ci build number:     manual
+[2026-08-28T09:11:24.680Z] + echo image tag:           e48f4d91ec10
+[2026-08-28T09:11:24.680Z] image tag:           e48f4d91ec10
+[2026-08-28T09:11:24.680Z] + echo target namespace:    devops-app
+[2026-08-28T09:11:24.680Z] target namespace:    devops-app
+[2026-08-28T09:11:24.680Z] + echo chart:               ./helm/devops-app
+[2026-08-28T09:11:24.680Z] chart:               ./helm/devops-app
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Input Validation)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+[2026-08-28T09:11:24.981Z] tag e48f4d91ec10 accepted: not empty, not latest, namespace permitted
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-08-28T09:11:25.680Z] + set -e
+[2026-08-28T09:11:25.680Z] + crane version
+[2026-08-28T09:11:25.680Z] 0.20.3
+[2026-08-28T09:11:25.681Z] + MISSING=0
+[2026-08-28T09:11:25.681Z] + REF=ayeletgeulayev/devops-app-backend:e48f4d91ec10
+[2026-08-28T09:11:25.681Z] + echo 'verifying ayeletgeulayev/devops-app-backend:e48f4d91ec10 exists in the registry'
+[2026-08-28T09:11:25.681Z] verifying ayeletgeulayev/devops-app-backend:e48f4d91ec10 exists in the registry
+[2026-08-28T09:11:25.681Z] + crane digest ayeletgeulayev/devops-app-backend:e48f4d91ec10
+[2026-08-28T09:11:26.639Z] + DIGEST=sha256:7c2f3c00168a97a4cfb80ee9b71dccc14632ce2a3f4ab501a0e87214445e5e41
+[2026-08-28T09:11:26.639Z] + echo 'ayeletgeulayev/devops-app-backend:e48f4d91ec10 confirmed, digest sha256:7c2f3c00168a97a4cfb80ee9b71dccc14632ce2a3f4ab501a0e87214445e5e41'
+[2026-08-28T09:11:26.639Z] ayeletgeulayev/devops-app-backend:e48f4d91ec10 confirmed, digest sha256:7c2f3c00168a97a4cfb80ee9b71dccc14632ce2a3f4ab501a0e87214445e5e41
+[2026-08-28T09:11:26.639Z] + echo 'backend=sha256:7c2f3c00168a97a4cfb80ee9b71dccc14632ce2a3f4ab501a0e87214445e5e41'
+[2026-08-28T09:11:26.639Z] + REF=ayeletgeulayev/devops-app-frontend:e48f4d91ec10
+[2026-08-28T09:11:26.639Z] + echo 'verifying ayeletgeulayev/devops-app-frontend:e48f4d91ec10 exists in the registry'
+[2026-08-28T09:11:26.640Z] verifying ayeletgeulayev/devops-app-frontend:e48f4d91ec10 exists in the registry
+[2026-08-28T09:11:26.640Z] + crane digest ayeletgeulayev/devops-app-frontend:e48f4d91ec10
+[2026-08-28T09:11:27.592Z] + DIGEST=sha256:4b6c941915bcfe9fb063a814741a503a8611c2d25d7dd5d3a83f90e6e322a4b6
+[2026-08-28T09:11:27.592Z] + echo 'ayeletgeulayev/devops-app-frontend:e48f4d91ec10 confirmed, digest sha256:4b6c941915bcfe9fb063a814741a503a8611c2d25d7dd5d3a83f90e6e322a4b6'
+[2026-08-28T09:11:27.592Z] ayeletgeulayev/devops-app-frontend:e48f4d91ec10 confirmed, digest sha256:4b6c941915bcfe9fb063a814741a503a8611c2d25d7dd5d3a83f90e6e322a4b6
+[2026-08-28T09:11:27.592Z] + echo 'frontend=sha256:4b6c941915bcfe9fb063a814741a503a8611c2d25d7dd5d3a83f90e6e322a4b6'
+[2026-08-28T09:11:27.592Z] + REF=ayeletgeulayev/devops-app-worker:e48f4d91ec10
+[2026-08-28T09:11:27.593Z] + echo 'verifying ayeletgeulayev/devops-app-worker:e48f4d91ec10 exists in the registry'
+[2026-08-28T09:11:27.593Z] verifying ayeletgeulayev/devops-app-worker:e48f4d91ec10 exists in the registry
+[2026-08-28T09:11:27.593Z] + crane digest ayeletgeulayev/devops-app-worker:e48f4d91ec10
+[2026-08-28T09:11:28.538Z] + DIGEST=sha256:8b43fdd8d628698c913463d97d35be3711c1a3bd240d172d143df42092213043
+[2026-08-28T09:11:28.538Z] + echo 'ayeletgeulayev/devops-app-worker:e48f4d91ec10 confirmed, digest sha256:8b43fdd8d628698c913463d97d35be3711c1a3bd240d172d143df42092213043'
+[2026-08-28T09:11:28.538Z] ayeletgeulayev/devops-app-worker:e48f4d91ec10 confirmed, digest sha256:8b43fdd8d628698c913463d97d35be3711c1a3bd240d172d143df42092213043
+[2026-08-28T09:11:28.538Z] + echo 'worker=sha256:8b43fdd8d628698c913463d97d35be3711c1a3bd240d172d143df42092213043'
+[2026-08-28T09:11:28.538Z] + '[' 0 -eq 1 ]
+[2026-08-28T09:11:28.538Z] + echo
+[2026-08-28T09:11:28.538Z] 
+[2026-08-28T09:11:28.538Z] + echo '=== all images verified, digests resolved ==='
+[2026-08-28T09:11:28.538Z] === all images verified, digests resolved ===
+[2026-08-28T09:11:28.538Z] + cat resolved-digests.txt
+[2026-08-28T09:11:28.538Z] backend=sha256:7c2f3c00168a97a4cfb80ee9b71dccc14632ce2a3f4ab501a0e87214445e5e41
+[2026-08-28T09:11:28.538Z] frontend=sha256:4b6c941915bcfe9fb063a814741a503a8611c2d25d7dd5d3a83f90e6e322a4b6
+[2026-08-28T09:11:28.538Z] worker=sha256:8b43fdd8d628698c913463d97d35be3711c1a3bd240d172d143df42092213043
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] archiveArtifacts
+[2026-08-28T09:11:28.652Z] Archiving artifacts
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Manifest Validation)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-08-28T09:11:30.050Z] + set -e
+[2026-08-28T09:11:30.051Z] + helm version --short
+[2026-08-28T09:11:30.051Z] v3.17.3+ge4da497
+[2026-08-28T09:11:30.051Z] + helm lint ./helm/devops-app
+[2026-08-28T09:11:30.313Z] ==> Linting ./helm/devops-app
+[2026-08-28T09:11:30.313Z] [INFO] Chart.yaml: icon is recommended
+[2026-08-28T09:11:30.313Z] 
+[2026-08-28T09:11:30.313Z] 1 chart(s) linted, 0 chart(s) failed
+[2026-08-28T09:11:30.314Z] + helm template devops-app ./helm/devops-app --namespace devops-app --set 'image.registry=ayeletgeulayev/' --set 'image.tag=e48f4d91ec10'
+[2026-08-28T09:11:30.576Z] + echo 'rendered objects:'
+[2026-08-28T09:11:30.576Z] rendered objects:
+[2026-08-28T09:11:30.576Z] + grep -c ^kind: /tmp/rendered.yaml
+[2026-08-28T09:11:30.576Z] 24
+[2026-08-28T09:11:30.576Z] + kubectl create '--dry-run=client' -f /tmp/rendered.yaml -o name
+[2026-08-28T09:11:33.136Z] + echo 'manifest validation passed'
+[2026-08-28T09:11:33.136Z] manifest validation passed
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Authenticate)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-08-28T09:11:33.906Z] + set -e
+[2026-08-28T09:11:33.906Z] + echo 'authenticating with the in-cluster ServiceAccount'
+[2026-08-28T09:11:33.906Z] authenticating with the in-cluster ServiceAccount
+[2026-08-28T09:11:33.906Z] + kubectl config current-context
+[2026-08-28T09:11:33.906Z] error: current-context is not set
+[2026-08-28T09:11:33.906Z] + true
+[2026-08-28T09:11:33.906Z] + echo 'permission check for the target namespace:'
+[2026-08-28T09:11:33.906Z] permission check for the target namespace:
+[2026-08-28T09:11:33.906Z] + kubectl auth can-i update deployments -n devops-app
+[2026-08-28T09:11:34.168Z] yes
+[2026-08-28T09:11:34.168Z] + kubectl auth can-i delete deployments -n devops-app
+[2026-08-28T09:11:34.168Z] no
+[2026-08-28T09:11:34.168Z] + echo 'delete not permitted, as intended'
+[2026-08-28T09:11:34.168Z] delete not permitted, as intended
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-08-28T09:11:34.984Z] + set -e
+[2026-08-28T09:11:34.984Z] + helm upgrade --install devops-app ./helm/devops-app --namespace devops-app --set 'image.registry=ayeletgeulayev/' --set 'image.tag=e48f4d91ec10' --set 'secrets.dbUser=app' --reuse-values --wait --timeout 5m
+[2026-08-28T09:11:34.984Z] Release "devops-app" does not exist. Installing it now.
+[2026-08-28T09:16:37.609Z] Error: context deadline exceeded
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Rollout)
+Stage "Rollout" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Verify)
+Stage "Verify" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Smoke Test)
+Stage "Smoke Test" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] deleteDir
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-08-28T09:16:38.863Z] + echo 'deployment failed. collecting diagnostics.'
+[2026-08-28T09:16:38.863Z] deployment failed. collecting diagnostics.
+[2026-08-28T09:16:38.863Z] + echo '=== pods ==='
+[2026-08-28T09:16:38.863Z] === pods ===
+[2026-08-28T09:16:38.863Z] + kubectl get pods -n devops-app -o wide
+[2026-08-28T09:16:39.131Z] NAME                        READY   STATUS                       RESTARTS      AGE    IP            NODE                NOMINATED NODE   READINESS GATES
+[2026-08-28T09:16:39.131Z] backend-7656645d6c-rcxr2    0/1     CreateContainerConfigError   0             5m1s   10.244.2.17   devops-ci-worker    <none>           <none>
+[2026-08-28T09:16:39.131Z] backend-7656645d6c-sbfw9    0/1     CreateContainerConfigError   0             5m1s   10.244.1.7    devops-ci-worker2   <none>           <none>
+[2026-08-28T09:16:39.131Z] frontend-769fdf8cb5-44szs   0/1     Running                      4 (44s ago)   5m1s   10.244.2.18   devops-ci-worker    <none>           <none>
+[2026-08-28T09:16:39.131Z] frontend-769fdf8cb5-qgr47   0/1     Running                      4 (44s ago)   5m1s   10.244.1.6    devops-ci-worker2   <none>           <none>
+[2026-08-28T09:16:39.131Z] postgres-6d9596b9b7-t6znd   0/1     CreateContainerConfigError   0             5m1s   10.244.2.20   devops-ci-worker    <none>           <none>
+[2026-08-28T09:16:39.131Z] worker-5df8457844-4ct7s     1/1     Running                      0             5m1s   10.244.2.16   devops-ci-worker    <none>           <none>
+[2026-08-28T09:16:39.131Z] + echo
+[2026-08-28T09:16:39.131Z] 
+[2026-08-28T09:16:39.131Z] + echo '=== recent events ==='
+[2026-08-28T09:16:39.131Z] === recent events ===
+[2026-08-28T09:16:39.132Z] + tail -25
+[2026-08-28T09:16:39.132Z] + kubectl get events -n devops-app '--sort-by=.metadata.creationTimestamp'
+[2026-08-28T09:16:39.398Z] 110s        Warning   FailedGetResourceMetric        horizontalpodautoscaler/backend-hpa   failed to get cpu utilization: unable to get metrics for resource cpu: unable to fetch metrics from resource metrics API: the server could not find the requested resource (get pods.metrics.k8s.io)
+[2026-08-28T09:16:39.398Z] 2m40s       Warning   Failed                         pod/backend-7656645d6c-sbfw9          Error: secret "db-secrets" not found
+[2026-08-28T09:16:39.398Z] 4m47s       Normal    Pulled                         pod/backend-7656645d6c-sbfw9          Successfully pulled image "ayeletgeulayev/devops-app-backend:e48f4d91ec10" in 14.7s (14.701s including waiting). Image size: 69773664 bytes.
+[2026-08-28T09:16:39.398Z] 2m5s        Warning   FailedComputeMetricsReplicas   horizontalpodautoscaler/backend-hpa   invalid metrics (1 invalid out of 1), first error is: failed to get cpu resource metric value: failed to get cpu utilization: unable to get metrics for resource cpu: unable to fetch metrics from resource metrics API: the server could not find the requested resource (get pods.metrics.k8s.io)
+[2026-08-28T09:16:39.398Z] 4m46s       Normal    Started                        pod/worker-5df8457844-4ct7s           Started container worker
+[2026-08-28T09:16:39.399Z] 2m40s       Normal    Pulled                         pod/backend-7656645d6c-sbfw9          Container image "ayeletgeulayev/devops-app-backend:e48f4d91ec10" already present on machine
+[2026-08-28T09:16:39.399Z] 4m46s       Normal    Pulled                         pod/worker-5df8457844-4ct7s           Successfully pulled image "ayeletgeulayev/devops-app-worker:e48f4d91ec10" in 3.676s (15.179s including waiting). Image size: 46570143 bytes.
+[2026-08-28T09:16:39.399Z] 4m46s       Normal    Created                        pod/worker-5df8457844-4ct7s           Created container worker
+[2026-08-28T09:16:39.399Z] 4m41s       Normal    Pulled                         pod/frontend-769fdf8cb5-qgr47         Successfully pulled image "ayeletgeulayev/devops-app-frontend:e48f4d91ec10" in 5.865s (20.532s including waiting). Image size: 20978357 bytes.
+[2026-08-28T09:16:39.399Z] 4m41s       Normal    Pulled                         pod/frontend-769fdf8cb5-44szs         Successfully pulled image "ayeletgeulayev/devops-app-frontend:e48f4d91ec10" in 5.809s (20.864s including waiting). Image size: 20978357 bytes.
+[2026-08-28T09:16:39.399Z] 3m43s       Normal    Created                        pod/frontend-769fdf8cb5-qgr47         Created container frontend
+[2026-08-28T09:16:39.399Z] 3m43s       Normal    Started                        pod/frontend-769fdf8cb5-qgr47         Started container frontend
+[2026-08-28T09:16:39.399Z] 3m43s       Normal    Created                        pod/frontend-769fdf8cb5-44szs         Created container frontend
+[2026-08-28T09:16:39.399Z] 3m43s       Normal    Started                        pod/frontend-769fdf8cb5-44szs         Started container frontend
+[2026-08-28T09:16:39.399Z] 2m53s       Warning   Unhealthy                      pod/frontend-769fdf8cb5-44szs         Readiness probe failed: HTTP probe failed with statuscode: 502
+[2026-08-28T09:16:39.399Z] 2m54s       Warning   Unhealthy                      pod/frontend-769fdf8cb5-qgr47         Readiness probe failed: HTTP probe failed with statuscode: 502
+[2026-08-28T09:16:39.399Z] 4m26s       Normal    Pulled                         pod/postgres-6d9596b9b7-t6znd         Successfully pulled image "postgres:16" in 14.568s (29.015s including waiting). Image size: 160260290 bytes.
+[2026-08-28T09:16:39.399Z] 2m11s       Warning   Failed                         pod/postgres-6d9596b9b7-t6znd         Error: secret "db-secrets" not found
+[2026-08-28T09:16:39.399Z] 2m11s       Normal    Pulled                         pod/postgres-6d9596b9b7-t6znd         Container image "postgres:16" already present on machine
+[2026-08-28T09:16:39.399Z] 3m4s        Warning   Unhealthy                      pod/frontend-769fdf8cb5-qgr47         Liveness probe failed: HTTP probe failed with statuscode: 502
+[2026-08-28T09:16:39.400Z] 3m3s        Warning   Unhealthy                      pod/frontend-769fdf8cb5-44szs         Liveness probe failed: HTTP probe failed with statuscode: 502
+[2026-08-28T09:16:39.400Z] 3m43s       Normal    Killing                        pod/frontend-769fdf8cb5-qgr47         Container frontend failed liveness probe, will be restarted
+[2026-08-28T09:16:39.400Z] 3m43s       Normal    Pulled                         pod/frontend-769fdf8cb5-44szs         Container image "ayeletgeulayev/devops-app-frontend:e48f4d91ec10" already present on machine
+[2026-08-28T09:16:39.400Z] 3m43s       Normal    Killing                        pod/frontend-769fdf8cb5-44szs         Container frontend failed liveness probe, will be restarted
+[2026-08-28T09:16:39.400Z] 3m43s       Normal    Pulled                         pod/frontend-769fdf8cb5-qgr47         Container image "ayeletgeulayev/devops-app-frontend:e48f4d91ec10" already present on machine
+[2026-08-28T09:16:39.400Z] + echo
+[2026-08-28T09:16:39.400Z] 
+[2026-08-28T09:16:39.400Z] + echo '=== helm history ==='
+[2026-08-28T09:16:39.400Z] === helm history ===
+[2026-08-28T09:16:39.400Z] + helm history devops-app -n devops-app --max 5
+[2026-08-28T09:16:39.669Z] REVISION	UPDATED                 	STATUS	CHART           	APP VERSION	DESCRIPTION                                           
+[2026-08-28T09:16:39.669Z] 1       	Fri Aug 28 09:11:34 2026	failed	devops-app-1.0.1	1.0.1      	Release "devops-app" failed: context deadline exceeded
+[2026-08-28T09:16:39.669Z] + echo
+[2026-08-28T09:16:39.669Z] 
+[2026-08-28T09:16:39.669Z] + echo 'TO ROLL BACK, run:'
+[2026-08-28T09:16:39.669Z] TO ROLL BACK, run:
+[2026-08-28T09:16:39.669Z] + echo '  helm rollback devops-app -n devops-app'
+[2026-08-28T09:16:39.669Z]   helm rollback devops-app -n devops-app
+[2026-08-28T09:16:39.669Z] + echo 'or roll back a single deployment:'
+[2026-08-28T09:16:39.669Z] or roll back a single deployment:
+[2026-08-28T09:16:39.669Z] + echo '  kubectl rollout undo deployment/backend -n devops-app'
+[2026-08-28T09:16:39.669Z]   kubectl rollout undo deployment/backend -n devops-app
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // timestamps
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE

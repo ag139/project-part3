@@ -30,6 +30,21 @@ if docker ps --format '{{.Names}}' | grep -q "$C-control-plane"; then
   sleep 40
   kind export kubeconfig --name "$C"
   kubectl wait --for=condition=Ready nodes --all --timeout=180s
+
+  # Application secrets are created imperatively and do not survive a cluster
+  # rebuild. Without them the pods fail with CreateContainerConfigError and
+  # helm --wait rolls the release back, leaving an empty namespace.
+  if kubectl get namespace devops-app >/dev/null 2>&1; then
+    if ! kubectl get secret db-secrets -n devops-app >/dev/null 2>&1; then
+      echo "recreating application secrets"
+      kubectl create secret generic db-secrets -n devops-app \
+        --from-literal=DB_USER=app \
+        --from-literal=DB_PASSWORD="${DB_PASSWORD:-secret}" >/dev/null
+      kubectl create secret generic aws-secrets -n devops-app \
+        --from-literal=AWS_ACCESS_KEY_ID="$(aws configure get aws_access_key_id)" \
+        --from-literal=AWS_SECRET_ACCESS_KEY="$(aws configure get aws_secret_access_key)" >/dev/null
+    fi
+  fi
   kubectl get nodes
   echo
   echo "environment restored. Verify with: ./scripts/05-verify.sh"
