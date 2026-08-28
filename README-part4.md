@@ -26,7 +26,8 @@ Parts 1 to 3 are documented in the main `README.md` at the repository root.
 13. [Evidence](#13-evidence)
 14. [Security](#14-security)
 15. [Trade-offs and known gaps](#15-trade-offs-and-known-gaps)
-16. [Manual steps performed](#16-manual-steps-performed)
+16. [Fixes applied after the review](#16-fixes-applied-after-the-review)
+17. [Manual steps performed](#17-manual-steps-performed)
 
 ---
 
@@ -35,7 +36,7 @@ Parts 1 to 3 are documented in the main `README.md` at the repository root.
 | Component | Summary |
 |---|---|
 | Cluster | Local multi-node kind cluster, one control plane and two workers |
-| Jenkins | Installed with the official Helm chart, pinned version, plugins pinned |
+| Jenkins | Official Helm chart, chart version pinned, every plugin pinned to a tested version |
 | Agents | Ephemeral pods, created per build and deleted on completion |
 | Identities | Three ServiceAccounts with different permissions |
 | CI pipeline | Validate, lint, test, build three images, push, publish metadata |
@@ -508,6 +509,14 @@ Helm history, and the exact rollback command to run.
 | `10-failed-deploy-no-damage.txt` | A failed deploy leaves the environment intact, then rollback |
 | `11-cd-failure-handling.txt` | The failure output of the CD pipeline |
 | `12-webhook-triggered-build.txt` | A build started by a GitHub push, which then triggered CD |
+| `13-jobs-generated-from-code.txt` | Seed job output and API listing, proving both jobs come from code |
+| `14-ci-failure-no-promotion.txt` | A failing CI run: no image pushed, CD never scheduled |
+| `15-jenkins-image-scans.txt` | Trivy results for the controller, agent and side container images |
+| `16-ci-with-image-scanning.txt` | A CI run including the scan stage and its policy check |
+| `17-cd-fails-closed-on-missing-image.txt` | CD refusing a tag that was never published |
+| `19-ci-with-linting-and-tests.txt` | A CI run with ruff, bandit and the unit tests |
+| `20-cd-with-digest-verification.txt` | A CD run resolving digests before deploying |
+| `21-pinning-and-hardening.txt` | Pinned versions, security contexts, policies and the webhook ingress |
 
 Regenerate the cluster state at any time with:
 
@@ -564,33 +573,37 @@ Listed honestly in the next section.
 
 ## 15. Trade-offs and known gaps
 
+This section was rewritten after the review. Items 1, 3 and 4 of the previous
+version have been resolved and are described in section 17.
+
 1. **The webhook depends on a temporary public tunnel.** GitHub cannot reach a
-   kind cluster on a laptop directly, so an ngrok tunnel exposes Jenkins for the
-   duration of a session. The webhook itself works end to end: a push to main
-   triggers CI, which triggers CD, with no manual step. The tunnel URL changes
-   each time it restarts and the GitHub webhook has to be updated to match. A
-   permanently reachable Jenkins, which a real installation would have, removes
-   this dependency entirely.
+   kind cluster on a laptop directly, so a tunnel is needed. The exposure has
+   been narrowed: an Ingress publishes only `/github-webhook/`, so the tunnel
+   no longer puts the Jenkins UI on a public URL. The UI is reachable only
+   through `kubectl port-forward`. The tunnel URL still changes on restart and
+   the GitHub webhook has to be updated to match. A permanently reachable
+   Jenkins removes the dependency entirely.
 
 2. **Job DSL script security is disabled.** `useScriptSecurity: false` is set in
-   JCasC. Without it, the seed job stops on first run and requires manual
+   JCasC. Without it the seed job stops on first run and requires manual
    approval through the UI, which would break the "no hidden manual
    configuration" requirement. This is acceptable because the DSL comes from a
    repository under our control, but it is a real reduction in defence in depth
    and would need a different approach where the repository is not trusted.
 
-3. **Registry verification in CD is best effort.** The stage tries `crane` and
-   then `skopeo`, and if neither is present it says so and relies on the deploy
-   itself failing. An earlier version silently reported success even when the
-   check failed, which was worse than not checking; it was replaced. The
-   validations that matter, that the tag is present and is not `latest`, are
-   enforced unconditionally.
+3. **The controller runs without a read-only root filesystem.** Every other
+   hardening control is applied: `runAsNonRoot`, a fixed uid and gid,
+   `RuntimeDefault` seccomp, `allowPrivilegeEscalation: false` and all
+   capabilities dropped. `readOnlyRootFilesystem` is left off because the
+   Jenkins controller writes to several paths outside its data volume during
+   startup and plugin loading. The assignment asks for it "where compatible",
+   and it is not compatible here without mapping every write path. Agent
+   containers have no such requirement and run with the same restrictions.
 
-4. **Jenkins images were not scanned.** The assignment asks for the controller
-   and agent images to be scanned. Trivy was run against the application images
-   in Part 3 but not against the Jenkins images here. Jenkins itself reports
-   several CVEs in its core and plugins in the UI, which are recorded but not
-   remediated.
+4. **Restricting the webhook to POST was not possible.** The Ingress was meant
+   to reject any method other than POST, but this ingress-nginx installation
+   disables configuration snippets by default, which is the safer posture.
+   Path scoping alone still removes the UI from the public surface.
 
 5. **Helm had to adopt resources created with kubectl.** The application was
    originally deployed with `kubectl apply -f k8s/`, so Helm refused to manage
@@ -604,14 +617,202 @@ Listed honestly in the next section.
    something that ships with each build, and separating it would remove a
    recurring source of timeouts.
 
-7. **Carried over from Part 3:** metrics-server is not installed, so the HPA
-   reports `<unknown>`; NetworkPolicies are defined but not enforced by kind's
-   default CNI; the in-cluster PostgreSQL replaces the private RDS instance,
-   which is unreachable from a local cluster.
+7. **Application secrets do not survive a cluster rebuild.** `db-secrets` and
+   `aws-secrets` are created imperatively so their values never reach a file.
+   The consequence is that a rebuilt cluster has no secrets, the pods fail with
+   `CreateContainerConfigError`, and `helm --wait` rolls the release back,
+   leaving an apparently empty namespace. `scripts/00-start.sh` now recreates
+   them automatically. A secrets manager with an external provider would remove
+   the problem rather than work around it.
+
+8. **Carried over from Part 3:** metrics-server is not installed, so the HPA
+   reports `<unknown>`; NetworkPolicies in the application namespace are defined
+   but not enforced by kind's default CNI; the in-cluster PostgreSQL replaces
+   the private RDS instance, which is unreachable from a local cluster.
 
 ---
 
-## 16. Manual steps performed
+## 16. Fixes applied after the review
+
+The review listed seven priority improvements. All seven were implemented.
+
+### 1. Mandatory image scanning in CI
+
+A `Scan Images` stage runs after the build and before the metadata is
+published. It scans all three application images with Trivy at HIGH and
+CRITICAL severity, writes a table report and a JSON report per image, archives
+both as build artifacts, and enforces a declared policy:
+
+```groovy
+MAX_CRITICAL = '10'
+```
+
+An image exceeding the limit fails the stage, which means nothing is promoted
+and CD is never triggered. The threshold reflects what the base images actually
+carry today and can be tightened; a number that fails every build would have
+been theatre rather than a gate.
+
+The Jenkins controller, the inbound agent and every side container image were
+also scanned. Results are in `evidence/15-jenkins-image-scans.txt`.
+
+### 2. Deterministic Jenkins recovery
+
+The chart is pinned in the install script:
+
+```bash
+helm upgrade --install jenkins jenkins/jenkins \
+  --version 5.9.54 \
+  ...
+```
+
+Every plugin is pinned to an exact version, and both
+`installLatestPlugins` and `installLatestSpecifiedPlugins` are `false`.
+
+**The tested compatibility set:**
+
+| Component | Version |
+|---|---|
+| Chart | `5.9.54` |
+| Controller image | `jenkins/jenkins:2.504.3-lts-jdk17` |
+| `kubernetes` | `4437.v3a_18554d3f32` |
+| `workflow-aggregator` | `608.v67378e9d3db_1` |
+| `git` | `5.10.1` |
+| `configuration-as-code` | `2036.v0b_c2de701dcb_` |
+| `job-dsl` | `3732.v9a_c49a_61a_313` |
+| `credentials-binding` | `728.v902a_273b_8947` |
+| `pipeline-stage-view` | `2.41` |
+| `junit` | `1369.v15da_00283f06` |
+| `timestamper` | `1.30` |
+| `ws-cleanup` | `0.49` |
+| `github` | `1.47.0` |
+| `kubernetes-credentials-provider` | `1.315.v92008589c044` |
+
+These versions were not chosen from documentation. An earlier attempt to pin
+guessed versions produced plugins that failed to load, with a symptom that gave
+nothing away: pipelines reported `SUCCESS` in seconds without running a single
+stage, because the plugin that interprets declarative syntax was among the
+failures. The versions above were read back out of a working installation and
+then locked, and a clean install now starts with no failed plugins.
+
+### 3. Fail-closed CD input validation
+
+The CD agent has a `crane` container. The validation stage resolves a digest
+for every required image and exits non-zero if any is missing:
+
+```
+ERROR: ayeletgeulayev/devops-app-backend:<tag> was not found in the registry
+one or more images are missing from the registry.
+refusing to deploy a tag that has not been published by CI.
+```
+
+The resolved digests are archived as `resolved-digests.txt`, so a deployment
+can be traced to exact image content rather than to a mutable tag.
+
+This gate proved itself in an unplanned way. A CI run failed to push because
+its registry token had expired, and a later CD run for that tag stopped at
+validation rather than attempting a deployment that could not have worked.
+`evidence/17-cd-fails-closed-on-missing-image.txt` records it.
+
+### 4. Failure evidence
+
+A branch with a deliberate syntax error was pushed and CI was run against it.
+The pipeline stopped at `Lint`; `Tests`, `Build and Push`, `Scan Images` and
+`Publish Metadata` never ran, no image was pushed, and `cd-application` was
+never scheduled. `evidence/14-ci-failure-no-promotion.txt` includes the console
+output and a listing showing the CD job has no build for it.
+
+`evidence/13-jobs-generated-from-code.txt` contains the seed job output creating
+both pipelines and the API response listing them, as proof that neither was
+configured through the UI.
+
+### 5. Pod hardening and exposure
+
+Controller and agent pods declare:
+
+```yaml
+runAsNonRoot: true
+runAsUser: 1000
+runAsGroup: 1000
+fsGroup: 1000
+seccompProfile:
+  type: RuntimeDefault
+```
+
+and at container level:
+
+```yaml
+allowPrivilegeEscalation: false
+capabilities:
+  drop: ["ALL"]
+```
+
+`readOnlyRootFilesystem` is discussed in section 15.
+
+Three NetworkPolicies apply to the `jenkins` namespace: default-deny for both
+directions, an allow rule for the controller that permits inbound traffic only
+from within the namespace and from the ingress-nginx namespace, and an
+egress-only rule for agents.
+
+The webhook is exposed through an Ingress scoped to `/github-webhook/` with
+`pathType: Exact`, so a tunnel pointed at the ingress controller publishes only
+that path and not the Jenkins UI.
+
+### 6. Lifecycle scripts and documentation
+
+| Script | Purpose |
+|---|---|
+| `00-start.sh` | Restores the environment after a host restart |
+| `01-setup-cluster.sh` | Creates the cluster and the ingress controller |
+| `02-install-jenkins.sh` | RBAC, credentials, Jenkins at pinned versions |
+| `03-deploy-application.sh` | First deployment, outside the pipeline |
+| `04-collect-evidence.sh` | Captures cluster state |
+| `05-verify.sh` | Health and permission checks |
+| `06-update.sh` | Applies configuration changes |
+| `07-uninstall.sh` | Removes the platform, optionally the cluster |
+
+All are idempotent and safe to re-run.
+
+`05-verify.sh` checks more than liveness. It asserts that the deployer **can**
+update deployments and **cannot** delete them, and that the CI identity cannot
+reach the application namespace at all. A permission that has quietly widened
+shows up as a failed check.
+
+`00-start.sh` encodes two things learned the hard way: kind's control plane
+must claim its address before the workers start, or it fails with
+`have an old IPv4 address but no current IPv4 address`; and the application
+secrets have to be recreated after a rebuild.
+
+`jenkins/rbac/dockerhub-secret.example.yaml` documents the credential shape and
+the rotation procedure: create a new token, re-run the two commands, revoke the
+old one. The credentials provider watches the secret, so no restart is needed.
+
+### 7. Real linting and executable tests
+
+`python -m py_compile` was replaced with `ruff` (style, correctness, security
+and import rules) and `bandit` (Python security analysis). A medium or high
+finding from bandit fails the stage, and both reports are archived.
+
+Two findings are suppressed with an explanation in the source rather than
+silently: binding to `0.0.0.0`, without which nginx could not reach the backend
+from another pod, and the fixed `/tmp/healthy` path, which is exactly what the
+worker's probes check and the only writable mount on a read-only filesystem.
+
+Fourteen unit tests run under pytest with results published as JUnit XML:
+
+| Area | What is covered |
+|---|---|
+| Routes | All four endpoints, status codes, response shape |
+| Design | That `/` does not query the database, so an outage cannot fail the liveness probe and kill healthy pods |
+| Security | That a name containing SQL is parameterised, not concatenated |
+| Configuration | That required variables come from the environment and a missing one fails at import |
+| Failure cases | That storage and notification failures surface as 500 rather than a false success |
+| Source | That no AWS key or database endpoint is hardcoded |
+
+The last one would have caught the credentials that Part 2's code contained.
+
+---
+
+## 17. Manual steps performed
 
 1. **Raising the inotify limits.** Required on WSL before the cluster can start.
    Included in `scripts/01-setup-cluster.sh`.
