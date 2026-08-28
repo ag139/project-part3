@@ -1,10 +1,7 @@
-=== chart and plugin versions are pinned ===
-    repository: jenkins/jenkins
-    tag: 2.504.3-lts-jdk17
-  installPlugins:
-  - kubernetes:4437.v3a_18554d3f32
+=== chart version pinned in the install script ===
 30:  --version 5.9.54 \
 
+=== plugin versions pinned, latest disabled ===
   installPlugins:
   - kubernetes:4437.v3a_18554d3f32
   - workflow-aggregator:608.v67378e9d3db_1
@@ -20,6 +17,8 @@
   - kubernetes-credentials-provider:1.315.v92008589c044
   installLatestPlugins: false
   installLatestSpecifiedPlugins: false
+19:  installLatestPlugins: false
+20:  installLatestSpecifiedPlugins: false
 
 === no failed plugins on startup ===
 none
@@ -28,8 +27,11 @@ none
 {"fsGroup":1000,"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000,"seccompProfile":{"type":"RuntimeDefault"}}
 {"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsGroup":1000,"runAsUser":1000}
 
-=== network policies in the jenkins namespace ===
+=== network policies ===
 NAME               POD-SELECTOR                                     AGE
-allow-agents       jenkins/jenkins-jenkins-agent=true               5m33s
-allow-controller   app.kubernetes.io/component=jenkins-controller   5m33s
-default-deny-all   <none>                                           5m33s
+allow-agents       jenkins/jenkins-jenkins-agent=true               7m59s
+allow-controller   app.kubernetes.io/component=jenkins-controller   7m59s
+default-deny-all   <none>                                           7m59s
+
+=== webhook exposed on its own path, not the whole UI ===
+

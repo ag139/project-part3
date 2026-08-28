@@ -1,0 +1,32 @@
+# Exposes only the GitHub webhook endpoint, not the Jenkins UI.
+#
+# The tunnel used during development pointed at the whole controller service,
+# which put the entire UI on a public URL. This Ingress narrows the public
+# surface to the single path GitHub needs to POST to. The UI stays reachable
+# only through kubectl port-forward.
+#
+# Point the tunnel at the ingress controller rather than at svc/jenkins:
+#   ngrok http 80
+# and set the GitHub webhook to <tunnel>/github-webhook/
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jenkins-webhook
+  namespace: jenkins
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    # Only POST is ever used by a webhook delivery.
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      if ($request_method != POST) { return 405; }
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /github-webhook/
+            pathType: Exact
+            backend:
+              service:
+                name: jenkins
+                port:
+                  number: 8080

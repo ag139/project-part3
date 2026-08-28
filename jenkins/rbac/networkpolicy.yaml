@@ -23,7 +23,10 @@ spec:
       ports:
         - { protocol: TCP, port: 8080 }
         - { protocol: TCP, port: 50000 }
-    - from: []
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
       ports:
         - { protocol: TCP, port: 8080 }
   egress:
