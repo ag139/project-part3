@@ -155,7 +155,7 @@ additionalAgents:
     - sideContainerName: tools
       image:
         repository: alpine/k8s
-        tag: 1.30.0
+        tag: 1.30.13
       command: sleep
       args: infinity
       privileged: false
@@ -168,8 +168,8 @@ additionalAgents:
           memory: 512Mi
     - sideContainerName: crane
       image:
-        repository: alpine
-        tag: '3.21'
+        repository: alpine/crane
+        tag: 0.20.3
       command: sleep
       args: infinity
       privileged: false
