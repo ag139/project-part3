@@ -125,6 +125,9 @@ JSON
                               --frontend dockerfile.v0 \\
                               --local context=docker/$svc \\
                               --local dockerfile=docker/$svc \\
+                              --opt build-arg:APP_VERSION=${IMAGE_TAG} \\
+                              --opt build-arg:GIT_SHA=${GIT_SHA} \\
+                              --opt build-arg:RELEASE=${BUILD_NUMBER} \\
                               --output type=image,name=${REGISTRY_REPO}/devops-app-$svc:${IMAGE_TAG},push=true \\
                               --metadata-file $(pwd)/meta-$svc.json
                           done
