@@ -88,6 +88,13 @@ def app_module(monkeypatch):
     fake_psycopg2.connect = lambda **kwargs: fake_conn
     monkeypatch.setitem(sys.modules, "psycopg2", fake_psycopg2)
 
+    from prometheus_client import REGISTRY
+    for collector in list(REGISTRY._collector_to_names):
+        try:
+            REGISTRY.unregister(collector)
+        except KeyError:
+            pass
+
     sys.path.insert(0, os.path.join(os.getcwd(), "docker", "backend"))
     for name in ("app",):
         sys.modules.pop(name, None)

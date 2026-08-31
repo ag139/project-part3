@@ -113,6 +113,13 @@ def test_required_configuration_comes_from_the_environment(monkeypatch):
     fake_psycopg2.connect = lambda **kw: None
     monkeypatch.setitem(sys.modules, "psycopg2", fake_psycopg2)
 
+    from prometheus_client import REGISTRY
+    for collector in list(REGISTRY._collector_to_names):
+        try:
+            REGISTRY.unregister(collector)
+        except KeyError:
+            pass
+
     sys.path.insert(0, os.path.join(os.getcwd(), "docker", "backend"))
     sys.modules.pop("app", None)
 
