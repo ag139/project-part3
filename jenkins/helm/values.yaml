@@ -4,20 +4,20 @@ controller:
     repository: jenkins/jenkins
     tag: 2.504.3-lts-jdk17
   installPlugins:
-  - kubernetes:4437.v3a_18554d3f32
-  - workflow-aggregator:608.v67378e9d3db_1
-  - git:5.10.1
-  - configuration-as-code:2036.v0b_c2de701dcb_
-  - job-dsl:3732.v9a_c49a_61a_313
-  - credentials-binding:728.v902a_273b_8947
-  - pipeline-stage-view:2.41
-  - junit:1369.v15da_00283f06
-  - timestamper:1.30
-  - ws-cleanup:0.49
-  - github:1.47.0
-  - kubernetes-credentials-provider:1.315.v92008589c044
-  installLatestPlugins: false
-  installLatestSpecifiedPlugins: false
+  - kubernetes
+  - workflow-aggregator
+  - git
+  - configuration-as-code
+  - job-dsl
+  - credentials-binding
+  - pipeline-stage-view
+  - junit
+  - timestamper
+  - ws-cleanup
+  - github
+  - kubernetes-credentials-provider
+  installLatestPlugins: true
+  installLatestSpecifiedPlugins: true
   serviceAccount:
     create: false
     name: jenkins-controller
