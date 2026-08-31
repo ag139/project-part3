@@ -148,6 +148,9 @@ JSON
                           set -e
                           export TRIVY_USERNAME="$REG_USER"
                           export TRIVY_PASSWORD="$REG_PASS"
+                          export TRIVY_CACHE_DIR="$WORKSPACE/.trivycache"
+                          export XDG_CACHE_HOME="$WORKSPACE/.cache"
+                          mkdir -p "$TRIVY_CACHE_DIR" "$XDG_CACHE_HOME"
                           mkdir -p scan-reports
                           FAILED=0
                           for svc in backend frontend worker; do
