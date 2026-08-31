@@ -1,0 +1,27 @@
+=== monitoring stack ===
+NAME                                             READY   STATUS    RESTARTS   AGE
+alertmanager-monitoring-alertmanager-0           2/2     Running   0          4m10s
+monitoring-grafana-68574fcb47-k9v8h              3/3     Running   0          4m24s
+monitoring-kube-state-metrics-5d6dc4d5f7-rmkbg   1/1     Running   0          4m24s
+monitoring-operator-7ffdcc6475-pj7sv             1/1     Running   0          4m24s
+monitoring-prometheus-node-exporter-7br6v        1/1     Running   0          4m24s
+monitoring-prometheus-node-exporter-9dxl4        1/1     Running   0          4m24s
+monitoring-prometheus-node-exporter-f7cbl        1/1     Running   0          4m24s
+prometheus-monitoring-prometheus-0               2/2     Running   0          4m7s
+
+=== ServiceMonitor ===
+NAME                                  AGE
+devops-app-backend                    84s
+monitoring-alertmanager               4m24s
+monitoring-apiserver                  4m24s
+monitoring-coredns                    4m24s
+monitoring-grafana                    4m24s
+monitoring-kube-state-metrics         4m24s
+monitoring-kubelet                    4m24s
+monitoring-operator                   4m24s
+monitoring-prometheus                 4m24s
+monitoring-prometheus-node-exporter   4m24s
+
+=== app_info as stored by Prometheus ===
+{'__name__': 'app_info', 'container': 'backend', 'endpoint': 'http', 'git_sha': 'c23eaa700cc8', 'instance': '10.244.2.14:5000', 'job': 'backend', 'namespace': 'devops-app', 'pod': 'backend-565bd5475b-sdf4w', 'release': '4', 'service': 'backend', 'version': 'c23eaa700cc8'}
+{'__name__': 'app_info', 'container': 'backend', 'endpoint': 'http', 'git_sha': 'c23eaa700cc8', 'instance': '10.244.1.15:5000', 'job': 'backend', 'namespace': 'devops-app', 'pod': 'backend-565bd5475b-txt47', 'release': '4', 'service': 'backend', 'version': 'c23eaa700cc8'}
