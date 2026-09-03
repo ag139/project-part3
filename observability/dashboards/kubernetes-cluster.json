@@ -1,0 +1,101 @@
+{
+  "title": "Kubernetes / Cluster",
+  "uid": "k8s-cluster",
+  "tags": ["kubernetes", "platform"],
+  "refresh": "30s",
+  "time": { "from": "now-1h", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "namespace",
+        "type": "query",
+        "datasource": "Prometheus",
+        "query": "label_values(kube_pod_info, namespace)",
+        "refresh": 1,
+        "includeAll": true,
+        "multi": true,
+        "current": { "text": "devops-app", "value": "devops-app" }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Nodes ready",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "targets": [ { "expr": "sum(kube_node_status_condition{condition=\"Ready\",status=\"true\"})", "instant": true } ]
+    },
+    {
+      "type": "stat",
+      "title": "Pods running",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+      "targets": [ { "expr": "sum(kube_pod_status_phase{phase=\"Running\",namespace=~\"$namespace\"})", "instant": true } ]
+    },
+    {
+      "type": "stat",
+      "title": "Pods pending",
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+      "targets": [ { "expr": "sum(kube_pod_status_phase{phase=\"Pending\",namespace=~\"$namespace\"})", "instant": true } ],
+      "fieldConfig": { "defaults": { "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 1 } ] } } }
+    },
+    {
+      "type": "stat",
+      "title": "Restarts in the last hour",
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+      "targets": [ { "expr": "sum(increase(kube_pod_container_status_restarts_total{namespace=~\"$namespace\"}[1h]))", "instant": true } ],
+      "fieldConfig": { "defaults": { "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "yellow", "value": 1 }, { "color": "red", "value": 5 } ] } } }
+    },
+    {
+      "type": "timeseries",
+      "title": "Desired vs available replicas",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "targets": [
+        { "expr": "kube_deployment_spec_replicas{namespace=~\"$namespace\"}", "legendFormat": "{{deployment}} desired" },
+        { "expr": "kube_deployment_status_replicas_available{namespace=~\"$namespace\"}", "legendFormat": "{{deployment}} available" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Container restarts",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "targets": [
+        { "expr": "sum by (pod) (increase(kube_pod_container_status_restarts_total{namespace=~\"$namespace\"}[15m]))", "legendFormat": "{{pod}}" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Node CPU usage",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 12 },
+      "targets": [
+        { "expr": "1 - avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m]))", "legendFormat": "{{instance}}" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "percentunit", "max": 1, "min": 0 } }
+    },
+    {
+      "type": "timeseries",
+      "title": "Node memory usage",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 12 },
+      "targets": [
+        { "expr": "1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)", "legendFormat": "{{instance}}" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "percentunit", "max": 1, "min": 0 } }
+    },
+    {
+      "type": "timeseries",
+      "title": "CPU throttling",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 12 },
+      "targets": [
+        { "expr": "sum by (pod) (rate(container_cpu_cfs_throttled_periods_total{namespace=~\"$namespace\"}[5m]))", "legendFormat": "{{pod}}" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Persistent volume usage",
+      "gridPos": { "h": 7, "w": 24, "x": 0, "y": 20 },
+      "targets": [
+        { "expr": "1 - (kubelet_volume_stats_available_bytes / kubelet_volume_stats_capacity_bytes)", "legendFormat": "{{persistentvolumeclaim}}" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "percentunit", "max": 1, "min": 0 } }
+    }
+  ]
+}

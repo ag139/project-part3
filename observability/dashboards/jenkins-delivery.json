@@ -1,0 +1,98 @@
+{
+  "title": "Jenkins & Delivery",
+  "uid": "jenkins-delivery",
+  "tags": ["jenkins", "delivery"],
+  "refresh": "30s",
+  "time": { "from": "now-6h", "to": "now" },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Jenkins up",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+      "targets": [ { "expr": "default_jenkins_up", "instant": true } ],
+      "fieldConfig": { "defaults": { "thresholds": { "mode": "absolute", "steps": [ { "color": "red", "value": null }, { "color": "green", "value": 1 } ] } } }
+    },
+    {
+      "type": "stat",
+      "title": "Queue length",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+      "targets": [ { "expr": "jenkins_queue_size_value", "instant": true } ],
+      "fieldConfig": { "defaults": { "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "yellow", "value": 2 }, { "color": "red", "value": 4 } ] } } }
+    },
+    {
+      "type": "stat",
+      "title": "Busy executors",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+      "targets": [ { "expr": "jenkins_executor_in_use_value", "instant": true } ]
+    },
+    {
+      "type": "stat",
+      "title": "Online nodes",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+      "targets": [ { "expr": "jenkins_node_online_value", "instant": true } ]
+    },
+    {
+      "type": "stat",
+      "title": "Last deployed version",
+      "gridPos": { "h": 4, "w": 8, "x": 16, "y": 0 },
+      "targets": [ { "expr": "app_info{namespace=\"devops-app\"}", "legendFormat": "{{version}} / build {{release}}", "instant": true } ],
+      "options": { "textMode": "name", "colorMode": "none" }
+    },
+    {
+      "type": "timeseries",
+      "title": "Build queue over time",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "targets": [
+        { "expr": "jenkins_queue_size_value", "legendFormat": "queued" },
+        { "expr": "jenkins_queue_blocked_value", "legendFormat": "blocked" },
+        { "expr": "jenkins_queue_pending_value", "legendFormat": "pending" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Executors and agents",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "targets": [
+        { "expr": "jenkins_executor_count_value", "legendFormat": "total executors" },
+        { "expr": "jenkins_executor_in_use_value", "legendFormat": "in use" },
+        { "expr": "jenkins_node_count_value", "legendFormat": "nodes" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Build results",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+      "targets": [
+        { "expr": "sum(increase(default_jenkins_builds_success_build_count[1h]))", "legendFormat": "success" },
+        { "expr": "sum(increase(default_jenkins_builds_failed_build_count[1h]))", "legendFormat": "failed" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Build duration",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+      "targets": [
+        { "expr": "default_jenkins_builds_last_build_duration_milliseconds", "legendFormat": "{{jenkins_job}}" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "ms" } }
+    },
+    {
+      "type": "timeseries",
+      "title": "Controller JVM memory",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 20 },
+      "targets": [
+        { "expr": "vm_memory_heap_usage", "legendFormat": "heap usage" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "percentunit" } }
+    },
+    {
+      "type": "timeseries",
+      "title": "Scrape health of monitored targets",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 20 },
+      "targets": [
+        { "expr": "up{job=~\"backend|jenkins\"}", "legendFormat": "{{job}} / {{instance}}" }
+      ],
+      "fieldConfig": { "defaults": { "max": 1, "min": 0 } }
+    }
+  ]
+}
