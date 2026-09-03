@@ -1,0 +1,58 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: application-rules
+  namespace: observability
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: application.sli
+      interval: 30s
+      rules:
+        - record: app:request_rate5m
+          expr: sum(rate(http_requests_total{namespace="devops-app"}[5m]))
+
+        - record: app:error_rate5m
+          expr: |
+            sum(rate(http_requests_total{namespace="devops-app",status=~"5.."}[5m]))
+            /
+            clamp_min(sum(rate(http_requests_total{namespace="devops-app"}[5m])), 0.001)
+
+        - record: app:availability5m
+          expr: 1 - app:error_rate5m
+
+        - record: app:latency_p95_5m
+          expr: |
+            histogram_quantile(
+              0.95,
+              sum by (le) (rate(http_request_duration_seconds_bucket{namespace="devops-app"}[5m]))
+            )
+
+    - name: application.alerts
+      rules:
+        - alert: HighErrorRate
+          expr: app:error_rate5m > 0.05
+          for: 5m
+          labels:
+            severity: critical
+            team: application
+          annotations:
+            summary: "More than 5 percent of requests are failing"
+            description: >-
+              The 5xx ratio over the last 5 minutes is {{ $value | humanizePercentage }},
+              above the 5 percent objective. Users are seeing errors.
+            runbook_url: "https://github.com/ag139/project-part3/blob/main/observability/runbooks/HighErrorRate.md"
+
+        - alert: HighLatencyP95
+          expr: app:latency_p95_5m > 1
+          for: 10m
+          labels:
+            severity: warning
+            team: application
+          annotations:
+            summary: "95th percentile latency is above the 1 second objective"
+            description: >-
+              p95 latency is {{ $value | humanizeDuration }} over the last 5 minutes.
+              The service is responding but slowly.
+            runbook_url: "https://github.com/ag139/project-part3/blob/main/observability/runbooks/HighLatencyP95.md"

@@ -1,0 +1,71 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: platform-rules
+  namespace: observability
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: kubernetes.alerts
+      rules:
+        - alert: ReplicasMismatch
+          expr: |
+            kube_deployment_status_replicas_available{namespace="devops-app"}
+            < kube_deployment_spec_replicas{namespace="devops-app"}
+          for: 10m
+          labels:
+            severity: warning
+            team: platform
+          annotations:
+            summary: "Deployment {{ $labels.deployment }} has fewer replicas than requested"
+            description: >-
+              {{ $labels.deployment }} in {{ $labels.namespace }} has been below its
+              desired replica count for 10 minutes. Capacity is reduced and a rollout
+              may be stuck.
+            runbook_url: "https://github.com/ag139/project-part3/blob/main/observability/runbooks/ReplicasMismatch.md"
+
+        - alert: PodCrashLooping
+          expr: |
+            increase(kube_pod_container_status_restarts_total{namespace="devops-app"}[15m]) > 3
+          for: 5m
+          labels:
+            severity: critical
+            team: platform
+          annotations:
+            summary: "Pod {{ $labels.pod }} is restarting repeatedly"
+            description: >-
+              {{ $labels.pod }} has restarted more than three times in 15 minutes.
+              A crash loop usually means a bad image, a missing secret or a failing probe.
+            runbook_url: "https://github.com/ag139/project-part3/blob/main/observability/runbooks/PodCrashLooping.md"
+
+    - name: jenkins.alerts
+      rules:
+        - alert: JenkinsQueueStuck
+          expr: jenkins_queue_size_value > 3
+          for: 10m
+          labels:
+            severity: warning
+            team: delivery
+          annotations:
+            summary: "Jenkins build queue is not draining"
+            description: >-
+              {{ $value }} builds have been waiting for more than 10 minutes.
+              Agents may be failing to start or the cluster may be out of capacity.
+            runbook_url: "https://github.com/ag139/project-part3/blob/main/observability/runbooks/JenkinsQueueStuck.md"
+
+    - name: monitoring.alerts
+      rules:
+        - alert: PrometheusTargetDown
+          expr: up{job=~"backend|jenkins"} == 0
+          for: 5m
+          labels:
+            severity: critical
+            team: platform
+          annotations:
+            summary: "Prometheus cannot scrape {{ $labels.job }}"
+            description: >-
+              The target {{ $labels.instance }} for job {{ $labels.job }} has been
+              unreachable for 5 minutes. Metrics for this component are missing, so
+              other alerts about it cannot be trusted.
+            runbook_url: "https://github.com/ag139/project-part3/blob/main/observability/runbooks/PrometheusTargetDown.md"
