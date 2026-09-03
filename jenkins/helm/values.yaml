@@ -16,6 +16,7 @@ controller:
   - ws-cleanup
   - github
   - kubernetes-credentials-provider
+  - prometheus
   installLatestPlugins: true
   installLatestSpecifiedPlugins: true
   serviceAccount:
@@ -55,6 +56,10 @@ controller:
         \       removeAction('DELETE')\n          }\n        }\n      }\n"
       job-dsl-security: "security:\n  globalJobDslSecurityConfiguration:\n    useScriptSecurity:\
         \ false\n"
+      prometheus: "unclassified:\n  prometheusConfiguration:\n    collectingMetricsPeriodInSeconds:\
+        \ 30\n    path: \"prometheus\"\n    useAuthenticatedEndpoint: false\n    defaultNamespace:\
+        \ \"default\"\n    countSuccessfulBuilds: true\n    countUnstableBuilds: true\n\
+        \    countFailedBuilds: true\n    fetchTestResults: true\n"
   podSecurityContextOverride:
     runAsNonRoot: true
     runAsUser: 1000
