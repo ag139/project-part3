@@ -1,0 +1,12 @@
+=== dashboard ConfigMaps created from files in Git ===
+dashboard-application-overview                 1      5m21s
+dashboard-jenkins-delivery                     1      5m21s
+dashboard-kubernetes-cluster                   1      5m21s
+
+=== picked up by the Grafana sidecar, not imported manually ===
+{"time": "2026-09-03T18:12:41.271208+00:00", "level": "INFO", "msg": "Writing /tmp/dashboards/application-overview.json (ascii)"}
+{"time": "2026-09-03T18:12:41.491091+00:00", "level": "INFO", "msg": "None sent to http://localhost:3000/api/admin/provisioning/dashboards/reload. Response: 200 OK {\"message\":\"Dashboards config reloaded\"}"}
+{"time": "2026-09-03T18:12:41.553196+00:00", "level": "INFO", "msg": "Writing /tmp/dashboards/jenkins-delivery.json (ascii)"}
+{"time": "2026-09-03T18:12:41.807518+00:00", "level": "INFO", "msg": "None sent to http://localhost:3000/api/admin/provisioning/dashboards/reload. Response: 200 OK {\"message\":\"Dashboards config reloaded\"}"}
+{"time": "2026-09-03T18:12:41.945467+00:00", "level": "INFO", "msg": "Writing /tmp/dashboards/kubernetes-cluster.json (ascii)"}
+{"time": "2026-09-03T18:12:42.218818+00:00", "level": "INFO", "msg": "None sent to http://localhost:3000/api/admin/provisioning/dashboards/reload. Response: 200 OK {\"message\":\"Dashboards config reloaded\"}"}

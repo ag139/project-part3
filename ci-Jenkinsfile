@@ -46,6 +46,9 @@ pipeline {
 
                   grep -rn ":latest" docker/*/Dockerfile && { echo "latest tag found in Dockerfile"; exit 1; } || true
                   echo "no latest tags in Dockerfiles"
+
+                  echo "=== observability manifests and dashboards ==="
+                  python3 scripts/validate-observability.py
                 '''
             }
         }
