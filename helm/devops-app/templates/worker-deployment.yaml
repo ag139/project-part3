@@ -23,6 +23,9 @@ spec:
         - name: worker
           image: "{{ .Values.image.registry }}devops-app-worker:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: metrics
+              containerPort: 9100
           envFrom:
             - configMapRef: { name: app-config }
           resources:

@@ -511,12 +511,13 @@ build content or credentials.
 
 ## 12. Trade-offs and known gaps
 
-1. **Only the backend is instrumented.** The frontend is nginx and the worker
-   has no HTTP surface, so neither exposes application metrics. Both are still
-   covered by the Kubernetes metrics, and the worker's liveness is tracked by
-   its heartbeat file. Instrumenting nginx would mean adding an exporter
-   sidecar; instrumenting the worker would mean adding an HTTP server to a
-   service that deliberately has none.
+1. **The frontend is not instrumented.** The backend and the worker both
+   expose Prometheus metrics and each has its own monitor: a ServiceMonitor for
+   the backend and a PodMonitor for the worker, which has no Service. The
+   frontend is nginx, whose built-in status endpoint does not speak the
+   Prometheus format, so covering it properly means adding an exporter sidecar
+   to translate. It remains covered by the Kubernetes metrics: pod health,
+   restarts, CPU and memory are all visible on the cluster dashboard.
 
 2. **Alertmanager has no real receiver.** It groups, inhibits and routes by
    severity, but the receivers are empty rather than pointing at a chat or
