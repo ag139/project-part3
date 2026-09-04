@@ -1,0 +1,28 @@
+=== monitoring ServiceAccounts ===
+NAME                                  SECRETS   AGE
+default                               0         96m
+monitoring-alertmanager               0         96m
+monitoring-grafana                    0         96m
+monitoring-kube-state-metrics         0         96m
+monitoring-operator                   0         96m
+monitoring-prometheus                 0         96m
+monitoring-prometheus-node-exporter   0         96m
+
+=== no monitoring component holds cluster-admin ===
+cluster-admin bindings for observability: none
+
+=== what the Prometheus ServiceAccount may actually do ===
+yes
+no
+no
+
+=== network policies restricting the scrape path ===
+NAME                      POD-SELECTOR         AGE
+allow-backend             component=backend    66m
+allow-frontend            component=frontend   66m
+allow-postgres            component=postgres   66m
+allow-prometheus-scrape   app=devops-app       6s
+allow-worker              component=worker     66m
+default-deny-all          <none>               66m
+NAME                              POD-SELECTOR                                     AGE
+allow-prometheus-scrape-jenkins   app.kubernetes.io/component=jenkins-controller   6s
