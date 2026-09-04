@@ -57,6 +57,8 @@ pipeline {
                 container('python') {
                     sh '''
                       set -e
+                      export PIP_TARGET=$WORKSPACE/.pip
+                      export PYTHONPATH=$PIP_TARGET:$PYTHONPATH
                       pip install --quiet --no-cache-dir pyyaml
                       python3 scripts/validate-observability.py
                     '''
