@@ -1,0 +1,30 @@
+=== end to end: commit to dashboard ===
+Fri Sep  4 10:33:50 IDT 2026
+
+--- running version, as stored by Prometheus ---
+  pod=backend-7b695b4455-d8pm4 version=2aa93c9f44ee git_sha=2aa93c9f44ee release=3
+  pod=backend-7b695b4455-pczg7 version=2aa93c9f44ee git_sha=2aa93c9f44ee release=3
+
+--- scrape targets ---
+  jenkins 10.244.1.5:8080 -> 1
+  backend 10.244.2.13:5000 -> 1
+  backend 10.244.1.17:5000 -> 1
+
+--- SLI values ---
+  app:request_rate5m = 0.592591577507189
+  app:error_rate5m = 0
+  app:availability5m = 1
+  app:latency_p95_5m = 0.004750000000000001
+
+--- alert rules loaded ---
+  HighErrorRate            inactive
+  HighLatencyP95           inactive
+  JenkinsQueueStuck        inactive
+  ReplicasMismatch         inactive
+  PodCrashLooping          inactive
+  PrometheusTargetDown     inactive
+
+--- dashboards provisioned from Git ---
+dashboard-application-overview                 1      94m
+dashboard-jenkins-delivery                     1      94m
+dashboard-kubernetes-cluster                   1      94m
