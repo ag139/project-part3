@@ -196,8 +196,6 @@ pipeline {
                 }
             }
         }
-    }
-
         stage('Monitoring Gate') {
             steps {
                 container('tools') {
@@ -205,6 +203,8 @@ pipeline {
                 }
             }
         }
+    }
+
 
     post {
         success {
