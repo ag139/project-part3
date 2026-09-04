@@ -1,0 +1,36 @@
+=== FAILURE EXERCISE 3: Jenkins agent starvation ===
+Fri Sep  4 10:23:46 IDT 2026
+
+Method: cap the Kubernetes cloud at zero concurrent agents, then queue
+builds. No permissions are changed. The queue metric should rise and
+JenkinsQueueStuck should move toward firing.
+
+--- baseline ---
+queue size: 0
+
+--- queueing builds while agents cannot start ---
+  queued build 1
+  queued build 2
+  queued build 3
+  queued build 4
+  queued build 5
+
+--- watching the queue ---
+  round 1 | queue 0 | executors in use 0 | JenkinsQueueStuck: inactive
+  round 2 | queue 0 | executors in use 0 | JenkinsQueueStuck: inactive
+  round 3 | queue 0 | executors in use 0 | JenkinsQueueStuck: inactive
+  round 4 | queue 0 | executors in use 0 | JenkinsQueueStuck: inactive
+  round 5 | queue 0 | executors in use 0 | JenkinsQueueStuck: inactive
+  round 6 | queue 0 | executors in use 0 | JenkinsQueueStuck: inactive
+  round 7 | queue 0 | executors in use 0 | JenkinsQueueStuck: inactive
+  round 8 | queue 0 | executors in use 0 | JenkinsQueueStuck: inactive
+  round 9 | queue 0 | executors in use 0 | JenkinsQueueStuck: inactive
+  round 10 | queue 0 | executors in use 0 | JenkinsQueueStuck: inactive
+
+--- pods created for the queued builds ---
+NAME        READY   STATUS    RESTARTS   AGE
+jenkins-0   2/2     Running   0          94m
+
+Runbook: observability/runbooks/JenkinsQueueStuck.md
+The runbook says a stuck queue is a capacity or configuration problem
+and must never be resolved by widening the controller RBAC.

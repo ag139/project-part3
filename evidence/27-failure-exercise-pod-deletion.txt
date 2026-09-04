@@ -1,0 +1,38 @@
+=== FAILURE EXERCISE 2: delete a pod ===
+Fri Sep  4 10:20:46 IDT 2026
+
+--- before ---
+NAME                       READY   STATUS    RESTARTS   AGE
+backend-7b695b4455-2z2b5   1/1     Running   0          54m
+backend-7b695b4455-d8pm4   1/1     Running   0          54m
+available replicas: 2
+
+--- deleting backend-7b695b4455-2z2b5 ---
+pod "backend-7b695b4455-2z2b5" deleted from devops-app namespace
+
+--- service availability during the event ---
+  attempt 1: HTTP 200
+  attempt 2: HTTP 200
+  attempt 3: HTTP 200
+  attempt 4: HTTP 200
+  attempt 5: HTTP 200
+  attempt 6: HTTP 200
+  attempt 7: HTTP 200
+  attempt 8: HTTP 200
+  attempt 9: HTTP 200
+  attempt 10: HTTP 200
+  attempt 11: HTTP 200
+  attempt 12: HTTP 200
+
+--- kubernetes recovered on its own ---
+NAME                       READY   STATUS    RESTARTS   AGE
+backend-7b695b4455-d8pm4   1/1     Running   0          55m
+backend-7b695b4455-pczg7   1/1     Running   0          60s
+
+available replicas after recovery:
+  2
+
+Runbook: observability/runbooks/ReplicasMismatch.md
+No human action was needed. The deployment controller replaced the pod
+and the service kept answering throughout, because the second replica
+continued to serve while the first was being recreated.

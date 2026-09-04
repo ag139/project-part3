@@ -1,0 +1,51 @@
+=== FAILURE EXERCISE 4: failed release ===
+Fri Sep  4 10:29:05 IDT 2026
+
+Method: run the CD pipeline with a tag that was never published.
+The pipeline must refuse before touching the running environment.
+
+--- state before ---
+NAME                        READY   STATUS    RESTARTS   AGE     IP            NODE                NOMINATED NODE   READINESS GATES
+backend-7b695b4455-d8pm4    1/1     Running   0          62m     10.244.2.13   devops-ci-worker2   <none>           <none>
+backend-7b695b4455-pczg7    1/1     Running   0          8m18s   10.244.1.17   devops-ci-worker    <none>           <none>
+frontend-96f8674d5-6rmg4    1/1     Running   0          62m     10.244.1.12   devops-ci-worker    <none>           <none>
+frontend-96f8674d5-mjfc6    1/1     Running   0          62m     10.244.2.11   devops-ci-worker2   <none>           <none>
+postgres-6d9596b9b7-sk75x   1/1     Running   0          14m     10.244.1.16   devops-ci-worker    <none>           <none>
+worker-6746fb6948-tzncw     1/1     Running   0          62m     10.244.2.12   devops-ci-worker2   <none>           <none>
+
+ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+docker.io/ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+docker.io/ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+docker.io/ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+
+Now run cd-application with IMAGE_TAG=does-not-exist-9999 in the UI,
+then press enter here.
+
+--- state after the failed deployment ---
+NAME                        READY   STATUS    RESTARTS   AGE   IP            NODE                NOMINATED NODE   READINESS GATES
+backend-7b695b4455-d8pm4    1/1     Running   0          65m   10.244.2.13   devops-ci-worker2   <none>           <none>
+backend-7b695b4455-pczg7    1/1     Running   0          10m   10.244.1.17   devops-ci-worker    <none>           <none>
+frontend-96f8674d5-6rmg4    1/1     Running   0          65m   10.244.1.12   devops-ci-worker    <none>           <none>
+frontend-96f8674d5-mjfc6    1/1     Running   0          65m   10.244.2.11   devops-ci-worker2   <none>           <none>
+postgres-6d9596b9b7-sk75x   1/1     Running   0          17m   10.244.1.16   devops-ci-worker    <none>           <none>
+worker-6746fb6948-tzncw     1/1     Running   0          65m   10.244.2.12   devops-ci-worker2   <none>           <none>
+
+ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+docker.io/ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+docker.io/ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+docker.io/ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+
+--- helm history: the good release was never replaced ---
+REVISION	UPDATED                 	STATUS  	CHART           	APP VERSION	DESCRIPTION     
+1       	Fri Sep  4 06:26:06 2026	deployed	devops-app-1.0.1	1.0.1      	Install complete
+
+--- service still answering ---
+  health endpoint: HTTP 200
+
+Runbook: observability/runbooks/HighErrorRate.md covers the rollback path.
+In this case no rollback was needed: the pipeline stopped at input
+validation, so nothing was deployed and the environment was untouched.
