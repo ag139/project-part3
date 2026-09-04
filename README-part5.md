@@ -22,6 +22,8 @@ Parts 1 to 3 are documented in `README.md`. Part 4 is documented in
 8. [Pipeline changes](#8-pipeline-changes)
 9. [Failure exercises](#9-failure-exercises)
 10. [Security and operations](#10-security-and-operations)
+10a. [Troubleshooting](#10a-troubleshooting)
+10b. [Cleanup](#10b-cleanup)
 11. [Evidence](#11-evidence)
 12. [Trade-offs and known gaps](#12-trade-offs-and-known-gaps)
 
@@ -492,6 +494,127 @@ build content or credentials.
 
 ---
 
+## 10a. Troubleshooting
+
+### A target shows as down
+
+```bash
+kubectl get servicemonitor,podmonitor -n observability
+kubectl get svc backend -n devops-app --show-labels
+```
+
+The monitor's `selector` must match the Service or Pod labels exactly. Reapply
+from Git rather than editing in place:
+
+```bash
+kubectl apply -f observability/monitors/
+```
+
+Verify the endpoint by hand before assuming the monitor is wrong:
+
+```bash
+kubectl run probe --rm -i --restart=Never --image=curlimages/curl:8.11.1 -n devops-app -- \
+  curl -s http://backend:5000/metrics | head -5
+```
+
+### The Jenkins target returns nothing
+
+The scrape path is `/prometheus/` with a trailing slash. Without it Jenkins
+answers with a 302 redirect and the scrape collects nothing.
+
+```bash
+kubectl exec -n jenkins jenkins-0 -c jenkins -- \
+  curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/prometheus/
+```
+
+### A PodMonitor finds no target
+
+A PodMonitor matches on the container port **name**, so the port has to be
+declared in the pod spec even though nothing routes to it. This was the cause
+of the worker not being scraped: the metrics server was running and the image
+was correct, but the Helm template did not declare the port.
+
+```bash
+kubectl get pods -n devops-app -l component=worker \
+  -o jsonpath='{.items[0].spec.containers[0].ports}'
+```
+
+An empty result means the port is missing from the template.
+
+### Dashboards do not appear in Grafana
+
+The sidecar watches for ConfigMaps carrying `grafana_dashboard=1`.
+
+```bash
+kubectl get configmap -n observability -l grafana_dashboard=1
+kubectl logs -n observability -l app.kubernetes.io/name=grafana -c grafana-sc-dashboard --tail=20
+```
+
+The log line to look for is `Dashboards config reloaded`. Note that dashboards
+sort by title, so ours appear under A, J and K rather than at the end of the
+list.
+
+### An alert will not fire during a test
+
+Every alert has a `for` clause, so the condition must hold continuously for the
+whole window. A single burst of errors passes through `pending` and resolves
+without firing. Failure exercise 1 shows the full progression.
+
+```bash
+curl -s http://localhost:9090/api/v1/rules | grep -o '"name":"HighErrorRate".*"state":"[a-z]*"'
+```
+
+### The monitoring gate fails right after a deployment
+
+Give the metrics time to settle. The gate waits 60 seconds by default, which
+can be raised:
+
+```bash
+SETTLE_SECONDS=120 sh scripts/monitoring-gate.sh
+```
+
+If Prometheus itself is unreachable the gate fails rather than passing, because
+an unverifiable release is not a healthy one.
+
+---
+
+## 10b. Cleanup
+
+### Remove the observability layer only
+
+```bash
+kubectl delete -f observability/networkpolicy.yaml
+kubectl delete -f observability/rules/
+kubectl delete -f observability/monitors/
+kubectl delete configmap -n observability -l grafana_dashboard=1
+helm uninstall monitoring -n observability
+```
+
+The PVCs are retained on purpose so that history survives a reinstall. To
+discard it as well:
+
+```bash
+kubectl delete pvc -n observability --all
+kubectl delete namespace observability
+```
+
+### Remove everything
+
+`scripts/07-uninstall.sh` removes Jenkins and the application. Pass `--all` to
+delete the cluster too. Images already pushed to the registry are unaffected;
+revoke the Docker Hub token separately if it is no longer needed.
+
+### Reinstalling
+
+```bash
+./scripts/09-install-observability.sh
+```
+
+Dashboards, alerts, scrape configuration and network policies all come back
+from Git. Only the recorded metric history is lost with the PVC.
+
+---
+
 ## 11. Evidence
 
 | File | Shows |
@@ -506,6 +629,7 @@ build content or credentials.
 | `29-failure-exercise-failed-release.txt` | A refused release leaving the environment untouched |
 | `30-monitoring-security.txt` | RBAC limits and network policies |
 | `31-end-to-end-observability.txt` | Version, targets, SLIs, alerts and dashboards in one view |
+| `32-all-services-monitored.txt` | Every instrumented service and Jenkins scraped successfully |
 
 ---
 

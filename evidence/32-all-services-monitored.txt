@@ -1,0 +1,20 @@
+=== all monitored targets ===
+Fri Sep  4 11:45:17 IDT 2026
+  jenkins              10.244.1.5:8080        -> 1
+  backend              10.244.1.25:5000       -> 1
+  backend              10.244.2.19:5000       -> 1
+
+=== monitors, one per instrumented service plus Jenkins ===
+servicemonitor.monitoring.coreos.com/devops-app-backend                    166m
+servicemonitor.monitoring.coreos.com/jenkins-controller                    166m
+podmonitor.monitoring.coreos.com/devops-app-worker   54m
+
+=== worker metrics ===
+  worker_iterations_total = 26
+  worker_up = 1
+  worker_heartbeat_timestamp_seconds = 1788511500.7039673
+
+=== build identity across services ===
+  backend    pod=backend-655cc5b479-464qn         version=c11869f879fd release=6
+  backend    pod=backend-655cc5b479-ml2wv         version=c11869f879fd release=6
+  worker     pod=worker-6488dd4f6-vdf89           version=c11869f879fd release=6
