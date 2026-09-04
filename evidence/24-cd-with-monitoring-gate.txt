@@ -1,0 +1,529 @@
+Started by user Jenkins Admin
+Checking out git https://github.com/ag139/project-part3.git into /var/jenkins_home/workspace/cd-application@script/57dd450d8414fd262279c161c1adfb6e34a7278748720afda2316ba02c3ec562 to read cd-Jenkinsfile
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/cd-application@script/57dd450d8414fd262279c161c1adfb6e34a7278748720afda2316ba02c3ec562/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/ag139/project-part3.git # timeout=10
+Fetching upstream changes from https://github.com/ag139/project-part3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/ag139/project-part3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 47be021a3adc2171e5c0b366eac6a7bc7cdb9934 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 47be021a3adc2171e5c0b366eac6a7bc7cdb9934 # timeout=10
+Commit message: "Move the monitoring gate inside the stages block"
+ > git rev-list --no-walk 2aa93c9f44ee4374dd6f743b814335d75d980d1f # timeout=10
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Still waiting to schedule task
+‘cd-agent-b5m7w’ is offline
+Agent cd-agent-b5m7w is provisioned from template cd-agent
+---
+apiVersion: "v1"
+kind: "Pod"
+metadata:
+  annotations:
+    kubernetes.jenkins.io/last-refresh: "1788503105549"
+  labels:
+    jenkins/jenkins-jenkins-agent: "true"
+    jenkins/label-digest: "c504c8675cde4d5ab4ecda548f29decec8770cd4"
+    jenkins/label: "jenkins-jenkins-agent_cd-agent"
+    kubernetes.jenkins.io/controller: "http___jenkins_jenkins_svc_cluster_local_8080x"
+  name: "cd-agent-b5m7w"
+  namespace: "jenkins"
+spec:
+  containers:
+  - args:
+    - "infinity"
+    command:
+    - "sleep"
+    env:
+    - name: "JENKINS_URL"
+      value: "http://jenkins.jenkins.svc.cluster.local:8080/"
+    image: "alpine/crane:0.20.3"
+    imagePullPolicy: "IfNotPresent"
+    name: "crane"
+    resources:
+      limits:
+        memory: "256Mi"
+        cpu: "500m"
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+    securityContext:
+      privileged: false
+      runAsGroup: 1000
+      runAsUser: 1000
+    tty: false
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+    workingDir: "/home/jenkins/agent"
+  - args:
+    - "********"
+    - "cd-agent-b5m7w"
+    env:
+    - name: "JENKINS_SECRET"
+      value: "********"
+    - name: "JENKINS_TUNNEL"
+      value: "jenkins-agent.jenkins.svc.cluster.local:50000"
+    - name: "JENKINS_AGENT_NAME"
+      value: "cd-agent-b5m7w"
+    - name: "REMOTING_OPTS"
+      value: "-noReconnectAfter 1d"
+    - name: "JENKINS_NAME"
+      value: "cd-agent-b5m7w"
+    - name: "JENKINS_AGENT_WORKDIR"
+      value: "/home/jenkins/agent"
+    - name: "JENKINS_URL"
+      value: "http://jenkins.jenkins.svc.cluster.local:8080/"
+    image: "jenkins/inbound-agent:3385.vf1123fb_515da_-1"
+    imagePullPolicy: "IfNotPresent"
+    name: "jnlp"
+    resources:
+      limits:
+        memory: "1Gi"
+        cpu: "1000m"
+      requests:
+        memory: "512Mi"
+        cpu: "200m"
+    securityContext:
+      privileged: false
+      runAsGroup: 1000
+      runAsUser: 1000
+    tty: false
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+    workingDir: "/home/jenkins/agent"
+  - args:
+    - "infinity"
+    command:
+    - "sleep"
+    env:
+    - name: "JENKINS_URL"
+      value: "http://jenkins.jenkins.svc.cluster.local:8080/"
+    image: "alpine/k8s:1.30.13"
+    imagePullPolicy: "IfNotPresent"
+    name: "tools"
+    resources:
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+    securityContext:
+      privileged: false
+      runAsGroup: 1000
+      runAsUser: 1000
+    tty: false
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+    workingDir: "/home/jenkins/agent"
+  nodeSelector:
+    kubernetes.io/os: "linux"
+  restartPolicy: "Never"
+  serviceAccountName: "jenkins-cd"
+  volumes:
+  - emptyDir:
+      medium: ""
+    name: "workspace-volume"
+
+Running on cd-agent-b5m7w in /home/jenkins/agent/workspace/cd-application
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/ag139/project-part3.git
+ > git init /home/jenkins/agent/workspace/cd-application # timeout=10
+Fetching upstream changes from https://github.com/ag139/project-part3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/ag139/project-part3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/ag139/project-part3.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+Checking out Revision 47be021a3adc2171e5c0b366eac6a7bc7cdb9934 (refs/remotes/origin/main)
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 47be021a3adc2171e5c0b366eac6a7bc7cdb9934 # timeout=10
+Commit message: "Move the monitoring gate inside the stages block"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timestamps
+[Pipeline] {
+[Pipeline] timeout
+[2026-09-04T06:25:54.485Z] Timeout set to expire in 20 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+[2026-09-04T06:25:54.678Z] The recommended git tool is: NONE
+[2026-09-04T06:25:54.715Z] No credentials specified
+[2026-09-04T06:25:54.729Z] Fetching changes from the remote Git repository
+[2026-09-04T06:25:55.655Z] Checking out Revision 47be021a3adc2171e5c0b366eac6a7bc7cdb9934 (refs/remotes/origin/main)
+[2026-09-04T06:25:54.721Z]  > git rev-parse --resolve-git-dir /home/jenkins/agent/workspace/cd-application/.git # timeout=10
+[2026-09-04T06:25:54.793Z]  > git config remote.origin.url https://github.com/ag139/project-part3.git # timeout=10
+[2026-09-04T06:25:54.809Z] Fetching upstream changes from https://github.com/ag139/project-part3.git
+[2026-09-04T06:25:54.809Z]  > git --version # timeout=10
+[2026-09-04T06:25:54.814Z]  > git --version # 'git version 2.47.3'
+[2026-09-04T06:25:54.814Z]  > git fetch --tags --force --progress -- https://github.com/ag139/project-part3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+[2026-09-04T06:25:55.648Z]  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+[2026-09-04T06:25:55.657Z]  > git config core.sparsecheckout # timeout=10
+[2026-09-04T06:25:55.661Z]  > git checkout -f 47be021a3adc2171e5c0b366eac6a7bc7cdb9934 # timeout=10
+[2026-09-04T06:25:55.704Z] Commit message: "Move the monitoring gate inside the stages block"
+[Pipeline] sh
+[2026-09-04T06:25:56.297Z] + echo jenkins-cd-application-3
+[2026-09-04T06:25:56.297Z] + echo deploy requested by: jenkins-cd-application-3
+[2026-09-04T06:25:56.297Z] deploy requested by: jenkins-cd-application-3
+[2026-09-04T06:25:56.297Z] + echo cd build number:     3
+[2026-09-04T06:25:56.297Z] cd build number:     3
+[2026-09-04T06:25:56.297Z] + echo ci build number:     3
+[2026-09-04T06:25:56.297Z] ci build number:     3
+[2026-09-04T06:25:56.297Z] + echo image tag:           2aa93c9f44ee
+[2026-09-04T06:25:56.297Z] image tag:           2aa93c9f44ee
+[2026-09-04T06:25:56.297Z] + echo target namespace:    devops-app
+[2026-09-04T06:25:56.297Z] target namespace:    devops-app
+[2026-09-04T06:25:56.298Z] + echo chart:               ./helm/devops-app
+[2026-09-04T06:25:56.298Z] chart:               ./helm/devops-app
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Input Validation)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+[2026-09-04T06:25:56.534Z] tag 2aa93c9f44ee accepted: not empty, not latest, namespace permitted
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-09-04T06:25:57.199Z] + set -e
+[2026-09-04T06:25:57.199Z] + crane version
+[2026-09-04T06:25:57.199Z] 0.20.3
+[2026-09-04T06:25:57.199Z] + MISSING=0
+[2026-09-04T06:25:57.199Z] + REF=ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:25:57.200Z] + echo 'verifying ayeletgeulayev/devops-app-backend:2aa93c9f44ee exists in the registry'
+[2026-09-04T06:25:57.200Z] verifying ayeletgeulayev/devops-app-backend:2aa93c9f44ee exists in the registry
+[2026-09-04T06:25:57.200Z] + crane digest ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:25:58.580Z] + DIGEST=sha256:05c8bbbbc0a3633dd6719c131263b955a0af768d44841c921ed32a7b1b27ecee
+[2026-09-04T06:25:58.580Z] + echo 'ayeletgeulayev/devops-app-backend:2aa93c9f44ee confirmed, digest sha256:05c8bbbbc0a3633dd6719c131263b955a0af768d44841c921ed32a7b1b27ecee'
+[2026-09-04T06:25:58.580Z] ayeletgeulayev/devops-app-backend:2aa93c9f44ee confirmed, digest sha256:05c8bbbbc0a3633dd6719c131263b955a0af768d44841c921ed32a7b1b27ecee
+[2026-09-04T06:25:58.580Z] + echo 'backend=sha256:05c8bbbbc0a3633dd6719c131263b955a0af768d44841c921ed32a7b1b27ecee'
+[2026-09-04T06:25:58.580Z] + REF=ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:25:58.580Z] + echo 'verifying ayeletgeulayev/devops-app-frontend:2aa93c9f44ee exists in the registry'
+[2026-09-04T06:25:58.580Z] verifying ayeletgeulayev/devops-app-frontend:2aa93c9f44ee exists in the registry
+[2026-09-04T06:25:58.580Z] + crane digest ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:25:59.518Z] + DIGEST=sha256:0462fe6a1afd1d0a7febe83fe50b570dc6fe823d46ae535ac22244376a82f444
+[2026-09-04T06:25:59.518Z] + echo 'ayeletgeulayev/devops-app-frontend:2aa93c9f44ee confirmed, digest sha256:0462fe6a1afd1d0a7febe83fe50b570dc6fe823d46ae535ac22244376a82f444'
+[2026-09-04T06:25:59.518Z] ayeletgeulayev/devops-app-frontend:2aa93c9f44ee confirmed, digest sha256:0462fe6a1afd1d0a7febe83fe50b570dc6fe823d46ae535ac22244376a82f444
+[2026-09-04T06:25:59.518Z] + echo 'frontend=sha256:0462fe6a1afd1d0a7febe83fe50b570dc6fe823d46ae535ac22244376a82f444'
+[2026-09-04T06:25:59.518Z] + REF=ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:25:59.518Z] + echo 'verifying ayeletgeulayev/devops-app-worker:2aa93c9f44ee exists in the registry'
+[2026-09-04T06:25:59.518Z] verifying ayeletgeulayev/devops-app-worker:2aa93c9f44ee exists in the registry
+[2026-09-04T06:25:59.518Z] + crane digest ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:26:00.463Z] + DIGEST=sha256:68139a1f57e5b6a0551ce12c1e4d512100bd4051f286f28c9b6e093a47b3a3a5
+[2026-09-04T06:26:00.463Z] + echo 'ayeletgeulayev/devops-app-worker:2aa93c9f44ee confirmed, digest sha256:68139a1f57e5b6a0551ce12c1e4d512100bd4051f286f28c9b6e093a47b3a3a5'
+[2026-09-04T06:26:00.463Z] ayeletgeulayev/devops-app-worker:2aa93c9f44ee confirmed, digest sha256:68139a1f57e5b6a0551ce12c1e4d512100bd4051f286f28c9b6e093a47b3a3a5
+[2026-09-04T06:26:00.463Z] + echo 'worker=sha256:68139a1f57e5b6a0551ce12c1e4d512100bd4051f286f28c9b6e093a47b3a3a5'
+[2026-09-04T06:26:00.463Z] + '[' 0 -eq 1 ]
+[2026-09-04T06:26:00.463Z] + echo
+[2026-09-04T06:26:00.463Z] 
+[2026-09-04T06:26:00.464Z] + echo '=== all images verified, digests resolved ==='
+[2026-09-04T06:26:00.464Z] === all images verified, digests resolved ===
+[2026-09-04T06:26:00.464Z] + cat resolved-digests.txt
+[2026-09-04T06:26:00.464Z] backend=sha256:05c8bbbbc0a3633dd6719c131263b955a0af768d44841c921ed32a7b1b27ecee
+[2026-09-04T06:26:00.464Z] frontend=sha256:0462fe6a1afd1d0a7febe83fe50b570dc6fe823d46ae535ac22244376a82f444
+[2026-09-04T06:26:00.464Z] worker=sha256:68139a1f57e5b6a0551ce12c1e4d512100bd4051f286f28c9b6e093a47b3a3a5
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] archiveArtifacts
+[2026-09-04T06:26:00.551Z] Archiving artifacts
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Manifest Validation)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-09-04T06:26:01.741Z] + set -e
+[2026-09-04T06:26:01.741Z] + helm version --short
+[2026-09-04T06:26:01.741Z] v3.17.3+ge4da497
+[2026-09-04T06:26:01.741Z] + helm lint ./helm/devops-app
+[2026-09-04T06:26:02.314Z] ==> Linting ./helm/devops-app
+[2026-09-04T06:26:02.314Z] [INFO] Chart.yaml: icon is recommended
+[2026-09-04T06:26:02.314Z] 
+[2026-09-04T06:26:02.314Z] 1 chart(s) linted, 0 chart(s) failed
+[2026-09-04T06:26:02.314Z] + helm template devops-app ./helm/devops-app --namespace devops-app --set 'image.registry=ayeletgeulayev/' --set 'image.tag=2aa93c9f44ee'
+[2026-09-04T06:26:02.314Z] + echo 'rendered objects:'
+[2026-09-04T06:26:02.314Z] rendered objects:
+[2026-09-04T06:26:02.314Z] + grep -c ^kind: /tmp/rendered.yaml
+[2026-09-04T06:26:02.314Z] 24
+[2026-09-04T06:26:02.314Z] + kubectl create '--dry-run=client' -f /tmp/rendered.yaml -o name
+[2026-09-04T06:26:04.859Z] + echo 'manifest validation passed'
+[2026-09-04T06:26:04.859Z] manifest validation passed
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Authenticate)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-09-04T06:26:05.616Z] + set -e
+[2026-09-04T06:26:05.616Z] + echo 'authenticating with the in-cluster ServiceAccount'
+[2026-09-04T06:26:05.616Z] authenticating with the in-cluster ServiceAccount
+[2026-09-04T06:26:05.616Z] + kubectl config current-context
+[2026-09-04T06:26:05.616Z] error: current-context is not set
+[2026-09-04T06:26:05.616Z] + true
+[2026-09-04T06:26:05.616Z] + echo 'permission check for the target namespace:'
+[2026-09-04T06:26:05.616Z] permission check for the target namespace:
+[2026-09-04T06:26:05.616Z] + kubectl auth can-i update deployments -n devops-app
+[2026-09-04T06:26:05.877Z] yes
+[2026-09-04T06:26:05.877Z] + kubectl auth can-i delete deployments -n devops-app
+[2026-09-04T06:26:05.877Z] no
+[2026-09-04T06:26:05.877Z] + echo 'delete not permitted, as intended'
+[2026-09-04T06:26:05.877Z] delete not permitted, as intended
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-09-04T06:26:06.667Z] + set -e
+[2026-09-04T06:26:06.667Z] + helm upgrade --install devops-app ./helm/devops-app --namespace devops-app --set 'image.registry=ayeletgeulayev/' --set 'image.tag=2aa93c9f44ee' --set 'secrets.dbUser=app' --reuse-values --wait --timeout 5m
+[2026-09-04T06:26:06.667Z] Release "devops-app" does not exist. Installing it now.
+[2026-09-04T06:27:03.049Z] NAME: devops-app
+[2026-09-04T06:27:03.049Z] LAST DEPLOYED: Fri Sep  4 06:26:06 2026
+[2026-09-04T06:27:03.049Z] NAMESPACE: devops-app
+[2026-09-04T06:27:03.049Z] STATUS: deployed
+[2026-09-04T06:27:03.049Z] REVISION: 1
+[2026-09-04T06:27:03.049Z] TEST SUITE: None
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Rollout)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-09-04T06:27:03.830Z] + set -e
+[2026-09-04T06:27:03.830Z] + kubectl rollout status deployment/backend -n devops-app '--timeout=180s'
+[2026-09-04T06:27:04.112Z] deployment "backend" successfully rolled out
+[2026-09-04T06:27:04.112Z] + kubectl rollout status deployment/frontend -n devops-app '--timeout=180s'
+[2026-09-04T06:27:04.376Z] deployment "frontend" successfully rolled out
+[2026-09-04T06:27:04.376Z] + kubectl rollout status deployment/worker -n devops-app '--timeout=180s'
+[2026-09-04T06:27:04.636Z] deployment "worker" successfully rolled out
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Verify)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-09-04T06:27:05.452Z] + set -e
+[2026-09-04T06:27:05.453Z] + echo '=== deployments ==='
+[2026-09-04T06:27:05.453Z] === deployments ===
+[2026-09-04T06:27:05.453Z] + kubectl get deployments -n devops-app
+[2026-09-04T06:27:05.453Z] NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+[2026-09-04T06:27:05.453Z] backend    2/2     2            2           56s
+[2026-09-04T06:27:05.453Z] frontend   2/2     2            2           56s
+[2026-09-04T06:27:05.453Z] postgres   1/1     1            1           56s
+[2026-09-04T06:27:05.453Z] worker     1/1     1            1           56s
+[2026-09-04T06:27:05.453Z] + echo
+[2026-09-04T06:27:05.453Z] 
+[2026-09-04T06:27:05.453Z] + echo '=== pods ==='
+[2026-09-04T06:27:05.453Z] === pods ===
+[2026-09-04T06:27:05.453Z] + kubectl get pods -n devops-app -o wide
+[2026-09-04T06:27:05.719Z] NAME                        READY   STATUS    RESTARTS   AGE   IP            NODE                NOMINATED NODE   READINESS GATES
+[2026-09-04T06:27:05.720Z] backend-7b695b4455-2z2b5    1/1     Running   0          56s   10.244.1.13   devops-ci-worker    <none>           <none>
+[2026-09-04T06:27:05.720Z] backend-7b695b4455-d8pm4    1/1     Running   0          56s   10.244.2.13   devops-ci-worker2   <none>           <none>
+[2026-09-04T06:27:05.720Z] frontend-96f8674d5-6rmg4    1/1     Running   0          56s   10.244.1.12   devops-ci-worker    <none>           <none>
+[2026-09-04T06:27:05.720Z] frontend-96f8674d5-mjfc6    1/1     Running   0          56s   10.244.2.11   devops-ci-worker2   <none>           <none>
+[2026-09-04T06:27:05.720Z] postgres-6d9596b9b7-2j7zf   1/1     Running   0          56s   10.244.1.15   devops-ci-worker    <none>           <none>
+[2026-09-04T06:27:05.720Z] worker-6746fb6948-tzncw     1/1     Running   0          56s   10.244.2.12   devops-ci-worker2   <none>           <none>
+[2026-09-04T06:27:05.984Z] + echo
+[2026-09-04T06:27:05.984Z] 
+[2026-09-04T06:27:05.984Z] + echo '=== services ==='
+[2026-09-04T06:27:05.984Z] === services ===
+[2026-09-04T06:27:05.984Z] + kubectl get services -n devops-app
+[2026-09-04T06:27:06.246Z] NAME       TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+[2026-09-04T06:27:06.246Z] backend    ClusterIP   10.96.211.61    <none>        5000/TCP   58s
+[2026-09-04T06:27:06.246Z] frontend   ClusterIP   10.96.137.140   <none>        80/TCP     58s
+[2026-09-04T06:27:06.246Z] postgres   ClusterIP   10.96.248.61    <none>        5432/TCP   58s
+[2026-09-04T06:27:06.247Z] + echo
+[2026-09-04T06:27:06.247Z] 
+[2026-09-04T06:27:06.247Z] + echo '=== running images ==='
+[2026-09-04T06:27:06.247Z] === running images ===
+[2026-09-04T06:27:06.247Z] + kubectl get pods -n devops-app -o 'jsonpath={..image}'
+[2026-09-04T06:27:06.247Z] + tr ' ' '\n'
+[2026-09-04T06:27:06.247Z] + sort -u
+[2026-09-04T06:27:06.511Z] + RUNNING='ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:27:06.511Z] ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:27:06.511Z] ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:27:06.511Z] docker.io/ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:27:06.511Z] docker.io/ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:27:06.511Z] docker.io/ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:27:06.511Z] docker.io/library/postgres:16
+[2026-09-04T06:27:06.511Z] postgres:16'
+[2026-09-04T06:27:06.511Z] + echo 'ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:27:06.511Z] ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:27:06.511Z] ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:27:06.511Z] docker.io/ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/library/postgres:16
+[2026-09-04T06:27:06.512Z] postgres:16'
+[2026-09-04T06:27:06.512Z] ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/library/postgres:16
+[2026-09-04T06:27:06.512Z] postgres:16
+[2026-09-04T06:27:06.512Z] + echo
+[2026-09-04T06:27:06.512Z] 
+[2026-09-04T06:27:06.512Z] + echo 'ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/library/postgres:16
+[2026-09-04T06:27:06.512Z] postgres:16'
+[2026-09-04T06:27:06.512Z] + grep -q devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] + echo 'backend is running the requested tag 2aa93c9f44ee'
+[2026-09-04T06:27:06.512Z] backend is running the requested tag 2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] + echo 'ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/library/postgres:16
+[2026-09-04T06:27:06.512Z] postgres:16'
+[2026-09-04T06:27:06.512Z] + grep -q devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] + echo 'frontend is running the requested tag 2aa93c9f44ee'
+[2026-09-04T06:27:06.512Z] frontend is running the requested tag 2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] + echo 'ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/ayeletgeulayev/devops-app-backend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/ayeletgeulayev/devops-app-frontend:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/ayeletgeulayev/devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] docker.io/library/postgres:16
+[2026-09-04T06:27:06.512Z] postgres:16'
+[2026-09-04T06:27:06.512Z] + grep -q devops-app-worker:2aa93c9f44ee
+[2026-09-04T06:27:06.512Z] + echo 'worker is running the requested tag 2aa93c9f44ee'
+[2026-09-04T06:27:06.512Z] worker is running the requested tag 2aa93c9f44ee
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Smoke Test)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-09-04T06:27:07.441Z] + set -e
+[2026-09-04T06:27:07.441Z] + echo 'calling the application through its in-cluster Service'
+[2026-09-04T06:27:07.441Z] calling the application through its in-cluster Service
+[2026-09-04T06:27:07.441Z] + wget -qO- '--timeout=15' http://frontend.devops-app.svc.cluster.local/
+[2026-09-04T06:27:07.441Z] + BODY='{"message":"app is running"}'
+[2026-09-04T06:27:07.441Z] + echo 'response: {"message":"app is running"}'
+[2026-09-04T06:27:07.441Z] response: {"message":"app is running"}
+[2026-09-04T06:27:07.441Z] + echo '{"message":"app is running"}'
+[2026-09-04T06:27:07.441Z] + grep -q 'app is running'
+[2026-09-04T06:27:07.441Z] + wget -qO- '--timeout=15' http://frontend.devops-app.svc.cluster.local/users
+[2026-09-04T06:27:07.441Z] + USERS='[]'
+[2026-09-04T06:27:07.441Z] + echo 'users endpoint: []'
+[2026-09-04T06:27:07.441Z] users endpoint: []
+[2026-09-04T06:27:07.441Z] + echo 'smoke test passed'
+[2026-09-04T06:27:07.441Z] smoke test passed
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Monitoring Gate)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-09-04T06:27:08.326Z] + sh scripts/monitoring-gate.sh
+[2026-09-04T06:27:08.326Z] waiting 60s for metrics to settle after the rollout
+[2026-09-04T06:28:16.004Z] === scrape targets ===
+[2026-09-04T06:28:16.004Z] all scrape targets are up
+[2026-09-04T06:28:16.004Z] === error ratio ===
+[2026-09-04T06:28:16.004Z] 5xx ratio over 5m: no data yet
+[2026-09-04T06:28:16.004Z] === p95 latency ===
+[2026-09-04T06:28:16.004Z] p95 latency over 5m: 0.004750000000000001
+[2026-09-04T06:28:16.004Z] 
+[2026-09-04T06:28:16.004Z] monitoring gate passed: the deployed release is serving traffic within objectives
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] deleteDir
+[Pipeline] container
+[Pipeline] {
+[Pipeline] sh
+[2026-09-04T06:28:16.807Z] + echo '===================================================='
+[2026-09-04T06:28:16.808Z] ====================================================
+[2026-09-04T06:28:16.808Z] + echo 'deployment succeeded'
+[2026-09-04T06:28:16.808Z] deployment succeeded
+[2026-09-04T06:28:16.808Z] + echo '  image tag:      2aa93c9f44ee'
+[2026-09-04T06:28:16.808Z]   image tag:      2aa93c9f44ee
+[2026-09-04T06:28:16.808Z] + echo '  namespace:      devops-app'
+[2026-09-04T06:28:16.808Z]   namespace:      devops-app
+[2026-09-04T06:28:16.808Z] + echo '  release:        devops-app'
+[2026-09-04T06:28:16.808Z]   release:        devops-app
+[2026-09-04T06:28:16.808Z] + echo '  cd build:       3'
+[2026-09-04T06:28:16.808Z]   cd build:       3
+[2026-09-04T06:28:16.808Z] + echo '  originating ci: 3'
+[2026-09-04T06:28:16.808Z]   originating ci: 3
+[2026-09-04T06:28:16.808Z] + echo '===================================================='
+[2026-09-04T06:28:16.808Z] ====================================================
+[2026-09-04T06:28:16.808Z] + helm history devops-app -n devops-app --max 5
+[2026-09-04T06:28:16.808Z] REVISION	UPDATED                 	STATUS  	CHART           	APP VERSION	DESCRIPTION     
+[2026-09-04T06:28:16.808Z] 1       	Fri Sep  4 06:26:06 2026	deployed	devops-app-1.0.1	1.0.1      	Install complete
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // timestamps
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
