@@ -198,6 +198,14 @@ pipeline {
         }
     }
 
+        stage('Monitoring Gate') {
+            steps {
+                container('tools') {
+                    sh 'sh scripts/monitoring-gate.sh'
+                }
+            }
+        }
+
     post {
         success {
             container('tools') {
