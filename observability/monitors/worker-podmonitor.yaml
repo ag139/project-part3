@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: devops-app-worker
+  namespace: observability
+  labels:
+    release: monitoring
+spec:
+  namespaceSelector:
+    matchNames: ["devops-app"]
+  selector:
+    matchLabels:
+      app: devops-app
+      component: worker
+  podMetricsEndpoints:
+    - port: metrics
+      path: /metrics
+      interval: 30s

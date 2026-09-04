@@ -15,6 +15,8 @@ spec:
               kubernetes.io/metadata.name: observability
       ports:
         - { protocol: TCP, port: 5000 }
+        - { protocol: TCP, port: 8080 }
+        - { protocol: TCP, port: 9100 }
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
