@@ -1,0 +1,67 @@
+=== FAILURE EXERCISE 1: controlled 5xx ===
+Fri Sep  4 09:35:23 IDT 2026
+
+Method: scale postgres to zero so the backend cannot reach its database.
+This produces genuine server errors rather than client errors.
+
+--- baseline ---
+error ratio: no data
+
+--- breaking the dependency ---
+deployment.apps/postgres scaled
+
+--- sending traffic that needs the database ---
+sent 40 requests
+
+--- waiting for metrics ---
+requests by status:
+  status 200 -> 387
+  status 400 -> 60
+  status 500 -> 40
+
+error ratio:
+  0.08833294081001618
+
+dependency failures:
+
+--- alert state after the error rate crossed the objective ---
+  Watchdog | firing | none
+
+=== sustained failure to trigger the alert ===
+The alert requires the ratio to stay above 5 percent for 5 minutes,
+so a single burst is not enough. This sends errors continuously.
+Fri Sep  4 10:03:43 IDT 2026
+deployment.apps/postgres scaled
+round 1 | ratio 0 | HighErrorRate: inactive
+round 2 | ratio 0.11111095188145348 | HighErrorRate: inactive
+round 3 | ratio 0.3709212322321552 | HighErrorRate: pending
+round 4 | ratio 0.35841831299326204 | HighErrorRate: pending
+round 5 | ratio 0.4035608620734293 | HighErrorRate: pending
+round 6 | ratio 0.44864534231628456 | HighErrorRate: pending
+round 7 | ratio 0.45189730282098267 | HighErrorRate: pending
+round 8 | ratio 0.44444448302461986 | HighErrorRate: pending
+round 9 | ratio 0.4789644012944984 | HighErrorRate: pending
+round 10 | ratio 0.4761904761904761 | HighErrorRate: pending
+round 11 | ratio 0.4920635424539227 | HighErrorRate: firing
+round 12 | ratio 0.4872611464968153 | HighErrorRate: firing
+round 13 | ratio 0.4723127690912904 | HighErrorRate: firing
+round 14 | ratio 0.4605262529497388 | HighErrorRate: firing
+
+=== recovery ===
+Fri Sep  4 10:14:09 IDT 2026
+deployment.apps/postgres scaled
+Waiting for deployment "postgres" rollout to finish: 0 of 1 updated replicas are available...
+deployment "postgres" successfully rolled out
+
+service check after recovery:
+  health endpoint: HTTP 200
+  add_user: HTTP 200
+
+waiting for the 5m window to clear so the alert resolves
+error ratio after recovery:
+  0
+alert state:
+  inactive
+
+Runbook used: observability/runbooks/HighErrorRate.md
+The dependency failure pointed at the database, matching the runbook table.
