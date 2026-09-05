@@ -1,0 +1,10 @@
+=== dependency failure attribution, after the fix ===
+Sat Sep  5 14:02:46 IDT 2026
+
+The counter was originally placed in the block that handles query
+errors, but the failure happens one step earlier, when the connection
+is opened. It was moved into get_connection(), where the failure
+actually occurs.
+
+database unavailable, 30 requests sent:
+   database -> 118
