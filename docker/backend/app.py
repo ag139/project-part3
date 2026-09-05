@@ -110,13 +110,17 @@ def metrics():
 
 
 def get_connection():
-    return psycopg2.connect(
-        host=rds_host,
-        port=rds_port,
-        database=rds_db,
-        user=rds_user,
-        password=rds_pass,
-    )
+    try:
+        return psycopg2.connect(
+            host=rds_host,
+            port=rds_port,
+            database=rds_db,
+            user=rds_user,
+            password=rds_pass,
+        )
+    except Exception:
+        dependency_failures_total.labels(dependency="database").inc()
+        raise
 
 
 @app.route("/", methods=["GET"])
